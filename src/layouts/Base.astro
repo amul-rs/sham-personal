@@ -22,20 +22,20 @@ if (description && description.length > 160) {
 }
 const canonical = new URL(Astro.url.pathname, Astro.site);
 
+// No postal address is emitted: none has been supplied for Eabenson Healthcare,
+// and the university department address stopped describing him when the MD
+// completed. An address we cannot stand behind is worse than none.
 const schema = {
   '@context': 'https://schema.org',
   '@type': 'Person',
   name: person.name,
-  jobTitle: 'Physician, Community Medicine',
+  honorificSuffix: person.postNominals,
+  jobTitle: person.title,
   description,
   url: Astro.site?.href,
-  affiliation: { '@type': 'CollegeOrUniversity', name: person.institution },
-  address: {
-    '@type': 'PostalAddress',
-    addressLocality: person.city,
-    addressRegion: person.region,
-    addressCountry: person.country,
-  },
+  email: person.email ? `mailto:${person.email}` : undefined,
+  worksFor: { '@type': 'Organization', name: person.org },
+  alumniOf: { '@type': 'CollegeOrUniversity', name: person.almaMater },
   sameAs: profiles.filter((p) => p.href).map((p) => p.href),
 };
 ---

@@ -1,0 +1,402 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import { person, academicProfiles } from '../../data/site.js';
+import { publications, inProgress, citationLine, isSelf } from '../../data/publications.js';
+import { decks } from '../../data/teaching.js';
+import {
+  education,
+  registration,
+  awards,
+  visibleMemberships,
+  medicalVentures,
+} from '../../data/credentials.js';
+
+// Rendered from the same data as /about and /publications, so the three can
+// never disagree. There is no separate PDF to fall out of step — the page is
+// styled for print instead.
+const journalCount = new Set(publications.map((p) => p.journal)).size;
+const updated = new Date().toLocaleDateString('en-GB', {
+  month: 'long',
+  year: 'numeric',
+});
+---
+
+<Base
+  title="Curriculum vitae"
+  description="Curriculum vitae of Dr Shamin Eabenson, MBBS MD Community Medicine — education, positions, memberships, awards and publications."
+>
+  <PageHeader
+    title="Curriculum vitae"
+    standfirst={`${person.name}, ${person.postNominals}`}
+    count={`Last updated ${updated}. Use your browser's print command to save a copy as PDF.`}
+  />
+
+  <section class="field-light pad">
+    <div class="wrap cv">
+      <p class="print-note no-print">
+        <button class="link-fill" id="print">Print or save as PDF</button>
+      </p>
+
+      <!-- Summary -->
+      <section class="sec">
+        <h2 class="sec-h">In brief</h2>
+        <dl class="brief">
+          <div><dt>Name</dt><dd>{person.name}</dd></div>
+          <div><dt>Qualifications</dt><dd>{person.postNominals}</dd></div>
+          <div><dt>Current post</dt><dd>{person.title}, {person.org}</dd></div>
+          <div>
+            <dt>Registration</dt>
+            <dd>{registration.council} ({registration.abbr}), {registration.number}</dd>
+          </div>
+          {person.email && (
+            <div><dt>Email</dt><dd><a class="link" href={`mailto:${person.email}`}>{person.email}</a></dd></div>
+          )}
+          <div>
+            <dt>Publications</dt>
+            <dd>{publications.length} peer-reviewed papers across {journalCount} journals</dd>
+          </div>
+        </dl>
+      </section>
+
+      <!-- Education -->
+      <section class="sec">
+        <h2 class="sec-h">Education</h2>
+        <ul class="rows">
+          {
+            education.map((e) => (
+              <li>
+                <span class="r-year">{e.year}</span>
+                <span class="r-body">
+                  <b>{e.degree}</b>
+                  <span>{e.institution}, {e.place}</span>
+                </span>
+              </li>
+            ))
+          }
+        </ul>
+      </section>
+
+      <!-- Positions -->
+      <section class="sec">
+        <h2 class="sec-h">Positions</h2>
+        <ul class="rows">
+          {
+            medicalVentures.map((v) => (
+              <li>
+                <span class="r-year">{v.role ? 'Current' : ''}</span>
+                <span class="r-body">
+                  <b>{v.name}</b>
+                  {v.role && <span>{v.role}</span>}
+                </span>
+              </li>
+            ))
+          }
+        </ul>
+      </section>
+
+      <!-- Memberships -->
+      <section class="sec">
+        <h2 class="sec-h">Professional memberships</h2>
+        <ul class="rows">
+          {
+            visibleMemberships.map((m) => (
+              <li>
+                <span class="r-year">{m.dates ?? ''}</span>
+                <span class="r-body">
+                  <b>{m.body}</b>
+                  <span>{m.detail}{m.number && `, ${m.number}`}</span>
+                </span>
+              </li>
+            ))
+          }
+        </ul>
+      </section>
+
+      <!-- Awards -->
+      <section class="sec">
+        <h2 class="sec-h">Awards and recognition</h2>
+        <ul class="rows">
+          {
+            awards.map((a) => (
+              <li>
+                <span class="r-year">{a.date ?? ''}</span>
+                <span class="r-body">
+                  <b>{a.title}</b>
+                  {a.issuer && <span>{a.issuer}</span>}
+                </span>
+              </li>
+            ))
+          }
+        </ul>
+      </section>
+
+      <!-- Publications -->
+      <section class="sec">
+        <h2 class="sec-h">Publications</h2>
+        <ol class="pubs">
+          {
+            publications.map((p) => (
+              <li>
+                <span class="p-title">
+                  {p.title}
+                  {p.subtitle && `: ${p.subtitle}`}
+                </span>
+                <span class="p-authors">
+                  {p.authors.map((a, i) => (
+                    <>
+                      {i > 0 && ', '}
+                      <span class:list={{ self: isSelf(a) }}>{a}</span>
+                    </>
+                  ))}
+                </span>
+                <span class="p-cite">
+                  {citationLine(p)}
+                  {p.doi && !p.doiUnresolved && (
+                    <>
+                      {' — '}
+                      <a class="link" href={`https://doi.org/${p.doi}`} rel="noopener">
+                        doi.org/{p.doi}
+                      </a>
+                    </>
+                  )}
+                  {p.doi && p.doiUnresolved && <> — doi {p.doi}</>}
+                </span>
+              </li>
+            ))
+          }
+        </ol>
+      </section>
+
+      <!-- In progress -->
+      <section class="sec">
+        <h2 class="sec-h">Under review</h2>
+        <ul class="rows">
+          {
+            inProgress.map((w) => (
+              <li>
+                <span class="r-year">{w.status}</span>
+                <span class="r-body">
+                  <b>{w.title}</b>
+                  {w.journal && <span>{w.journal}</span>}
+                </span>
+              </li>
+            ))
+          }
+        </ul>
+        <p class="more-note">
+          Further papers are at various stages of preparation and are not listed here until they
+          are submitted.
+        </p>
+      </section>
+
+      <!-- Presentations -->
+      <section class="sec">
+        <h2 class="sec-h">Presentations</h2>
+        <ul class="rows">
+          {
+            decks.map((d) => (
+              <li>
+                <span class="r-year">{d.date ?? d.kind}</span>
+                <span class="r-body">
+                  <b>{d.title}</b>
+                  <span>{d.kind}</span>
+                </span>
+              </li>
+            ))
+          }
+        </ul>
+      </section>
+
+      <!-- Profiles -->
+      <section class="sec">
+        <h2 class="sec-h">Academic profiles</h2>
+        <ul class="rows">
+          {
+            academicProfiles
+              .filter((p) => p.href)
+              .map((p) => (
+                <li>
+                  <span class="r-year">{p.label}</span>
+                  <span class="r-body">
+                    <a class="link p-link" href={p.href} rel="me noopener">
+                      {p.href.replace(/^https?:\/\//, '')}
+                    </a>
+                  </span>
+                </li>
+              ))
+          }
+        </ul>
+      </section>
+    </div>
+  </section>
+</Base>
+
+<script>
+  document.getElementById('print')?.addEventListener('click', () => window.print());
+</script>
+
+<style>
+  .cv {
+    max-width: 62rem;
+  }
+  .print-note {
+    margin-bottom: var(--s-7);
+  }
+
+  .sec + .sec {
+    margin-top: var(--s-8);
+  }
+  .sec-h {
+    font-variation-settings: 'wdth' 88;
+    font-weight: 600;
+    font-size: var(--t-lg);
+    letter-spacing: -0.02em;
+    padding-bottom: var(--s-3);
+    margin-bottom: var(--s-5);
+    border-bottom: 2px solid var(--indigo);
+  }
+
+  .brief {
+    display: grid;
+    gap: var(--s-3);
+    font-size: var(--t-sm);
+  }
+  .brief > div {
+    display: grid;
+    grid-template-columns: 170px minmax(0, 1fr);
+    gap: var(--s-4);
+  }
+  .brief dt {
+    color: var(--text-mute);
+  }
+  .brief dd {
+    margin: 0;
+  }
+  @media (max-width: 520px) {
+    .brief > div {
+      grid-template-columns: 1fr;
+      gap: var(--s-1);
+    }
+  }
+
+  .rows {
+    display: grid;
+  }
+  .rows li {
+    display: grid;
+    grid-template-columns: 170px minmax(0, 1fr);
+    gap: var(--s-4);
+    padding-block: var(--s-4);
+    border-bottom: 1px solid var(--rule);
+  }
+  .rows li:first-child {
+    padding-top: 0;
+  }
+  .rows li:last-child {
+    border-bottom: 0;
+  }
+  .r-year {
+    font-size: var(--t-sm);
+    color: var(--text-mute);
+  }
+  .r-body {
+    display: grid;
+    gap: var(--s-1);
+  }
+  .r-body b {
+    font-variation-settings: 'wdth' 92;
+    font-weight: 600;
+    font-size: var(--t-base);
+    letter-spacing: -0.01em;
+  }
+  .r-body span {
+    font-family: var(--serif);
+    font-size: var(--t-sm);
+    line-height: 1.55;
+    color: var(--text-soft);
+  }
+  .p-link {
+    font-family: var(--sans);
+    word-break: break-all;
+  }
+  @media (max-width: 520px) {
+    .rows li {
+      grid-template-columns: 1fr;
+      gap: var(--s-2);
+    }
+  }
+
+  .pubs {
+    display: grid;
+    counter-reset: pub;
+    list-style: none;
+    padding: 0;
+  }
+  .pubs li {
+    display: grid;
+    gap: var(--s-1);
+    padding-block: var(--s-4);
+    padding-left: var(--s-6);
+    border-bottom: 1px solid var(--rule);
+    position: relative;
+    counter-increment: pub;
+  }
+  .pubs li::before {
+    content: counter(pub) '.';
+    position: absolute;
+    left: 0;
+    top: var(--s-4);
+    font-size: var(--t-sm);
+    color: var(--text-mute);
+    font-variant-numeric: tabular-nums;
+  }
+  .pubs li:first-child {
+    padding-top: 0;
+  }
+  .pubs li:first-child::before {
+    top: 0;
+  }
+  .pubs li:last-child {
+    border-bottom: 0;
+  }
+  .p-title {
+    font-family: var(--serif);
+    font-weight: 600;
+    font-size: var(--t-base);
+    line-height: 1.4;
+  }
+  .p-authors {
+    font-size: var(--t-sm);
+    color: var(--text-soft);
+  }
+  .p-authors .self {
+    color: var(--text);
+    font-weight: 600;
+  }
+  .p-cite {
+    font-size: var(--t-sm);
+    color: var(--text-mute);
+  }
+
+  .more-note {
+    margin-top: var(--s-5);
+    font-size: var(--t-sm);
+    font-style: italic;
+    color: var(--text-mute);
+  }
+
+  /* Printing this page is the PDF. There is no separate file to drift. */
+  @media print {
+    .no-print {
+      display: none !important;
+    }
+    .sec {
+      break-inside: avoid;
+    }
+    .rows li,
+    .pubs li {
+      break-inside: avoid;
+    }
+  }
+</style>

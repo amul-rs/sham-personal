@@ -15,11 +15,17 @@ npm run preview
 ## Architecture
 
 ```
+CLAUDE.md        what the client supplied, verbatim, plus the decisions taken
+                 from it. When client answers and code disagree, that file wins.
+REQUIREMENTS.md  what is still outstanding, and what each answer unblocks.
+
 src/
   data/          the single source of truth — no content lives in markup
-    site.js          identity, navigation, outbound profiles
-    publications.js  7 papers + citationLine() helper
-    themes.js        5 research themes → /research/[slug]
+    site.js          identity, navigation, outbound profiles, clinical mode
+    publications.js  14 papers, 2 under review, citation + BibTeX helpers
+    credentials.js   education, registration, positions, memberships, awards
+    themes.js        8 research themes → /research/[slug]
+    themeDetail.js   long-form copy where it exists; pages degrade without it
     teaching.js      SlideShare decks
   styles/
     tokens.css     colour, fluid type scale, spacing, the shared column split
@@ -32,7 +38,9 @@ src/
 
 `publications.js` feeds the home page, the theme pages, the Publications page
 and the CV from one place, so those four can never disagree — which is the
-failure mode the spec calls out.
+failure mode the spec calls out. `credentials.js` does the same for About and
+the CV. The CV has no separate PDF: it is styled for print, so there is no
+second document to drift out of step.
 
 ## Conventions worth knowing
 
@@ -54,6 +62,11 @@ failure mode the spec calls out.
 - **Marigold means counting.** It is used on data marks and nothing else. On
   light grounds use `--marigold-dark`, which clears 3:1 where the bright one
   does not.
+- **A DOI is only linked if it resolves.** `doiUnresolved: true` renders the
+  identifier as text instead of linking to a 404. All DOIs were checked against
+  doi.org; re-check when adding papers.
+- **Held-back facts.** `hold: true` on a membership keeps it out of the rendered
+  page. Used where we believe the supplied detail is wrong — see CLAUDE.md §2.
 
 ## Still blocked on client answers
 

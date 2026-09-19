@@ -1,13 +1,13 @@
 ---
 import Base from '../layouts/Base.astro';
 import PageHeader from '../components/PageHeader.astro';
-import { person, profiles } from '../data/site.js';
+import { person, elsewhereProfiles } from '../data/site.js';
 
 const live = Boolean(person.formEndpoint);
-const reachable = profiles.filter((p) => ['LinkedIn', 'ResearchGate'].includes(p.label) && p.href);
 
 const purposes = [
   'Research collaboration',
+  'Consultation request',
   'Speaking invitation',
   'Student or teaching question',
   'Press and media',
@@ -16,24 +16,26 @@ const purposes = [
 
 <Base
   title="Contact"
-  description="Contact Dr Shamin Eabenson about research collaboration, speaking invitations, questions from students, or press enquiries."
+  description="Contact Dr Shamin Eabenson about research collaboration, a telemedicine consultation, speaking invitations or student questions."
 >
   <PageHeader
     title="Get in touch"
-    standfirst="For research collaboration, speaking invitations, questions from students, or press enquiries."
+    standfirst="For research collaboration, a consultation, speaking invitations, questions from students, or press enquiries."
   />
 
   <section class="field-light pad">
     <div class="wrap form-grid">
       <div>
         {
-          !live && (
+          !live && person.email && (
             <div class="notice">
               <p>
-                <strong>This form is not connected yet.</strong> The site is static and has no mail
-                server of its own, so an external form service has to be configured before anything
-                sent here can be delivered. Until then, please use one of the profiles listed
-                alongside.
+                <strong>The form below is not connected yet.</strong> This site is static and has no
+                mail server of its own, so a form service has to be configured before anything sent
+                here can be delivered. In the meantime, email works:{' '}
+                <a class="link" href={`mailto:${person.email}`}>
+                  {person.email}
+                </a>
               </p>
             </div>
           )
@@ -88,22 +90,43 @@ const purposes = [
           </label>
 
           <p class="medical">
-            Please do not send questions about your own health through this form, and do not use it
-            for anything urgent. If you have a medical emergency, go to your nearest hospital.
+            Please do not describe your own symptoms or send medical records through this form, and
+            do not use it for anything urgent. If you have a medical emergency, go to your nearest
+            hospital. To arrange a telemedicine appointment, see
+            <a class="link" href="/clinical/">consultation</a>.
           </p>
 
           <p>
             <button class="submit" type="submit" disabled={!live}>Send message</button>
-            {!live && <span id="form-disabled" class="disabled-why">Sending is disabled until the form service is configured.</span>}
+            {
+              !live && (
+                <span id="form-disabled" class="disabled-why">
+                  Sending is disabled until the form service is configured. Please use email.
+                </span>
+              )
+            }
           </p>
         </form>
       </div>
 
       <aside class="aside">
-        <h2 class="aside-h">Elsewhere</h2>
+        {
+          person.email && (
+            <>
+              <h2 class="aside-h">Email</h2>
+              <p class="mail">
+                <a class="link" href={`mailto:${person.email}`}>
+                  {person.email}
+                </a>
+              </p>
+            </>
+          )
+        }
+
+        <h2 class="aside-h aside-h-2">Elsewhere</h2>
         <ul class="links">
           {
-            reachable.map((p) => (
+            elsewhereProfiles.map((p) => (
               <li>
                 <a class="link" href={p.href} rel="me noopener">
                   {p.label}
@@ -113,14 +136,11 @@ const purposes = [
           }
         </ul>
 
-        <h2 class="aside-h aside-h-2">Department address</h2>
-        <address class="addr">
-          {person.department}<br />
-          {person.institution}<br />
-          {person.city}
-          {person.postcode}<br />
-          {person.region}, {person.country}
-        </address>
+        <h2 class="aside-h aside-h-2">Consultations</h2>
+        <p class="note">
+          Dr Eabenson consults by telemedicine.
+          <a class="link" href="/clinical/">How it works</a>.
+        </p>
       </aside>
     </div>
   </section>
@@ -146,9 +166,12 @@ const purposes = [
     padding: var(--s-4) var(--s-5);
     margin-bottom: var(--s-7);
     font-size: var(--t-sm);
-    line-height: 1.6;
+    line-height: 1.7;
     color: var(--text-soft);
     max-width: 60ch;
+    /* The email address is one long unbreakable token; without this it forces
+       the whole page to scroll sideways on a 320px screen. */
+    overflow-wrap: anywhere;
   }
   .notice strong {
     color: var(--text);
@@ -247,6 +270,7 @@ const purposes = [
 
   .medical {
     font-size: var(--t-sm);
+    line-height: 1.7;
     color: var(--text-soft);
     max-width: 56ch;
     padding-top: var(--s-4);
@@ -288,15 +312,18 @@ const purposes = [
   .aside-h-2 {
     margin-top: var(--s-7);
   }
+  .mail {
+    font-size: var(--t-sm);
+    word-break: break-word;
+  }
   .links {
     display: grid;
     gap: var(--s-3);
     font-size: var(--t-sm);
   }
-  .addr {
-    font-style: normal;
+  .note {
     font-size: var(--t-sm);
-    line-height: 1.75;
+    line-height: 1.7;
     color: var(--text-soft);
   }
 </style>

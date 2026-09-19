@@ -1,23 +1,22 @@
 ---
-import { person, nav, footerPages, profiles } from '../data/site.js';
+import { person, nav, footerPages, academicProfiles, elsewhereProfiles } from '../data/site.js';
 const year = new Date().getFullYear();
-const academic = profiles.filter((p) =>
-  ['ORCID', 'ResearchGate', 'Academia.edu', 'Google Scholar', 'Scopus'].includes(p.label)
-);
-const elsewhere = profiles.filter((p) => ['LinkedIn', 'SlideShare'].includes(p.label));
 ---
 
 <footer class="foot">
   <div class="wrap">
     <div class="cols">
       <div class="col col-lead">
-        <p class="sign">Shamin Eabenson</p>
-        <address class="addr">
-          {person.department}<br />
-          {person.institution}<br />
-          {person.city}
-          {person.postcode}, {person.region}, {person.country}
-        </address>
+        <p class="sign">Dr Shamin Eabenson</p>
+        <p class="quals">{person.postNominals}</p>
+        <p class="post">{person.title}, {person.org}</p>
+        {
+          person.email && (
+            <p class="email">
+              <a href={`mailto:${person.email}`}>{person.email}</a>
+            </p>
+          )
+        }
       </div>
 
       <div class="col">
@@ -32,7 +31,7 @@ const elsewhere = profiles.filter((p) => ['LinkedIn', 'SlideShare'].includes(p.l
         <h2 class="col-h">Academic profiles</h2>
         <ul class="list">
           {
-            academic.map((p) => (
+            academicProfiles.map((p) => (
               <li>
                 {p.href ? (
                   <a href={p.href} rel="me noopener">
@@ -50,7 +49,15 @@ const elsewhere = profiles.filter((p) => ['LinkedIn', 'SlideShare'].includes(p.l
       <div class="col">
         <h2 class="col-h">Elsewhere</h2>
         <ul class="list">
-          {elsewhere.map((p) => (<li><a href={p.href} rel="me noopener">{p.label}</a></li>))}
+          {
+            elsewhereProfiles.map((p) => (
+              <li>
+                <a href={p.href} rel="me noopener">
+                  {p.label}
+                </a>
+              </li>
+            ))
+          }
         </ul>
       </div>
     </div>
@@ -96,11 +103,17 @@ const elsewhere = profiles.filter((p) => ['LinkedIn', 'SlideShare'].includes(p.l
     letter-spacing: -0.02em;
     color: var(--on-dark);
   }
-  .addr {
-    font-style: normal;
-    line-height: 1.75;
+  .quals {
+    margin-top: var(--s-1);
+  }
+  .post {
     margin-top: var(--s-4);
-    max-width: 34ch;
+    max-width: 30ch;
+    line-height: 1.6;
+  }
+  .email {
+    margin-top: var(--s-4);
+    word-break: break-word;
   }
 
   .col-h {

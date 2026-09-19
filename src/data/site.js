@@ -1,54 +1,151 @@
-// Single source of truth for identity, navigation and outbound profiles.
-// Anything the client has not yet confirmed is `null` — components hide the
-// element rather than rendering a placeholder. We do not invent a doctor's
-// contact details or credentials.
+// Identity, navigation and outbound profiles.
+// Client-supplied 19 September 2026 — see CLAUDE.md §1 and §3.
+//
+// Anything not yet confirmed is `null`; components hide the element rather than
+// rendering a placeholder. We do not invent a doctor's contact details.
 
 export const person = {
   name: 'Dr Shamin Eabenson',
-  given: 'Dr Shamin',
+  given: 'Shamin',
   family: 'Eabenson',
-  department: 'Department of Community Medicine',
-  institution:
-    'BLDE (Deemed to be University), Shri B. M. Patil Medical College, Hospital and Research Centre',
-  institutionShort: 'BLDE (DU), Shri B. M. Patil Medical College',
-  city: 'Vijayapura',
-  region: 'Karnataka',
-  country: 'India',
-  postcode: '586103',
-  // Q2 — pending client answer. Nothing renders an email until this is set.
-  email: null,
+  postNominals: 'MBBS, MD Community Medicine',
+  title: 'Founder and Director',
+  org: 'Eabenson Healthcare Private Limited',
+
+  // Where he took his MD. This is his alma mater, not his current address —
+  // the MD completed in 2026, so the department address no longer describes
+  // where he works.
+  almaMater: 'BLDE (Deemed to be University), Shri B. M. Patil Medical College, Hospital and Research Centre',
+  almaMaterShort: 'BLDE (DU), Shri B. M. Patil Medical College',
+  almaMaterCity: 'Vijayapura, Karnataka',
+
+  // The region his research covers, which is a claim about the studies rather
+  // than about where he currently sits.
+  researchRegion: 'North Karnataka',
+
+  /**
+   * Public contact. He supplied four addresses; this is the company one, which
+   * matches his current post and keeps the medical identity separate from the
+   * ministry. Alternatives on file: drshamin123@gmail.com, dr_shamin@yahoo.com.
+   */
+  email: 'drshamineabenson@eabensonhealthcare.com',
+
+  /**
+   * Postal address for Eabenson Healthcare Private Limited — not supplied.
+   * Until it is, no postal address is printed anywhere on the site.
+   */
+  address: null,
+
   /**
    * Where the contact form POSTs. A static site has no server of its own, so
-   * this must be a form service (Formspree, Netlify Forms, Web3Forms...) or
-   * the form cannot deliver anything. While it is null the page says so
-   * plainly instead of pretending to accept messages.
+   * this must be a form service (Formspree, Netlify Forms, Web3Forms...) or the
+   * form cannot deliver anything. While it is null the page says so plainly
+   * instead of pretending to accept messages.
    */
   formEndpoint: null,
+
+  /** Telemedicine only, confirmed. Days, timings and languages not supplied. */
+  clinical: {
+    telemedicine: true,
+    inPerson: false,
+    days: null,
+    timings: null,
+    languages: null,
+    bookingUrl: null,
+  },
+
   lede:
-    'Medicine practised at the scale of a population — studying how health systems, education and everyday risk shape the lives of people in North Karnataka.',
+    'Medicine practised at the scale of a population — how health systems, education and everyday risk shape the lives of people in North Karnataka.',
 };
 
-// Writing (Q28), Clinical (Q16-19), Speaking (Q20-25) and the CV (Q5-10) are
-// deliberately absent: linking a page we cannot honestly fill produces a 404,
-// and a half-true clinical or CV page is worse than no page. Restore each
-// entry at the same time as its page.
+// Writing (Q27), Speaking (Q19–21) and the ministry question (Q22) are still
+// unanswered, so those pages are neither built nor linked. Restore the entry at
+// the same time as the page.
 export const nav = [
   { label: 'About', href: '/about/' },
   { label: 'Research', href: '/research/' },
   { label: 'Publications', href: '/publications/' },
   { label: 'Teaching', href: '/teaching/' },
+  { label: 'Consultation', href: '/clinical/' },
   { label: 'Contact', href: '/contact/' },
 ];
 
-export const footerPages = [{ label: 'Privacy', href: '/privacy/' }];
-
-// `pending: true` renders as a muted, non-clickable row until confirmed.
-export const profiles = [
-  { label: 'ORCID', detail: '0009-0002-6516-7234', href: 'https://orcid.org/0009-0002-6516-7234' },
-  { label: 'ResearchGate', detail: 'Publications and preprints', href: 'https://www.researchgate.net/profile/Shamin-Eabenson' },
-  { label: 'Academia.edu', detail: 'Papers and drafts', href: 'https://bldeu.academia.edu/DrSHAMINEABENSON' },
-  { label: 'LinkedIn', detail: 'Professional profile', href: 'https://www.linkedin.com/in/dr-shamin-eabenson-1a55811b3/' },
-  { label: 'SlideShare', detail: 'Teaching material', href: 'https://www.slideshare.net/DrSHAMINEABENSON1' },
-  { label: 'Google Scholar', detail: 'Awaiting link', href: null, pending: true },
-  { label: 'Scopus', detail: 'Awaiting author ID', href: null, pending: true },
+export const footerPages = [
+  { label: 'Curriculum vitae', href: '/about/cv/' },
+  { label: 'Privacy', href: '/privacy/' },
 ];
+
+// Every link below was supplied by the client. `pending: true` renders muted and
+// unclickable rather than being silently dropped.
+export const profiles = [
+  {
+    label: 'ORCID',
+    detail: '0009-0002-6516-7234',
+    href: 'https://orcid.org/0009-0002-6516-7234',
+    group: 'academic',
+  },
+  {
+    label: 'Google Scholar',
+    detail: 'Citations and metrics',
+    href: 'https://scholar.google.com/citations?user=iGElE6UAAAAJ&hl=en',
+    group: 'academic',
+  },
+  {
+    label: 'Web of Science',
+    detail: 'ResearcherID QDN-7117-2026',
+    href: 'https://www.webofscience.com/wos/author/record/QDN-7117-2026',
+    group: 'academic',
+  },
+  {
+    label: 'ResearchGate',
+    detail: 'Publications and preprints',
+    href: 'https://www.researchgate.net/profile/Shamin-Eabenson',
+    group: 'academic',
+  },
+  {
+    label: 'Semantic Scholar',
+    detail: 'Indexed papers',
+    href: 'https://www.semanticscholar.org/author/Shamin-Eabenson/2421380683',
+    group: 'academic',
+  },
+  {
+    label: 'Academia.edu',
+    detail: 'Papers and drafts',
+    href: 'https://bldeu.academia.edu/DrSHAMINEABENSON',
+    group: 'academic',
+  },
+  {
+    label: 'Researchers Profile',
+    detail: 'Profile 41486',
+    href: 'https://researchersprofile.com/users/41486/shamin-eabenson',
+    group: 'academic',
+  },
+  {
+    label: 'Scopus',
+    detail: 'Author ID awaited',
+    href: null,
+    pending: true,
+    group: 'academic',
+  },
+  {
+    label: 'LinkedIn',
+    detail: 'Professional profile',
+    href: 'https://www.linkedin.com/in/dr-shamin-eabenson-1a55811b3/',
+    group: 'elsewhere',
+  },
+  {
+    label: 'SlideShare',
+    detail: 'Teaching material',
+    href: 'https://www.slideshare.net/DrSHAMINEABENSON1',
+    group: 'elsewhere',
+  },
+  {
+    label: 'Medisage',
+    detail: 'Clinical profile',
+    href: 'https://mymedisage.com/profile/dr-shamin-eabenson-general-practitioner-gp',
+    group: 'elsewhere',
+  },
+];
+
+export const academicProfiles = profiles.filter((p) => p.group === 'academic');
+export const elsewhereProfiles = profiles.filter((p) => p.group === 'elsewhere');

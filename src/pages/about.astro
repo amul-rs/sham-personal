@@ -4,78 +4,165 @@ import PageHeader from '../components/PageHeader.astro';
 import { person } from '../data/site.js';
 import { publications } from '../data/publications.js';
 import { themes } from '../data/themes.js';
+import {
+  education,
+  registration,
+  awards,
+  visibleMemberships,
+  medicalVentures,
+} from '../data/credentials.js';
 
 // Derived, never hardcoded, so the prose cannot drift from the data.
 const journalCount = new Set(publications.map((p) => p.journal)).size;
-
-// Education, positions held, registration, memberships and awards are
-// deliberately absent from this page. Nothing public states them, and a
-// doctor's qualifications are not something to infer. Those sections appear
-// here only once the answers to Q5–Q10 arrive.
+const mbbs = education.find((e) => e.degree === 'MBBS');
+const md = education.find((e) => e.degree.startsWith('MD'));
 ---
 
 <Base
   title="About"
-  description="Dr Shamin Eabenson is a physician in the Department of Community Medicine at BLDE (DU), Shri B. M. Patil Medical College, Vijayapura, Karnataka."
+  description="Dr Shamin Eabenson, MBBS MD Community Medicine. Founder and Director of Eabenson Healthcare Private Limited, and a public health researcher."
 >
   <PageHeader
     title="About"
-    standfirst="A physician working in community medicine in North Karnataka, with research spanning medical education, road safety, access to medicines, infection control and medical ethics."
+    standfirst="A physician in community medicine, researching how health systems, education and everyday risk shape the lives of people in North Karnataka."
   />
 
   <section class="field-light pad">
     <div class="wrap bio-grid">
       <div class="prose bio">
         <p>
-          Dr Shamin Eabenson is a medical doctor working in the {person.department} at {
-            person.institution
-          } in {person.city}, {person.region}.
+          Dr Shamin Eabenson took his MBBS at {mbbs.institution} in {mbbs.place} in {mbbs.year}, and
+          his MD in Community Medicine at {md.institution} in {md.place} in {md.year}. He is the
+          {person.title.toLowerCase()} of {person.org}.
         </p>
         <p>
           Community medicine asks a different question from most of clinical practice. Instead of
           what is wrong with this patient, it asks what is happening to this population, and why.
           That shift runs through all of his published work. When he studied road traffic accidents
-          in {person.city}, the question was not how to treat the injured but who was being injured,
-          and what pattern the answer revealed. When he surveyed medical students about artificial
-          intelligence, the question was whether the curriculum is preparing them for the practice
-          they will actually enter.
+          in Vijayapura, the question was not how to treat the injured but who was being injured,
+          and what happened in the hour that followed. When he surveyed medical students about
+          artificial intelligence, the question was whether the curriculum is preparing them for the
+          practice they will actually enter.
         </p>
         <p>
-          In 2026 he published {publications.length} papers across {journalCount} journals, covering
-          medical education, generic medicines under the Janaushadhi scheme, road safety, infection
-          control in dental practice, biomedical waste management, and the perception of medical
-          negligence among undergraduates. The common thread is the training and conduct of doctors,
-          examined with the same methods he would apply to any other public health problem.
+          He has published {publications.length} peer-reviewed papers across {journalCount} journals,
+          covering medical education, road safety and emergency response, access to generic medicines
+          under the Janaushadhi scheme, infection control, biomedical waste, heat related illness,
+          the work of ASHA community health workers, and the perception of medical negligence among
+          undergraduates. The common thread is the training and conduct of doctors, and the systems
+          that surround a patient, examined with the same methods he would apply to any other public
+          health problem.
         </p>
         <p>
-          Alongside research he teaches and presents in departmental journal clubs, and publishes his
-          teaching material openly so that students outside his institution can use it.
+          Alongside research he teaches and presents in departmental journal clubs, publishes his
+          teaching material openly, and consults patients by telemedicine.
         </p>
       </div>
 
       <dl class="facts">
         <div>
-          <dt>Department</dt>
-          <dd>Community Medicine</dd>
+          <dt>Qualifications</dt>
+          <dd>{person.postNominals}</dd>
         </div>
         <div>
-          <dt>Institution</dt>
-          <dd>{person.institution}</dd>
+          <dt>Current post</dt>
+          <dd>{person.title}, {person.org}</dd>
         </div>
         <div>
-          <dt>Based in</dt>
-          <dd>{person.city}, {person.region}, {person.country}</dd>
+          <dt>Registration</dt>
+          <dd>{registration.council}, {registration.number}</dd>
         </div>
         <div>
           <dt>Published</dt>
-          <dd>
-            {publications.length} peer-reviewed papers across {journalCount} journals, 2026
-          </dd>
+          <dd>{publications.length} papers across {journalCount} journals</dd>
         </div>
       </dl>
     </div>
   </section>
 
+  <!-- ── Education ── -->
+  <section class="field-light">
+    <div class="wrap block-grid">
+      <h2 class="block-h">Education</h2>
+      <div>
+        <ul class="entries">
+          {
+            education.map((e) => (
+              <li>
+                <span class="e-main">{e.degree}</span>
+                <span class="e-sub">
+                  {e.institution}, {e.place}
+                </span>
+                <span class="e-side">{e.year}</span>
+              </li>
+            ))
+          }
+        </ul>
+        <p class="reg">
+          Registered with the {registration.council} ({registration.abbr}), registration number
+          {' '}{registration.number}.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Positions ── -->
+  <section class="field-light">
+    <div class="wrap block-grid">
+      <h2 class="block-h">Positions</h2>
+      <ul class="entries">
+        {
+          medicalVentures.map((v) => (
+            <li>
+              <span class="e-main">{v.name}</span>
+              {v.role && <span class="e-sub">{v.role}</span>}
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <!-- ── Memberships ── -->
+  <section class="field-light">
+    <div class="wrap block-grid">
+      <h2 class="block-h">Professional memberships</h2>
+      <ul class="entries">
+        {
+          visibleMemberships.map((m) => (
+            <li>
+              <span class="e-main">{m.body}</span>
+              <span class="e-sub">
+                {m.detail}
+                {m.number && `, ${m.number}`}
+              </span>
+              {m.dates && <span class="e-side">{m.dates}</span>}
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <!-- ── Awards ── -->
+  <section class="field-light">
+    <div class="wrap block-grid">
+      <h2 class="block-h">Awards and recognition</h2>
+      <ul class="entries">
+        {
+          awards.map((a) => (
+            <li>
+              <span class="e-main">{a.title}</span>
+              {a.issuer && <span class="e-sub">{a.issuer}</span>}
+              {a.date && <span class="e-side">{a.date}</span>}
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <!-- ── Onward ── -->
   <section class="field-light">
     <div class="wrap">
       <h2 class="section-head">Where the work goes</h2>
@@ -98,23 +185,33 @@ const journalCount = new Set(publications.map((p) => p.journal)).size;
 
   <section class="field-indigo pad">
     <div class="wrap split">
-      <h2 class="cta-head">Questions about any of the studies are welcome.</h2>
-      <p><a class="link-fill" href="/contact/">Send an enquiry</a></p>
+      <h2 class="cta-head">The full record, in one page.</h2>
+      <div>
+        <p><a class="link-fill" href="/about/cv/">Curriculum vitae</a></p>
+        <p class="cta-body">
+          Education, positions, memberships, awards and every publication — generated from the same
+          data as this page, so the two cannot disagree.
+        </p>
+      </div>
     </div>
   </section>
 </Base>
 
 <style>
-  .bio-grid {
+  .bio-grid,
+  .block-grid,
+  .split {
     display: grid;
     grid-template-columns: var(--split);
     gap: var(--split-gap);
     align-items: start;
   }
   @media (max-width: 880px) {
-    .bio-grid {
+    .bio-grid,
+    .block-grid,
+    .split {
       grid-template-columns: 1fr;
-      gap: var(--s-7);
+      gap: var(--s-4);
     }
   }
   .bio {
@@ -136,14 +233,83 @@ const journalCount = new Set(publications.map((p) => p.journal)).size;
     margin: 0;
   }
 
+  /* ---- credential blocks ---- */
+  .block-grid {
+    padding-block: var(--s-7);
+    border-top: 1px solid var(--rule);
+  }
+  .block-h {
+    font-variation-settings: 'wdth' 88;
+    font-weight: 600;
+    font-size: var(--t-lg);
+    letter-spacing: -0.02em;
+    color: var(--text-mute);
+  }
+
+  .entries {
+    display: grid;
+  }
+  .entries li {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    column-gap: var(--s-5);
+    padding-block: var(--s-4);
+    border-bottom: 1px solid var(--rule);
+  }
+  .entries li:first-child {
+    padding-top: 0;
+  }
+  .entries li:last-child {
+    border-bottom: 0;
+  }
+  .e-main {
+    font-variation-settings: 'wdth' 92;
+    font-weight: 600;
+    font-size: var(--t-base);
+    letter-spacing: -0.01em;
+  }
+  .e-sub {
+    grid-column: 1;
+    font-family: var(--serif);
+    font-size: var(--t-sm);
+    line-height: 1.55;
+    color: var(--text-soft);
+    margin-top: var(--s-1);
+    max-width: 58ch;
+  }
+  .e-side {
+    grid-column: 2;
+    grid-row: 1;
+    font-size: var(--t-sm);
+    color: var(--text-mute);
+    white-space: nowrap;
+  }
+  @media (max-width: 520px) {
+    .entries li {
+      grid-template-columns: 1fr;
+    }
+    .e-side {
+      grid-column: 1;
+      grid-row: auto;
+      margin-top: var(--s-2);
+    }
+  }
+
+  .reg {
+    margin-top: var(--s-5);
+    font-size: var(--t-sm);
+    color: var(--text-soft);
+    max-width: 52ch;
+  }
+
+  /* ---- onward ---- */
   .section-head {
     font-size: var(--t-lg);
     font-variation-settings: 'wdth' 88;
     font-weight: 600;
     color: var(--text-mute);
-    margin-bottom: var(--s-6);
+    margin-block: var(--s-7) var(--s-6);
   }
-
   .onward {
     border-top: 1px solid var(--rule);
   }
@@ -190,18 +356,6 @@ const journalCount = new Set(publications.map((p) => p.journal)).size;
     color: var(--on-dark-soft);
   }
 
-  .split {
-    display: grid;
-    grid-template-columns: var(--split);
-    gap: var(--split-gap);
-    align-items: start;
-  }
-  @media (max-width: 880px) {
-    .split {
-      grid-template-columns: 1fr;
-      gap: var(--s-5);
-    }
-  }
   .cta-head {
     font-variation-settings: 'wdth' 85;
     font-weight: 600;
@@ -211,5 +365,13 @@ const journalCount = new Set(publications.map((p) => p.journal)).size;
     margin-left: var(--optical-left);
     color: var(--on-dark);
     max-width: 18ch;
+  }
+  .cta-body {
+    margin-top: var(--s-5);
+    font-family: var(--serif);
+    font-size: var(--t-sm);
+    line-height: 1.7;
+    color: var(--on-dark-soft);
+    max-width: 46ch;
   }
 </style>

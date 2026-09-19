@@ -1,5 +1,5 @@
 ---
-import { citationLine } from '../data/publications.js';
+import { citationLine, isSelf } from '../data/publications.js';
 const { pub, compact = false } = Astro.props;
 ---
 
@@ -14,7 +14,7 @@ const { pub, compact = false } = Astro.props;
         pub.authors.map((a, i) => (
           <>
             {i > 0 && ', '}
-            <span class:list={{ self: a.startsWith('Eabenson') }}>{a}</span>
+            <span class:list={{ self: isSelf(a) }}>{a}</span>
           </>
         ))
       }
@@ -22,10 +22,12 @@ const { pub, compact = false } = Astro.props;
     <p class="cite">{citationLine(pub)}</p>
     {!compact && pub.note && <p class="note">{pub.note}</p>}
     {
-      pub.doi ? (
+      pub.doi && !pub.doiUnresolved ? (
         <a class="doi" href={`https://doi.org/${pub.doi}`} rel="noopener">
           Read the paper
         </a>
+      ) : pub.doi ? (
+        <p class="nodoi">DOI {pub.doi} — not yet resolving</p>
       ) : (
         <p class="nodoi">DOI not yet available</p>
       )

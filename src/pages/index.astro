@@ -4,21 +4,25 @@ import Tally from '../components/Tally.astro';
 import { person } from '../data/site.js';
 import { themes } from '../data/themes.js';
 import { publications, byTheme, citationLine } from '../data/publications.js';
+import { registration, education } from '../data/credentials.js';
 
 const recent = publications.slice(0, 3);
+const md = education[0];
 ---
 
 <Base
   title="Dr Shamin Eabenson — Community Medicine & Public Health"
   bareTitle
-  description="Physician and postgraduate in Community Medicine at BLDE (DU), Vijayapura. Research on medical education, road safety and access to medicines."
+  description="Dr Shamin Eabenson, MBBS MD Community Medicine. Research on medical education, road safety, access to medicines and community health systems."
 >
   <!-- ═══ Hero: the population is the hero ═══ -->
   <section class="hero field-deep">
     <div class="wrap">
       <h1 class="name">Shamin<br />Eabenson</h1>
+      <p class="quals">{person.postNominals}</p>
       <p class="role">
-        A physician in community medicine at {person.institutionShort}, {person.city}.
+        {person.title} of {person.org}, and a community medicine researcher working across
+        {person.researchRegion}.
       </p>
     </div>
 
@@ -29,8 +33,8 @@ const recent = publications.slice(0, 3);
     <div class="wrap">
       <p class="reading">
         <strong>111 of the 195</strong> medical students he surveyed said artificial intelligence
-        threatens the human part of being a doctor. Eighty-two thought it would take their job. Almost
-        none had been taught anything about it.
+        threatens the human part of being a doctor. Eighty-two thought it would take their job.
+        Almost none had been taught anything about it.
       </p>
     </div>
   </section>
@@ -41,15 +45,15 @@ const recent = publications.slice(0, 3);
       <div class="prose statement">
         <p>
           Community medicine asks a different question from most of clinical practice. Not
-          <em>what is wrong with this patient</em>, but <em>what is happening to this population, and
-          why</em>.
+          <em>what is wrong with this patient</em>, but <em>what is happening to this population,
+          and why</em>.
         </p>
         <p>
           That shift runs through everything he publishes. When he studied road traffic accidents in
           Vijayapura, the question was not how to treat the injured but who was being injured, and
-          what pattern the answer revealed. When he surveyed students about artificial intelligence,
-          the question was whether the curriculum is preparing them for the practice they will
-          actually enter.
+          what happened in the hour afterwards. When he surveyed students about artificial
+          intelligence, the question was whether the curriculum is preparing them for the practice
+          they will actually enter.
         </p>
         <p>
           <a class="link" href="/about/">More about him</a>
@@ -58,20 +62,20 @@ const recent = publications.slice(0, 3);
 
       <dl class="facts">
         <div>
-          <dt>Department</dt>
-          <dd>Community Medicine</dd>
+          <dt>Qualified</dt>
+          <dd>{md.degree}, {md.year}</dd>
         </div>
         <div>
-          <dt>Institution</dt>
-          <dd>{person.institution}</dd>
+          <dt>Current post</dt>
+          <dd>{person.title}, {person.org}</dd>
         </div>
         <div>
-          <dt>Based in</dt>
-          <dd>{person.city}, {person.region}, {person.country}</dd>
+          <dt>Registration</dt>
+          <dd>{registration.council} {registration.number}</dd>
         </div>
         <div>
           <dt>Published</dt>
-          <dd>{publications.length} peer-reviewed papers in 2026</dd>
+          <dd>{publications.length} peer-reviewed papers</dd>
         </div>
       </dl>
     </div>
@@ -133,12 +137,18 @@ const recent = publications.slice(0, 3);
       </h2>
       <div>
         <p class="contact-cta"><a class="link-fill" href="/contact/">Send an enquiry</a></p>
-        <address class="contact-addr">
-          {person.department}<br />
-          {person.institution}<br />
-          {person.city}
-          {person.postcode}, {person.region}
-        </address>
+        {
+          person.email && (
+            <p class="contact-mail">
+              <a class="link" href={`mailto:${person.email}`}>
+                {person.email}
+              </a>
+            </p>
+          )
+        }
+        <p class="contact-note">
+          Consulting patients by <a class="link" href="/clinical/">telemedicine</a>.
+        </p>
       </div>
     </div>
   </section>
@@ -158,13 +168,18 @@ const recent = publications.slice(0, 3);
     margin-left: var(--optical-left);
     color: var(--on-dark);
   }
+  .quals {
+    margin-top: var(--s-4);
+    font-size: var(--t-md);
+    color: var(--marigold);
+  }
   .role {
     font-family: var(--serif);
     font-size: var(--t-md);
     line-height: 1.55;
     color: var(--on-dark-soft);
-    max-width: 34ch;
-    margin-top: var(--s-5);
+    max-width: 38ch;
+    margin-top: var(--s-4);
   }
 
   .tally-band {
@@ -230,7 +245,7 @@ const recent = publications.slice(0, 3);
     margin-bottom: var(--s-6);
   }
 
-  /* ---------- themes: full-bleed rows that fill on hover ---------- */
+  /* ---------- themes ---------- */
   .themes {
     border-top: 1px solid var(--rule);
   }
@@ -247,10 +262,10 @@ const recent = publications.slice(0, 3);
     grid-template-columns: var(--split);
     gap: var(--split-gap);
     align-items: baseline;
-    padding-block: clamp(1.25rem, 0.8rem + 1.6vw, 2.25rem);
+    padding-block: clamp(1.1rem, 0.7rem + 1.4vw, 1.9rem);
   }
-  /* Description and count share the second column, so the count stays
-     flush right without breaking the page's shared vertical axis. */
+  /* Description and count share the second column, so the count stays flush
+     right without breaking the page's shared vertical axis. */
   .theme-meta {
     display: flex;
     justify-content: space-between;
@@ -294,9 +309,6 @@ const recent = publications.slice(0, 3);
   }
 
   /* ---------- recent papers ---------- */
-  .papers {
-    counter-reset: none;
-  }
   .papers li {
     border-top: 1px solid var(--rule);
   }
@@ -362,11 +374,14 @@ const recent = publications.slice(0, 3);
     color: var(--on-dark);
     max-width: 18ch;
   }
-  .contact-addr {
-    font-style: normal;
+  .contact-mail {
+    margin-top: var(--s-5);
     font-size: var(--t-sm);
-    line-height: 1.75;
+    word-break: break-word;
+  }
+  .contact-note {
+    margin-top: var(--s-5);
+    font-size: var(--t-sm);
     color: var(--on-dark-soft);
-    margin-top: var(--s-6);
   }
 </style>

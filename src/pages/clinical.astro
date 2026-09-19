@@ -1,0 +1,192 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHeader from '../components/PageHeader.astro';
+import { person, profiles } from '../data/site.js';
+import { education, registration } from '../data/credentials.js';
+
+// Written against Indian medical advertising rules: no testimonials, no
+// before-and-after imagery, no superlatives, no claims of guaranteed outcomes,
+// registration number displayed. Have this page read by someone familiar with
+// NMC regulations before launch.
+//
+// Days, timings and languages are NOT stated because they were not supplied.
+// Consulting hours a patient cannot rely on are worse than none at all.
+const { clinical } = person;
+const medisage = profiles.find((p) => p.label === 'Medisage');
+---
+
+<Base
+  title="Consultation"
+  description="Dr Shamin Eabenson consults patients by telemedicine. Registered with the Karnataka Medical Council, registration number 169121."
+>
+  <PageHeader
+    title="Consultation"
+    standfirst="Dr Eabenson consults patients by telemedicine."
+  />
+
+  <section class="field-light pad">
+    <div class="wrap split">
+      <div class="prose lead">
+        <p>
+          Consultations are conducted remotely, by telemedicine. A remote consultation suits
+          questions, review of an existing problem, and advice on next steps. It does not replace a
+          physical examination where one is needed, and where an examination is needed you will be
+          told so.
+        </p>
+        <p>
+          To arrange a consultation, send an enquiry and you will be given the available times.
+        </p>
+        <p>
+          <a class="link-fill" href="/contact/">Request a consultation</a>
+        </p>
+      </div>
+
+      <dl class="facts">
+        <div>
+          <dt>Qualifications</dt>
+          <dd>{person.postNominals}</dd>
+        </div>
+        {
+          education.map((e) => (
+            <div>
+              <dt>{e.degree}</dt>
+              <dd>
+                {e.institution}, {e.year}
+              </dd>
+            </div>
+          ))
+        }
+        <div>
+          <dt>Registration</dt>
+          <dd>
+            {registration.council}
+            <br />
+            {registration.abbr} {registration.number}
+          </dd>
+        </div>
+        <div>
+          <dt>Mode</dt>
+          <dd>{clinical.telemedicine ? 'Telemedicine' : 'Not currently consulting'}</dd>
+        </div>
+      </dl>
+    </div>
+  </section>
+
+  <!-- Only renders once the client supplies these. -->
+  {
+    (clinical.days || clinical.timings || clinical.languages) && (
+      <section class="field-light">
+        <div class="wrap split bordered">
+          <h2 class="block-h">When</h2>
+          <dl class="facts">
+            {clinical.days && (<div><dt>Days</dt><dd>{clinical.days}</dd></div>)}
+            {clinical.timings && (<div><dt>Timings</dt><dd>{clinical.timings}</dd></div>)}
+            {clinical.languages && (<div><dt>Languages</dt><dd>{clinical.languages}</dd></div>)}
+          </dl>
+        </div>
+      </section>
+    )
+  }
+
+  {
+    medisage?.href && (
+      <section class="field-light">
+        <div class="wrap split bordered">
+          <h2 class="block-h">Elsewhere</h2>
+          <p class="prose">
+            He also keeps a clinical profile on{' '}
+            <a class="link" href={medisage.href} rel="noopener">
+              Medisage
+            </a>
+            .
+          </p>
+        </div>
+      </section>
+    )
+  }
+
+  <section class="field-light">
+    <div class="wrap split bordered">
+      <h2 class="block-h">Important</h2>
+      <div class="prose disclaimer">
+        <p>
+          <strong>This website does not give medical advice.</strong> Everything published here is
+          general and educational. It is not a substitute for a consultation with a doctor who has
+          assessed you personally.
+        </p>
+        <p>
+          <strong>Do not use this site in an emergency.</strong> If you have a medical emergency, go
+          to your nearest hospital or call your local emergency number. Enquiries sent through this
+          site are not monitored continuously and must not be used for anything urgent.
+        </p>
+        <p>
+          A consultation is a professional relationship that begins when it is agreed, not when a
+          message is sent. Sending an enquiry does not by itself make you a patient.
+        </p>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .split {
+    display: grid;
+    grid-template-columns: var(--split);
+    gap: var(--split-gap);
+    align-items: start;
+  }
+  @media (max-width: 880px) {
+    .split {
+      grid-template-columns: 1fr;
+      gap: var(--s-5);
+    }
+  }
+  .bordered {
+    padding-block: var(--s-7);
+    border-top: 1px solid var(--rule);
+  }
+
+  .lead {
+    font-size: var(--t-md);
+  }
+  .lead p:last-child {
+    margin-top: var(--s-6);
+  }
+
+  .block-h {
+    font-variation-settings: 'wdth' 88;
+    font-weight: 600;
+    font-size: var(--t-lg);
+    letter-spacing: -0.02em;
+    color: var(--text-mute);
+  }
+
+  .facts {
+    font-size: var(--t-sm);
+  }
+  .facts > div {
+    padding-block: var(--s-4);
+    border-top: 1px solid var(--rule);
+  }
+  .facts > div:first-child {
+    border-top: 0;
+    padding-top: 0;
+  }
+  .facts dt {
+    color: var(--text-mute);
+    margin-bottom: var(--s-1);
+  }
+  .facts dd {
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  .disclaimer {
+    border-left: 3px solid var(--marigold-dark);
+    padding-left: var(--s-5);
+  }
+  .disclaimer strong {
+    color: var(--text);
+    font-weight: 600;
+  }
+</style>

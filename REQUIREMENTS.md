@@ -1,158 +1,172 @@
 # What is still needed
 
-Written for: whoever is collecting answers from Dr Eabenson, plus whoever deploys the site.
+Written for: whoever is collecting answers from Dr Eabenson, plus whoever deploys.
 
-Every item below is blocking something specific. Nothing on the site has been
-invented to fill a gap — where an answer is missing, the section is absent
-rather than guessed at, and the page it belongs to is not linked anywhere.
+Updated 19 September 2026, after his answers came back. Most of the earlier list is
+now closed. What follows is only what is still open, and what each answer unblocks.
+
+Nothing on the site is invented. Where an answer is missing, the element does not
+render and the page it belongs to is not linked anywhere.
 
 ---
 
-## 1. Blocking a whole page
+## 1. One question that should be answered first
 
-These four pages do not exist and are not linked from anywhere. Nav and footer
-entries were removed so nothing 404s. Each returns the moment its answers do.
+**Which professional body is the KRL/… life membership?**
 
-### Curriculum vitae — `/about/cv`
-**Needs:** degrees held, with institution and year for each · whether the MD in
-Community Medicine is complete, and if so which year · current post and its
-exact title · medical council registration number and which council ·
-professional memberships · awards, with years.
+It is recorded as *"Indian Medical Council"*, membership number
+`KRL/12999/33/2025/155554/2010-11/L`, Thiruvananthapuram Local Branch under the Kerala
+State Branch.
 
-A CV for a doctor that is missing qualifications and registration is worse than
-no CV, so this is not being built partially. The publications and presentations
-halves are already in the data files and will render the moment the rest lands.
+That is almost certainly the **Indian Medical Association (IMA)**. The IMA has local and
+state branches exactly as described and issues life membership numbers in this format.
+A *council* is a statutory registration body — it has neither life members nor local
+branches, and the Medical Council of India was dissolved in 2020.
 
-### Clinical practice — `/clinical`
-**Needs:** is he currently seeing patients privately at all? If yes — where,
-which days, what times, which languages, and should people be able to book
-through the site? Is the Medisage listing still accurate?
+Because putting the wrong professional body on a doctor's site is a credential error,
+**this membership is currently held back from the site**. Every other membership is
+published. One line confirming "IMA" puts it live.
 
-If the answer to the first question is no, this page is dropped permanently and
-that is the end of it. A Medisage listing is not evidence of a current practice;
-listings outlive the thing they describe. This page must also be read against
-NMC advertising rules before launch: no testimonials, no before-and-after
-imagery, no superlatives, no guaranteed outcomes, registration number shown.
+---
+
+## 2. Blocking a whole page
+
+These pages do not exist and are not linked from anywhere, so nothing 404s.
 
 ### Speaking and media — `/speaking`
-**Needs:** recent speaking engagements with dates and places · topics he will
-accept invitations on · a decision on the ministry question below.
+**Needs:** recent speaking engagements with dates and places, and the topics he will
+accept invitations on. Questions 19 and 20 came back blank.
 
-Nothing is publicly documented about his speaking in a medical or academic
-capacity, and inferring a talk list from his papers would be fabrication.
+Nothing public documents his speaking in a medical or academic capacity, and inferring
+a talk list from his papers would be fabrication.
 
-**The ministry question.** His ministry work is a real and substantial part of
-his public life. Four options: keep it entirely off this site; give it a small
-clearly separate section linking out to eabensonministries.com; give it a full
-page of its own; or something else. The recommendation is the second — hiding it
-is dishonest, but blending it into the academic identity weakens both. Adjacent
-and clearly distinct. If it appears at all, a second decision follows: should
-*Anointing* and *The Great Commission* be listed, and which YouTube channels, if
-any, should be linked?
+Worth assembling regardless of the answer: a downloadable headshot, a 50-word bio, a
+200-word bio, and a note on how to pronounce his name. That set is what makes an
+organiser choose one speaker over another, and it takes about an hour.
+
+### The ministry question — Question 22, unanswered
+His ministry work is a substantial part of his public life: he is Chairman, Founder and
+Managing Trustee of the Eabenson Ministries and Church Trust, and also behind Eabenson
+TV and Eabenson Books and Publishers.
+
+Four options: **A** keep it entirely off this site · **B** a small, clearly separate
+section linking out to eabensonministries.com · **C** a full page of its own · **D**
+something else.
+
+Our recommendation remains **B**. Hiding it is dishonest; blending it into the academic
+identity weakens both. Adjacent and clearly distinct.
+
+Until he chooses, the site carries **only** the medical identity. The Trust, Eabenson TV
+and Eabenson Books are in the data but flagged `medical: false` and do not render. The
+trust email is not published here. If he picks B or C, two follow-ups: should *Anointing*
+and *The Great Commission* be listed, and which YouTube channels should be linked?
 
 ### Writing — `/writing`
-**Needs:** one decision — will he actually write regularly?
+**Needs:** one decision — will he write regularly? Question 27 came back blank.
 
-Answer honestly. A writing section whose newest piece is eighteen months old
-does active damage; no writing section does none. It can be added later without
-rebuilding anything, so "not yet" is a perfectly good answer. Three pieces that
-draw on work already done, if he says yes: what 195 students said about AI; why
-your doctor may not prescribe the cheaper medicine; what a year with one family
-teaches a medical student.
+Answer honestly. A writing section whose newest piece is eighteen months old does active
+damage; no writing section does none. It can be added later without rebuilding anything.
 
 ---
 
-## 2. Blocking a section of a page that exists
+## 3. Blocking a section of a page that exists
 
-### About — `/about`
-**Needs:** the same qualifications and positions as the CV above.
+### Consultation — `/clinical`
+Built, and live. He consults by **telemedicine**, and that is stated with his KMC
+registration number as the advertising rules require.
 
-The biography is written and live. Education, positions held, memberships and
-awards are absent from the page entirely — not stubbed, not headed with an empty
-list underneath. They appear as real sections once the facts arrive.
+**Still needs:** days, timings and languages (Question 16 came back blank). The page
+deliberately states none of these — consulting hours a patient cannot rely on are worse
+than no hours at all. The section appears automatically once
+`person.clinical.days / timings / languages` are filled in `src/data/site.js`.
 
-**Also needs:** his approval of the biography itself. It was written from public
-sources and is in our voice, not his. He should rewrite it freely.
+**Also needs a booking decision.** He said yes to online booking (Question 17). A static
+site cannot run a scheduler, so this needs a service — Calendly, Practo, a link to his
+Medisage profile, or simply the enquiry form as it works now. Set
+`person.clinical.bookingUrl` once chosen.
 
-### Publications — `/publications`
-**Needs:** the DOI for two papers, and confirmation that seven is all of them.
+Before launch, this page should be read by someone familiar with NMC advertising rules.
 
-Missing DOIs are for *Are future doctors ready for AI?* and *Biomedical waste
-management*. The second is also missing volume, issue and page numbers. Both
-render honestly as "DOI not yet available" rather than linking somewhere wrong.
-If any papers are missing from the list, or any are under review and should be
-shown as in progress, send the details.
+### Publications
+**One DOI does not resolve.** `10.69605/IJLBPR_15.5.2026.182`, the *Handle with Care*
+biomedical waste paper. Checked 19 September 2026: the `10.69605` prefix is registered
+but this suffix returns "Resource not found" at doi.org — the publisher appears not to
+have deposited it yet. The identifier is displayed as text rather than linked to a dead
+page. Worth chasing the journal, or confirming the suffix is right.
 
-**Also needs:** a Google Scholar profile link and a Scopus or Web of Science
-author ID, if they exist. Both currently show greyed out in the footer.
+The other ten DOIs were all checked and resolve.
 
-**Also needs:** written consent from co-authors before a named collaborators
-section goes up. Naming them in citations is normal academic practice and is
-already done; a feature list of collaborators is a different thing and needs
-asking. Recurring names: M. R. Gudadinni, M. C. Yadavannavar, A. M. Rangoli,
-Rekha Udgiri, Tanuja P. Pattankar, Sachin Sangavi, A. Ravindra.
+**Also needs:** the **Scopus author ID**. The heading was given, the value left blank. It
+shows greyed in the footer until supplied.
 
-### Research theme pages — `/research/*`
-**Needs:** long-form copy for four of the five themes.
+**Two more papers were due within a fortnight** of his reply, with more than twenty at
+various stages. Send details and they render everywhere at once.
 
-Only *Medical education* is written out in full, as the model. The other four
-detect that their copy is missing and fall back to an overview plus the papers
-themselves, so they read as complete rather than broken. Filling in
-`src/data/themeDetail.js` upgrades each page with no code changes.
+### About and CV
+**Missing dates:** the Commonwealth Scholarship (United Kingdom) and the Shankers
+International Award have no year. The Shankers award also has no issuing body. Both are
+listed without a date rather than dropped, but they look unfinished next to the others.
 
-### Teaching — `/teaching`
-**Needs:** permission to link the SlideShare decks, and the individual deck URLs.
-
-Every card currently points at the SlideShare profile rather than a guessed
-permalink. Also worth asking whether there are decks that are not on SlideShare.
+### Teaching
+**Needs:** permission to link the SlideShare decks, and the individual deck URLs
+(Question 21 came back blank). Every card currently points at the SlideShare profile
+rather than a guessed permalink. Also worth asking whether there are decks not on
+SlideShare.
 
 ---
 
-## 3. Blocking launch
-
-### Domain name
-Two or three choices in order of preference, in case the first is taken.
-`src/astro.config.mjs` currently assumes `shamineabenson.com` as a placeholder
-for canonical URLs and the sitemap. It must be set correctly before launch or
-search engines index the wrong address.
+## 4. Blocking launch
 
 ### Contact form service
-The contact form is built, validated and styled, but a static site has no mail
-server. It needs an external form service — Formspree, Netlify Forms and
-Web3Forms all have free tiers adequate for this volume. Set the endpoint in
-`person.formEndpoint` in `src/data/site.js` and the form enables itself; while
-it is null the page says plainly that it is not connected rather than silently
-discarding messages.
+The form is built, validated and styled, but a static site has no mail server. It needs
+an external form service — Formspree, Netlify Forms and Web3Forms all have free tiers
+adequate for this volume. Set `person.formEndpoint` in `src/data/site.js` and the form
+enables itself. Until then the page says plainly that it is not connected and points
+people to email, which works.
 
-### Email address
-What address should appear publicly, if any? Nothing renders an email anywhere
-until `person.email` is set, so the site currently shows none at all.
+### Confirm the public email address
+Four addresses were supplied. The site currently publishes the company one,
+`drshamineabenson@eabensonhealthcare.com`, because it matches his current post and keeps
+the medical identity separate from the ministry. The alternatives on file are
+`drshamin123@gmail.com` and `dr_shamin@yahoo.com`. One word changes it.
+
+### Postal address
+No address was supplied for Eabenson Healthcare Private Limited. The site prints **no**
+postal address anywhere — the old BLDE department address stopped describing him when
+the MD completed in 2026, and an address we cannot stand behind is worse than none.
 
 ### Photograph
-A professional headshot, high resolution, plain background if possible. Also
-useful regardless of the speaking decision: a 50-word bio, a 200-word bio, and a
-note on how to pronounce his name. That set is what makes an event organiser
-pick one speaker over another and takes an hour to assemble.
+Promised as an attachment, not yet received. Nothing on the site depends on it, but a
+portrait on About and a headshot in a press kit both want it.
+
+### Social accounts — Questions 25 and 26, unanswered
+Currently linked: ORCID, Google Scholar, Web of Science, ResearchGate, Semantic Scholar,
+Academia.edu, Researchers Profile, LinkedIn, SlideShare, Medisage — every link he
+actually supplied. **X, Facebook, Instagram, Pinterest and YouTube are not linked**,
+because he did not supply them and did not tick them. Only the ones he ticks get linked.
 
 ### Privacy notice sign-off
-`/privacy` is accurate about what the site technically does — no cookies, no
-analytics, no tracking, and an honest disclosure that Google Fonts receives
-visitors' IP addresses. The parts describing how enquiries are handled and for
-how long state a sensible default that nobody has formally agreed to. He should
-read it, and ideally someone should check it against the DPDP Act before launch.
+`/privacy` is accurate about what the site technically does — no cookies, no analytics,
+no tracking, and an honest disclosure that Google Fonts receives visitors' IP addresses.
+The parts describing how enquiries are handled state a sensible default nobody has
+formally agreed to. He should read it, and ideally someone should check it against the
+DPDP Act before launch.
 
-### Social accounts
-Which should be linked: LinkedIn, ResearchGate, Academia.edu, SlideShare, X,
-Facebook, Instagram, Pinterest, YouTube, Medisage? Only the ones he ticks get
-linked — a professional site that links a personal Instagram undercuts itself.
-Currently linked: LinkedIn, ResearchGate, Academia.edu, SlideShare, ORCID.
+### Domain
+`www.shamineabenson.com` is purchased and is set as the canonical domain in
+`astro.config.mjs`. It still needs DNS pointed at whichever host is chosen.
 
 ---
 
-## 4. Worth asking, not blocking anything
+## 5. Answered, no longer blocking
 
-- Is anything currently online about him out of date or wrong that should be
-  corrected here?
-- Is there anything he specifically does **not** want on the site?
-- Any researchers' or doctors' sites whose look he likes, or definitely dislikes?
-- Does his institution have colours or marks the site should respect?
+Domain · public email · full name and post-nominals · both degrees with institutions and
+years · MD completion · current post · KMC registration number · professional
+memberships (bar the one query above) · awards · all fourteen publications with DOIs ·
+two papers under review · Google Scholar · Web of Science ResearcherID · Semantic
+Scholar · Researchers Profile · ORCID · ResearchGate · Academia.edu · LinkedIn ·
+SlideShare · Medisage · co-author consent · telemedicine practice · Medisage profile
+still accurate.
+
+Questions 28–34 — tone, reference sites, colours, corrections, exclusions — came back
+blank. The existing visual direction stands unless he says otherwise.
