@@ -62,6 +62,21 @@ second document to drift out of step.
 - **Marigold means counting.** It is used on data marks and nothing else. On
   light grounds use `--marigold-dark`, which clears 3:1 where the bright one
   does not.
+- **Two hues, never mixed inside one element.** Green (`--field-*`) carries the
+  masthead, hero and footer; plum (`--field-alt-*`) carries the contact band and
+  every second dark block. Light sections alternate `--plaster`, `--tint-mint`
+  and `--tint-sand` so the page moves between tones instead of repeating one.
+- **Cards only where content is parallel.** Research themes and teaching decks
+  are card grids because the items are comparable. Publications, credentials and
+  paper lists stay as rows. Making everything a card is the tell.
+- **Card internals are flex, not grid.** `margin-top: auto` pushes the footer
+  line to the bottom of a flex column; in a grid with `align-content: start` it
+  silently does nothing and the cards end up ragged.
+- **The ambient drift is capped by contrast, not taste.** `.aurora` lightens the
+  ground it sits on. At 0.55 opacity it dropped marigold text to 4.15:1, under
+  the minimum. It is 0.36 / 0.30 now, holding 4.8:1 at the brightest point.
+  Automated contrast checks read `backgroundColor` and cannot see a gradient —
+  if you raise those values, re-check by hand.
 - **A DOI is only linked if it resolves.** `doiUnresolved: true` renders the
   identifier as text instead of linking to a 404. All DOIs were checked against
   doi.org; re-check when adding papers.

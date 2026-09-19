@@ -18,11 +18,23 @@
    ============================================================ */
 :root {
   /* --- colour ------------------------------------------------ */
-  --field-deep: #12301f; /* hero, masthead, contact band, footer */
+  /* Primary hue — green. Carries the masthead, hero and footer. */
+  --field-deep: #12301f; /* hero, masthead, footer */
   --field: #1e4a32; /* structural field, row hovers, buttons */
   --field-lift: #2c6b49; /* unmarked tally strokes, hover lift */
 
-  --plaster: #edefea; /* page ground — cool, lime-washed */
+  /* Second hue — plum. Used for the contact band and every second
+     alternating block, so the page has two grounds to move between instead
+     of one repeated one. Never mixed with green inside a single element. */
+  --field-alt-deep: #2e1b27;
+  --field-alt: #4a2b3a;
+  --field-alt-lift: #6b4055;
+
+  /* Pale grounds. Light sections alternate between these instead of every
+     one being identical plaster. */
+  --plaster: #edefea; /* default page ground — cool, lime-washed */
+  --tint-mint: #dfeae1; /* pale green ground */
+  --tint-sand: #f2eadb; /* pale warm ground */
   --plaster-warm: #e3e6df; /* sunken panels */
   --plaster-raised: #f5f6f2; /* panels lifted off the page ground */
 
@@ -31,10 +43,13 @@
 
   --text: #16261c; /* chromatic, not a tinted black */
   --text-soft: #4e6157;
-  --text-mute: #5c6f65; /* 4.6:1 on plaster — the floor for real content */
+  --text-mute: #586b61; /* 4.6:1 on the DARKEST pale ground (mint), so it
+                            clears 4.5 on all four: mint, sand, plaster, raised */
   --on-dark: #ebf0ec;
-  --on-dark-soft: #a6bfae;
+  --on-dark-soft: #a6bfae; /* secondary text on the green grounds */
+  --on-alt-soft: #c9afbc; /* secondary text on the plum grounds */
   --rule: #cdd0c7;
+  --rule-soft: #dcdfd6;
 
   /* --- type -------------------------------------------------- */
   /* One sans with a live width axis, one reading serif. */
@@ -80,11 +95,26 @@
      optically aligns with the body text and wordmark above it. */
   --optical-left: -0.025em;
 
+  /* --- shape and depth ---------------------------------------- */
+  /* Three radii, not one. A small chip and a large panel curving by the same
+     amount is the tell that nobody chose either. */
+  --r-sm: 8px;
+  --r: 14px;
+  --r-lg: 22px;
+
+  /* Shadows are tinted with the page's own green rather than neutral black,
+     which is what stops them reading as the default grey drop shadow. */
+  --shadow: 0 1px 2px rgba(18, 48, 31, 0.04), 0 10px 28px -14px rgba(18, 48, 31, 0.16);
+  --shadow-lift: 0 2px 4px rgba(18, 48, 31, 0.05), 0 18px 40px -16px rgba(18, 48, 31, 0.22);
+
   /* --- motion ------------------------------------------------ */
   /* One orchestrated page-load moment. Nothing animates on scroll. */
   --ease: cubic-bezier(0.2, 0.7, 0.3, 1);
   --dur-fast: 140ms;
   --dur: 260ms;
+  /* The background drift is deliberately far too slow to watch. If you can
+     see it moving, it is too fast. */
+  --dur-ambient: 90s;
 }
 
 @media (max-width: 640px) {

@@ -104,9 +104,19 @@ p {
   width: 100%;
 }
 
-/* Sections are separated by a change of colour field, not by rules. */
+/* Sections are separated by a change of colour field, not by rules.
+   Light sections alternate ground so the page moves between tones instead of
+   repeating one. Dark sections alternate hue: green, then plum. */
 .field-light {
   background: var(--plaster);
+  color: var(--text);
+}
+.ground-mint {
+  background: var(--tint-mint);
+  color: var(--text);
+}
+.ground-sand {
+  background: var(--tint-sand);
   color: var(--text);
 }
 .field-deep {
@@ -116,6 +126,97 @@ p {
 .field-strong {
   background: var(--field);
   color: var(--on-dark);
+}
+.field-alt-deep {
+  background: var(--field-alt-deep);
+  color: var(--on-dark);
+}
+.field-alt {
+  background: var(--field-alt);
+  color: var(--on-dark);
+}
+/* Secondary text takes its colour from whichever hue it sits on. */
+.field-alt-deep .soft,
+.field-alt .soft {
+  color: var(--on-alt-soft);
+}
+.field-deep .soft,
+.field-strong .soft {
+  color: var(--on-dark-soft);
+}
+
+/* ============================================================
+   Card — used ONLY where the content is genuinely parallel and
+   comparable (research themes, teaching decks). Rows stay rows.
+   Identical cards for everything is the tell we are avoiding.
+   ============================================================ */
+.card {
+  display: block;
+  background: var(--plaster-raised);
+  border: 1px solid var(--rule-soft);
+  border-radius: var(--r);
+  box-shadow: var(--shadow);
+  text-decoration: none;
+  transition:
+    transform var(--dur) var(--ease),
+    box-shadow var(--dur) var(--ease),
+    border-color var(--dur) var(--ease);
+}
+.card:hover,
+.card:focus-within {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lift);
+  border-color: var(--rule);
+}
+@media (prefers-reduced-motion: reduce) {
+  .card:hover,
+  .card:focus-within {
+    transform: none;
+  }
+}
+
+/* ============================================================
+   Ambient drift — two very large, very soft blooms moving behind
+   dark sections over 90 seconds. Deliberately below the threshold
+   of noticing: it should read as depth, not as animation.
+   ============================================================ */
+.aurora {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+.aurora > * {
+  position: relative;
+  z-index: 1;
+}
+.aurora::before {
+  content: '';
+  position: absolute;
+  inset: -40%;
+  z-index: 0;
+  pointer-events: none;
+  /* Opacity is capped by contrast, not by taste. At 0.55 the centre of the
+     green bloom lightened the ground enough to drop marigold text to 4.15:1,
+     under the 4.5 minimum — and marigold carries his post-nominals and the
+     "111 of the 195" figure. At 0.36 the worst point holds 4.8:1.
+     Raising these values means re-checking that number. */
+  background:
+    radial-gradient(38% 44% at 22% 28%, rgba(44, 107, 73, 0.36), transparent 70%),
+    radial-gradient(34% 40% at 78% 72%, rgba(107, 64, 85, 0.3), transparent 70%);
+  will-change: transform;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .aurora::before {
+    animation: drift var(--dur-ambient) ease-in-out infinite alternate;
+  }
+  @keyframes drift {
+    from {
+      transform: translate3d(-3%, -2%, 0) scale(1);
+    }
+    to {
+      transform: translate3d(3%, 2%, 0) scale(1.12);
+    }
+  }
 }
 .pad {
   padding-block: var(--s-9);
@@ -150,6 +251,7 @@ a {
   text-decoration: none;
   padding: var(--s-3) var(--s-5);
   border: 1px solid currentColor;
+  border-radius: var(--r-sm);
   transition:
     background-color var(--dur) var(--ease),
     color var(--dur) var(--ease);
@@ -161,7 +263,9 @@ a {
   color: var(--on-dark);
 }
 .field-deep .link-fill:hover,
-.field-strong .link-fill:hover {
+.field-strong .link-fill:hover,
+.field-alt-deep .link-fill:hover,
+.field-alt .link-fill:hover {
   background: var(--on-dark);
   border-color: var(--on-dark);
   color: var(--field-deep);

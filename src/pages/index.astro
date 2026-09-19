@@ -16,7 +16,7 @@ const md = education[0];
   description="Dr Shamin Eabenson, MBBS MD Community Medicine. Research on medical education, road safety, access to medicines and community health systems."
 >
   <!-- ═══ Hero: the population is the hero ═══ -->
-  <section class="hero field-deep">
+  <section class="hero field-deep aurora">
     <div class="wrap">
       <h1 class="name">Shamin<br />Eabenson</h1>
       <p class="quals">{person.postNominals}</p>
@@ -81,30 +81,31 @@ const md = education[0];
     </div>
   </section>
 
-  <!-- ═══ Research: full-width rows, not a card kit ═══ -->
-  <section class="field-light">
+  <!-- ═══ Research ═══
+       Cards here, and only here on this page: eight themes are genuinely
+       parallel and comparable, which is the one shape a card grid is for. -->
+  <section class="ground-mint pad">
     <div class="wrap">
       <h2 class="section-head">What he studies</h2>
-    </div>
-    <ul class="themes">
-      {
-        themes.map((t) => (
-          <li>
-            <a class="theme" href={`/research/${t.slug}/`}>
-              <span class="wrap theme-inner">
-                <span class="theme-title">{t.title}</span>
-                <span class="theme-meta">
+      <ul class="theme-grid">
+        {
+          themes.map((t) => {
+            const n = byTheme(t.slug).length;
+            return (
+              <li>
+                <a class="card theme" href={`/research/${t.slug}/`}>
+                  <span class="theme-title">{t.title}</span>
                   <span class="theme-line">{t.card}</span>
                   <span class="theme-count">
-                    {byTheme(t.slug).length} {byTheme(t.slug).length === 1 ? 'paper' : 'papers'}
+                    {n} {n === 1 ? 'paper' : 'papers'}
                   </span>
-                </span>
-              </span>
-            </a>
-          </li>
-        ))
-      }
-    </ul>
+                </a>
+              </li>
+            );
+          })
+        }
+      </ul>
+    </div>
   </section>
 
   <!-- ═══ Recent work: deliberately quiet ═══ -->
@@ -130,7 +131,7 @@ const md = education[0];
   </section>
 
   <!-- ═══ Contact ═══ -->
-  <section class="field-strong pad">
+  <section class="field-alt-deep aurora pad">
     <div class="wrap contact-grid">
       <h2 class="contact-head">
         Open to collaboration, invitations to speak, and questions from students.
@@ -246,44 +247,28 @@ const md = education[0];
   }
 
   /* ---------- themes ---------- */
-  .themes {
-    border-top: 1px solid var(--rule);
-  }
-  .themes li {
-    border-bottom: 1px solid var(--rule);
-  }
-  .theme {
-    display: block;
-    text-decoration: none;
-    transition: background-color var(--dur) var(--ease), color var(--dur) var(--ease);
-  }
-  .theme-inner {
+  .theme-grid {
     display: grid;
-    grid-template-columns: var(--split);
-    gap: var(--split-gap);
-    align-items: baseline;
-    padding-block: clamp(1.1rem, 0.7rem + 1.4vw, 1.9rem);
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 268px), 1fr));
+    gap: var(--s-4);
   }
-  /* Description and count share the second column, so the count stays flush
-     right without breaking the page's shared vertical axis. */
-  .theme-meta {
+  /* Flex, not grid: `margin-top: auto` on the count only pushes it to the
+     bottom in a flex column. In a grid with align-content:start it does
+     nothing, and the counts sit at ragged heights across the row. */
+  .theme {
     display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    gap: var(--s-5);
-  }
-  @media (max-width: 880px) {
-    .theme-inner {
-      grid-template-columns: 1fr;
-      gap: var(--s-3);
-    }
+    flex-direction: column;
+    gap: var(--s-3);
+    height: 100%;
+    padding: var(--s-5);
   }
   .theme-title {
-    font-variation-settings: 'wdth' 88;
+    font-variation-settings: 'wdth' 90;
     font-weight: 600;
-    font-size: var(--t-lg);
-    line-height: 1.1;
-    letter-spacing: -0.02em;
+    font-size: var(--t-md);
+    line-height: 1.18;
+    letter-spacing: -0.015em;
+    color: var(--text);
   }
   .theme-line {
     font-family: var(--serif);
@@ -292,20 +277,15 @@ const md = education[0];
     color: var(--text-soft);
   }
   .theme-count {
+    margin-top: auto;
+    padding-top: var(--s-3);
+    border-top: 1px solid var(--rule-soft);
     font-size: var(--t-sm);
     color: var(--text-mute);
-    white-space: nowrap;
   }
-  .theme:hover,
-  .theme:focus-visible {
-    background: var(--field);
-    color: var(--on-dark);
-  }
-  .theme:hover .theme-line,
-  .theme:hover .theme-count,
-  .theme:focus-visible .theme-line,
-  .theme:focus-visible .theme-count {
-    color: var(--on-dark-soft);
+  .theme:hover .theme-title,
+  .theme:focus-visible .theme-title {
+    color: var(--field);
   }
 
   /* ---------- recent papers ---------- */
@@ -382,6 +362,6 @@ const md = education[0];
   .contact-note {
     margin-top: var(--s-5);
     font-size: var(--t-sm);
-    color: var(--on-dark-soft);
+    color: var(--on-alt-soft);
   }
 </style>

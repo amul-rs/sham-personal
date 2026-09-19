@@ -211,7 +211,9 @@ const coauthors = [...new Set(papers.flatMap((p) => p.authors))].filter(
   /* The plain-language summary sits above anything technical. */
   .plain {
     border-left: 3px solid var(--field);
-    padding-left: var(--s-5);
+    border-radius: 0 var(--r-sm) var(--r-sm) 0;
+    background: var(--tint-mint);
+    padding: var(--s-5);
   }
   .plain-h {
     font-size: var(--t-sm);
@@ -312,7 +314,9 @@ const coauthors = [...new Set(papers.flatMap((p) => p.authors))].filter(
 
   .card {
     background: var(--plaster-raised);
-    border: 1px solid var(--rule);
+    border: 1px solid var(--rule-soft);
+    border-radius: var(--r);
+    box-shadow: var(--shadow);
     padding: var(--s-4);
   }
   .card-h {
@@ -338,6 +342,7 @@ const coauthors = [...new Set(papers.flatMap((p) => p.authors))].filter(
     font-size: var(--t-sm);
     padding: var(--s-2) var(--s-3);
     border: 1px solid var(--rule);
+    border-radius: var(--r-sm);
     color: var(--text-soft);
     background: var(--plaster);
     transition: border-color var(--dur-fast) var(--ease), color var(--dur-fast) var(--ease);
