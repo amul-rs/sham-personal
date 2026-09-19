@@ -35,10 +35,20 @@ const label = `${TOTAL} tally strokes, one for each medical student surveyed. ${
  * deeper amber instead — same signal, legible against its own background.
  */
 const { ground = 'dark' } = Astro.props;
+
+/** 195 divides into exactly 5 rows of this, at every screen width. */
+const COLS = 39;
 ---
 
 <div class:list={['tally', `on-${ground}`]} role="img" aria-label={label}>
-  {strokes.map((marked, i) => <i class:list={['stroke', { marked }]} style={`--n:${i}`}></i>)}
+  {
+    /* --n drives the entrance, which runs in reading order. --col drives the
+       standing wave, which must travel by column so all five rows ripple
+       together rather than diagonally. */
+    strokes.map((marked, i) => (
+      <i class:list={['stroke', { marked }]} style={`--n:${i};--col:${i % COLS}`}></i>
+    ))
+  }
 </div>
 
 <style>
@@ -68,18 +78,42 @@ const { ground = 'dark' } = Astro.props;
     background: var(--marigold-dark);
   }
 
-  /* The page's one orchestrated moment: the count being taken, left to
-     right. Nothing else on the site animates without a person acting. */
+  /* Two movements.
+     1. The count being taken, left to right, once on load.
+     2. A slow wave that travels across afterwards and keeps going.
+
+     Height is safe to animate here because it carries no data — every stroke
+     is the same height and the encoding is colour. Animating a mark whose
+     SIZE meant something would misstate the figure.
+
+     Both are one property, transform, so the compositor handles them and the
+     195 elements cost no layout. The second animation is listed last, so once
+     it starts it takes over from the entrance's forwards fill. */
   @media (prefers-reduced-motion: no-preference) {
     .stroke {
       transform: scaleY(0);
       transform-origin: bottom;
-      animation: tally 420ms var(--ease) forwards;
-      animation-delay: calc(var(--n) * 4ms + 180ms);
+      animation:
+        tally 420ms var(--ease) forwards,
+        wave 4.8s ease-in-out infinite;
+      /* Entrance is per-stroke; the wave is per-column, and starts only after
+         the last stroke has finished arriving (195 x 4ms + 180 + 420). */
+      animation-delay: calc(var(--n) * 4ms + 180ms), calc(var(--col) * 52ms + 1700ms);
     }
     @keyframes tally {
       to {
         transform: none;
+      }
+    }
+    /* Peaks at 9%. Large enough to read as alive, small enough that you have
+       to look for it. */
+    @keyframes wave {
+      0%,
+      100% {
+        transform: scaleY(1);
+      }
+      50% {
+        transform: scaleY(1.09);
       }
     }
   }

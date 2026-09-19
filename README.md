@@ -51,9 +51,17 @@ second document to drift out of step.
 - **The tally is seeded.** `Tally.astro` shuffles 111 of 195 marks with a
   fixed-seed PRNG at build time, so the figure is byte-identical on every build
   and needs no JavaScript to render.
-- **One motion moment.** The tally counting in on page load is the only
-  non-user-triggered animation on the site, and it sits behind
-  `prefers-reduced-motion: no-preference`. Nothing animates on scroll.
+- **Two ambient movements, both behind `prefers-reduced-motion`.** The tally
+  counts in on load, then settles into a slow standing wave that travels by
+  column. The dark bands carry the aurora drift. Nothing animates on scroll,
+  and nothing animates in response to nothing.
+- **The tally wave animates height because height carries no data here.** Every
+  stroke is the same height; the encoding is colour and count. Animating the
+  size of a mark whose size meant something would misstate the figure.
+- **Measured cost, 4x CPU throttle at 390px:** 61fps idle, 56 with the wave,
+  59 with the aurora, 54 with both. `transform` only, so no layout; no
+  `will-change` on the 195 strokes, which would cost more in memory than it
+  saves in paint.
 - **One vertical axis.** `--split` in `tokens.css` is the column ratio every
   two-column section uses, so secondary content lines up down the whole page.
   Do not give a section its own ratio.
