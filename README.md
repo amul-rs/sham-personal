@@ -1,8 +1,9 @@
 # Dr Shamin Eabenson — personal site
 
 Static site, built with Astro. No CMS, no client-side framework, no runtime data
-fetching. Output is plain HTML with two small inline scripts (mobile nav, scroll
-reveal); the page is fully readable with JavaScript disabled.
+fetching. Output is plain HTML with three small inline scripts — the mobile nav,
+the publications filter, and copy-to-clipboard for citations. Every page is
+fully readable with JavaScript disabled.
 
 ```
 npm install
