@@ -1,0 +1,372 @@
+---
+import Base from '../layouts/Base.astro';
+import Tally from '../components/Tally.astro';
+import { person } from '../data/site.js';
+import { themes } from '../data/themes.js';
+import { publications, byTheme, citationLine } from '../data/publications.js';
+
+const recent = publications.slice(0, 3);
+---
+
+<Base
+  title="Dr Shamin Eabenson — Community Medicine & Public Health"
+  bareTitle
+  description="Physician and postgraduate in Community Medicine at BLDE (DU), Vijayapura. Research on medical education, road safety and access to medicines."
+>
+  <!-- ═══ Hero: the population is the hero ═══ -->
+  <section class="hero field-deep">
+    <div class="wrap">
+      <h1 class="name">Shamin<br />Eabenson</h1>
+      <p class="role">
+        A physician in community medicine at {person.institutionShort}, {person.city}.
+      </p>
+    </div>
+
+    <div class="wrap tally-band">
+      <Tally />
+    </div>
+
+    <div class="wrap">
+      <p class="reading">
+        <strong>111 of the 195</strong> medical students he surveyed said artificial intelligence
+        threatens the human part of being a doctor. Eighty-two thought it would take their job. Almost
+        none had been taught anything about it.
+      </p>
+    </div>
+  </section>
+
+  <!-- ═══ What the work is ═══ -->
+  <section class="field-light pad">
+    <div class="wrap statement-grid">
+      <div class="prose statement">
+        <p>
+          Community medicine asks a different question from most of clinical practice. Not
+          <em>what is wrong with this patient</em>, but <em>what is happening to this population, and
+          why</em>.
+        </p>
+        <p>
+          That shift runs through everything he publishes. When he studied road traffic accidents in
+          Vijayapura, the question was not how to treat the injured but who was being injured, and
+          what pattern the answer revealed. When he surveyed students about artificial intelligence,
+          the question was whether the curriculum is preparing them for the practice they will
+          actually enter.
+        </p>
+        <p>
+          <a class="link" href="/about/">More about him</a>
+        </p>
+      </div>
+
+      <dl class="facts">
+        <div>
+          <dt>Department</dt>
+          <dd>Community Medicine</dd>
+        </div>
+        <div>
+          <dt>Institution</dt>
+          <dd>{person.institution}</dd>
+        </div>
+        <div>
+          <dt>Based in</dt>
+          <dd>{person.city}, {person.region}, {person.country}</dd>
+        </div>
+        <div>
+          <dt>Published</dt>
+          <dd>{publications.length} peer-reviewed papers in 2026</dd>
+        </div>
+      </dl>
+    </div>
+  </section>
+
+  <!-- ═══ Research: full-width rows, not a card kit ═══ -->
+  <section class="field-light">
+    <div class="wrap">
+      <h2 class="section-head">What he studies</h2>
+    </div>
+    <ul class="themes">
+      {
+        themes.map((t) => (
+          <li>
+            <a class="theme" href={`/research/${t.slug}/`}>
+              <span class="wrap theme-inner">
+                <span class="theme-title">{t.title}</span>
+                <span class="theme-meta">
+                  <span class="theme-line">{t.card}</span>
+                  <span class="theme-count">
+                    {byTheme(t.slug).length} {byTheme(t.slug).length === 1 ? 'paper' : 'papers'}
+                  </span>
+                </span>
+              </span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <!-- ═══ Recent work: deliberately quiet ═══ -->
+  <section class="field-light pad">
+    <div class="wrap">
+      <h2 class="section-head">Most recent</h2>
+      <ol class="papers">
+        {
+          recent.map((p) => (
+            <li>
+              <a class="paper" href={`/research/${p.theme}/`}>
+                <span class="paper-title">{p.title}</span>
+                <span class="paper-cite">{citationLine(p)}</span>
+              </a>
+            </li>
+          ))
+        }
+      </ol>
+      <p class="more">
+        <a class="link-fill" href="/publications/">See all {publications.length} papers</a>
+      </p>
+    </div>
+  </section>
+
+  <!-- ═══ Contact ═══ -->
+  <section class="field-indigo pad">
+    <div class="wrap contact-grid">
+      <h2 class="contact-head">
+        Open to collaboration, invitations to speak, and questions from students.
+      </h2>
+      <div>
+        <p class="contact-cta"><a class="link-fill" href="/contact/">Send an enquiry</a></p>
+        <address class="contact-addr">
+          {person.department}<br />
+          {person.institution}<br />
+          {person.city}
+          {person.postcode}, {person.region}
+        </address>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  /* ---------- hero ---------- */
+  .hero {
+    padding-block: clamp(2.5rem, 1rem + 6vw, 6rem) clamp(2.5rem, 1.5rem + 4vw, 4.5rem);
+  }
+  .name {
+    font-variation-settings: 'wdth' 78;
+    font-weight: 700;
+    font-size: var(--t-display);
+    line-height: 0.86;
+    letter-spacing: -0.035em;
+    margin-left: var(--optical-left);
+    color: var(--on-dark);
+  }
+  .role {
+    font-family: var(--serif);
+    font-size: var(--t-md);
+    line-height: 1.55;
+    color: var(--on-dark-soft);
+    max-width: 34ch;
+    margin-top: var(--s-5);
+  }
+
+  .tally-band {
+    margin-top: clamp(2.5rem, 1.5rem + 5vw, 5rem);
+  }
+
+  .reading {
+    font-family: var(--serif);
+    font-size: var(--t-md);
+    line-height: 1.65;
+    color: var(--on-dark-soft);
+    max-width: 58ch;
+    margin-top: var(--s-6);
+  }
+  .reading strong {
+    color: var(--marigold);
+    font-weight: 600;
+  }
+
+  /* ---------- statement ---------- */
+  .statement-grid {
+    display: grid;
+    grid-template-columns: var(--split);
+    gap: var(--split-gap);
+    align-items: start;
+  }
+  @media (max-width: 880px) {
+    .statement-grid {
+      grid-template-columns: 1fr;
+      gap: var(--s-7);
+    }
+  }
+  .statement {
+    font-size: var(--t-md);
+  }
+  .statement em {
+    color: var(--text);
+    font-style: italic;
+  }
+
+  .facts {
+    font-size: var(--t-sm);
+  }
+  .facts > div {
+    padding-block: var(--s-4);
+    border-top: 1px solid var(--rule);
+  }
+  .facts dt {
+    color: var(--text-mute);
+    margin-bottom: var(--s-1);
+  }
+  .facts dd {
+    margin: 0;
+    color: var(--text);
+  }
+
+  /* ---------- section heads ---------- */
+  .section-head {
+    font-size: var(--t-lg);
+    font-variation-settings: 'wdth' 88;
+    font-weight: 600;
+    color: var(--text-mute);
+    margin-bottom: var(--s-6);
+  }
+
+  /* ---------- themes: full-bleed rows that fill on hover ---------- */
+  .themes {
+    border-top: 1px solid var(--rule);
+  }
+  .themes li {
+    border-bottom: 1px solid var(--rule);
+  }
+  .theme {
+    display: block;
+    text-decoration: none;
+    transition: background-color var(--dur) var(--ease), color var(--dur) var(--ease);
+  }
+  .theme-inner {
+    display: grid;
+    grid-template-columns: var(--split);
+    gap: var(--split-gap);
+    align-items: baseline;
+    padding-block: clamp(1.25rem, 0.8rem + 1.6vw, 2.25rem);
+  }
+  /* Description and count share the second column, so the count stays
+     flush right without breaking the page's shared vertical axis. */
+  .theme-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: var(--s-5);
+  }
+  @media (max-width: 880px) {
+    .theme-inner {
+      grid-template-columns: 1fr;
+      gap: var(--s-3);
+    }
+  }
+  .theme-title {
+    font-variation-settings: 'wdth' 88;
+    font-weight: 600;
+    font-size: var(--t-lg);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+  }
+  .theme-line {
+    font-family: var(--serif);
+    font-size: var(--t-sm);
+    line-height: 1.6;
+    color: var(--text-soft);
+  }
+  .theme-count {
+    font-size: var(--t-sm);
+    color: var(--text-mute);
+    white-space: nowrap;
+  }
+  .theme:hover,
+  .theme:focus-visible {
+    background: var(--indigo);
+    color: var(--on-dark);
+  }
+  .theme:hover .theme-line,
+  .theme:hover .theme-count,
+  .theme:focus-visible .theme-line,
+  .theme:focus-visible .theme-count {
+    color: var(--on-dark-soft);
+  }
+
+  /* ---------- recent papers ---------- */
+  .papers {
+    counter-reset: none;
+  }
+  .papers li {
+    border-top: 1px solid var(--rule);
+  }
+  .papers li:last-child {
+    border-bottom: 1px solid var(--rule);
+  }
+  .paper {
+    display: grid;
+    grid-template-columns: var(--split);
+    gap: var(--split-gap);
+    align-items: baseline;
+    padding-block: var(--s-5);
+    text-decoration: none;
+    transition: padding-left var(--dur) var(--ease);
+  }
+  @media (max-width: 880px) {
+    .paper {
+      grid-template-columns: 1fr;
+      gap: var(--s-2);
+    }
+  }
+  .paper:hover,
+  .paper:focus-visible {
+    padding-left: var(--s-4);
+  }
+  .paper-title {
+    font-family: var(--serif);
+    font-size: var(--t-base);
+    line-height: 1.45;
+    color: var(--text);
+  }
+  .paper:hover .paper-title {
+    color: var(--indigo);
+  }
+  .paper-cite {
+    font-size: var(--t-sm);
+    color: var(--text-mute);
+  }
+  .more {
+    margin-top: var(--s-7);
+  }
+
+  /* ---------- contact ---------- */
+  .contact-grid {
+    display: grid;
+    grid-template-columns: var(--split);
+    gap: var(--split-gap);
+    align-items: start;
+  }
+  @media (max-width: 880px) {
+    .contact-grid {
+      grid-template-columns: 1fr;
+      gap: var(--s-6);
+    }
+  }
+  .contact-head {
+    font-variation-settings: 'wdth' 85;
+    font-weight: 600;
+    font-size: var(--t-xl);
+    line-height: 1.1;
+    letter-spacing: -0.025em;
+    margin-left: var(--optical-left);
+    color: var(--on-dark);
+    max-width: 18ch;
+  }
+  .contact-addr {
+    font-style: normal;
+    font-size: var(--t-sm);
+    line-height: 1.75;
+    color: var(--on-dark-soft);
+    margin-top: var(--s-6);
+  }
+</style>

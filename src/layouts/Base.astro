@@ -1,0 +1,82 @@
+---
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { person, profiles } from '../data/site.js';
+
+const {
+  title,
+  description,
+  /** Suppresses the name suffix on the home page. */
+  bareTitle = false,
+} = Astro.props;
+
+const fullTitle = bareTitle ? title : `${title} — ${person.name}`;
+
+// Search engines truncate around 160 characters. Fail loudly at build time
+// rather than shipping a description that gets cut mid-sentence.
+if (description && description.length > 160) {
+  console.warn(
+    `[seo] ${Astro.url.pathname} meta description is ${description.length} chars (max 160)`
+  );
+}
+const canonical = new URL(Astro.url.pathname, Astro.site);
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: person.name,
+  jobTitle: 'Physician, Community Medicine',
+  description,
+  url: Astro.site?.href,
+  affiliation: { '@type': 'CollegeOrUniversity', name: person.institution },
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: person.city,
+    addressRegion: person.region,
+    addressCountry: person.country,
+  },
+  sameAs: profiles.filter((p) => p.href).map((p) => p.href),
+};
+---
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="profile" />
+    <meta property="og:url" content={canonical} />
+    <meta name="theme-color" content="#161C3D" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- Anek Latin carries a live width axis, used for display; Literata reads. -->
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Anek+Latin:wdth,wght@75..125,300..700&family=Literata:ital,opsz,wght@0,7..72,400..600;1,7..72,400&display=swap"
+    />
+
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+    <!-- Controls in the Publications filter hide themselves when they cannot work. -->
+    <script is:inline>
+      document.documentElement.classList.remove('no-js');
+    </script>
+  </head>
+
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+    <Header />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>

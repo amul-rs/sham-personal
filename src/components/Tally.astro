@@ -1,0 +1,86 @@
+---
+/**
+ * 195 tally strokes, one per student in the AI-readiness study; 111 marked.
+ *
+ * A tally rather than a dot grid because taking a count is literally the
+ * method under discussion. The marked strokes are scattered by a fixed-seed
+ * shuffle so the 111 reads as a proportion of the whole rather than a block,
+ * and so the figure is byte-identical on every build.
+ */
+const TOTAL = 195;
+const MARKED = 111;
+
+function mulberry32(seed) {
+  return function () {
+    seed |= 0;
+    seed = (seed + 0x6d2b79f5) | 0;
+    let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+const rand = mulberry32(195111);
+const strokes = Array.from({ length: TOTAL }, (_, i) => i < MARKED);
+for (let i = strokes.length - 1; i > 0; i--) {
+  const j = Math.floor(rand() * (i + 1));
+  [strokes[i], strokes[j]] = [strokes[j], strokes[i]];
+}
+
+const label = `${TOTAL} tally strokes, one for each medical student surveyed. ${MARKED} are marked, representing those who said artificial intelligence threatens the human dimension of medicine.`;
+
+/**
+ * `ground` picks the marked-stroke colour. The bright marigold clears 3:1 on
+ * indigo but only reaches 1.9:1 on plaster, so a light ground needs the
+ * deeper amber instead — same signal, legible against its own background.
+ */
+const { ground = 'dark' } = Astro.props;
+---
+
+<div class:list={['tally', `on-${ground}`]} role="img" aria-label={label}>
+  {strokes.map((marked, i) => <i class:list={['stroke', { marked }]} style={`--n:${i}`}></i>)}
+</div>
+
+<style>
+  /* Columns are the exact stroke width and the leftover space is distributed
+     between them, so the first stroke sits flush on the page's left axis and
+     the last on the right. Centring strokes inside 1fr columns inset the whole
+     band by half a column and broke alignment with the type above and below.
+     39 columns divides 195 into exactly 5 rows and still fits a 320px screen. */
+  .tally {
+    display: grid;
+    grid-template-columns: repeat(39, 2px);
+    justify-content: space-between;
+    row-gap: clamp(3px, 0.7vw, 9px);
+    align-items: end;
+  }
+
+  .stroke {
+    display: block;
+    width: 2px;
+    height: clamp(26px, 4.2vw, 58px);
+    background: var(--indigo-lift);
+  }
+  .stroke.marked {
+    background: var(--marigold);
+  }
+  .tally.on-light .stroke.marked {
+    background: var(--marigold-dark);
+  }
+
+  /* The page's one orchestrated moment: the count being taken, left to
+     right. Nothing else on the site animates without a person acting. */
+  @media (prefers-reduced-motion: no-preference) {
+    .stroke {
+      transform: scaleY(0);
+      transform-origin: bottom;
+      animation: tally 420ms var(--ease) forwards;
+      animation-delay: calc(var(--n) * 4ms + 180ms);
+    }
+    @keyframes tally {
+      to {
+        transform: none;
+      }
+    }
+  }
+</style>

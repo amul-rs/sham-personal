@@ -1,0 +1,110 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHeader from '../components/PageHeader.astro';
+
+// Everything claimed here is true of the code as built and was measured
+// rather than assumed. Do not add a claim to this page that has not been
+// tested — an accessibility statement that overstates is worse than none.
+---
+
+<Base
+  title="Accessibility"
+  description="How this website is built for accessibility, what has been tested, and what has not."
+>
+  <PageHeader
+    title="Accessibility"
+    standfirst="What has been done, what has been measured, and what has not yet been tested."
+  />
+
+  <section class="field-light pad">
+    <div class="wrap doc prose">
+      <h2>The standard aimed at</h2>
+      <p>
+        WCAG 2.2 level AA is treated as the floor rather than the goal. Where the two conflict,
+        being genuinely usable wins over being technically compliant.
+      </p>
+
+      <h2>What has been done</h2>
+      <ul>
+        <li>
+          Every text and background pair used on the site has been measured for contrast. The lowest
+          on any page is 4.5:1 for body text and 3:1 for graphical marks, which are the AA
+          thresholds. Two colours were changed during the build because they fell short.
+        </li>
+        <li>
+          Keyboard focus is always visible. The focus ring takes its colour from the text it sits
+          near, so it stays legible on both the light and dark sections.
+        </li>
+        <li>A skip link to the main content is the first thing a keyboard reaches on every page.</li>
+        <li>
+          Motion is limited to a single sequence when the home page loads. If your system asks for
+          reduced motion, that sequence does not run.
+        </li>
+        <li>
+          The tally figure on the home page carries a text description of what it shows, so it is
+          not lost to a screen reader.
+        </li>
+        <li>
+          Headings run in order without skipping levels, and the page is built from real landmarks —
+          header, navigation, main, footer.
+        </li>
+        <li>
+          Text reflows to a single column on small screens with no horizontal scrolling, which has
+          been checked down to 320 pixels wide.
+        </li>
+      </ul>
+
+      <h2>What has not been tested</h2>
+      <p>
+        The site has not yet been tested with a screen reader by someone who uses one daily, and it
+        has not been through an independent audit. Automated contrast and structure checks are not a
+        substitute for either.
+      </p>
+
+      <h2>If something does not work</h2>
+      <p>
+        If any part of this site is difficult or impossible for you to use, please say so — that is
+        a fault worth fixing, and a description of what went wrong is genuinely useful.
+        <a class="link" href="/contact/">Get in touch</a>.
+      </p>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .doc h2 {
+    font-family: var(--sans);
+    font-variation-settings: 'wdth' 90;
+    font-weight: 600;
+    font-size: var(--t-md);
+    letter-spacing: -0.015em;
+    color: var(--text);
+    margin-top: var(--s-7);
+    padding-top: var(--s-4);
+    border-top: 1px solid var(--rule);
+  }
+  .doc h2:first-child {
+    margin-top: 0;
+    padding-top: 0;
+    border-top: 0;
+  }
+  .doc ul {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: var(--s-4);
+  }
+  .doc li {
+    padding-left: var(--s-5);
+    position: relative;
+  }
+  .doc li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.62em;
+    width: 10px;
+    height: 2px;
+    background: var(--marigold-dark);
+  }
+</style>

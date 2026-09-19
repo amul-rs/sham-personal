@@ -1,0 +1,432 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import PubRow from '../../components/PubRow.astro';
+import { themes } from '../../data/themes.js';
+import { detailFor } from '../../data/themeDetail.js';
+import { byTheme, fullCitation, bibtex } from '../../data/publications.js';
+
+export function getStaticPaths() {
+  return themes.map((theme) => ({ params: { slug: theme.slug }, props: { theme } }));
+}
+
+const { theme } = Astro.props;
+const detail = detailFor(theme.slug);
+const papers = byTheme(theme.slug);
+const primary = detail?.primary ? papers.find((p) => p.id === detail.primary) : papers[0];
+const others = papers.filter((p) => p.id !== primary?.id);
+const coauthors = [...new Set(papers.flatMap((p) => p.authors))].filter(
+  (a) => !a.startsWith('Eabenson')
+);
+---
+
+<Base title={detail?.displayTitle ?? theme.title} description={`${theme.title} — ${theme.card}`}>
+  <PageHeader
+    title={detail?.displayTitle ?? theme.title}
+    standfirst={detail ? null : theme.body}
+    crumb="Research"
+    crumbHref="/research/"
+  />
+
+  <section class="field-light pad">
+    <div class="wrap layout">
+      <article class="main">
+        {
+          detail && (
+            <section class="plain">
+              <h2 class="plain-h">In plain language</h2>
+              <p class="plain-body">{detail.summary}</p>
+            </section>
+          )
+        }
+
+        {
+          detail?.sections.map((s) => (
+            <section class="block">
+              <h2 class="block-h">{s.heading}</h2>
+              <p class="block-body">{s.body}</p>
+            </section>
+          ))
+        }
+
+        {
+          detail?.findings && (
+            <section class="block">
+              <h2 class="block-h">Findings</h2>
+              <ul class="findings">
+                {detail.findings.map((f) => (
+                  <li>
+                    <span class="f-stat">{f.stat}</span>
+                    <span class="f-meta">
+                      {f.of}, {f.pct}
+                    </span>
+                    <span class="f-label">{f.label}</span>
+                  </li>
+                ))}
+              </ul>
+              <p class="f-note">All figures verified against the published paper.</p>
+            </section>
+          )
+        }
+
+        {
+          detail?.meaning && (
+            <section class="block">
+              <h2 class="block-h">{detail.meaning.heading}</h2>
+              <p class="block-body">{detail.meaning.body}</p>
+            </section>
+          )
+        }
+
+        {
+          !detail && (
+            <section class="block">
+              <h2 class="block-h">Overview</h2>
+              <p class="block-body">{theme.body}</p>
+            </section>
+          )
+        }
+
+        <section class="block">
+          <h2 class="block-h">{others.length ? 'The papers' : 'The paper'}</h2>
+          <div class="papers">
+            {papers.map((p) => <PubRow pub={p} />)}
+          </div>
+        </section>
+      </article>
+
+      <aside class="side">
+        {
+          primary && (
+            <div class="card">
+              <h2 class="card-h">Citation</h2>
+              <p class="card-cite">{fullCitation(primary)}</p>
+              <div class="card-actions">
+                <button class="btn" data-copy={fullCitation(primary)}>
+                  Copy citation
+                </button>
+                <button class="btn" data-copy={bibtex(primary)}>
+                  Copy BibTeX
+                </button>
+              </div>
+            </div>
+          )
+        }
+
+        {
+          primary?.doi && (
+            <a class="card card-link" href={`https://doi.org/${primary.doi}`} rel="noopener">
+              <span class="card-h">Read the paper</span>
+              <span class="card-doi">doi.org/{primary.doi}</span>
+            </a>
+          )
+        }
+
+        {
+          detail?.glance && (
+            <div class="card">
+              <h2 class="card-h">At a glance</h2>
+              <ul class="plainlist">
+                {detail.glance.map((g) => (
+                  <li>{g}</li>
+                ))}
+              </ul>
+            </div>
+          )
+        }
+
+        {
+          coauthors.length > 0 && (
+            <div class="card">
+              <h2 class="card-h">Co-authors</h2>
+              <ul class="plainlist">
+                {coauthors.map((a) => (
+                  <li>{a}</li>
+                ))}
+              </ul>
+            </div>
+          )
+        }
+
+        <p class="side-note">
+          This site links to the DOI of record. It does not host publishers' typeset PDFs.
+        </p>
+      </aside>
+    </div>
+  </section>
+
+  <nav class="next field-light" aria-label="Other research themes">
+    <ul class="next-list">
+      {
+        themes
+          .filter((t) => t.slug !== theme.slug)
+          .map((t) => (
+            <li>
+              <a class="next-item" href={`/research/${t.slug}/`}>
+                <span class="wrap next-inner">
+                  <span class="next-title">{t.title}</span>
+                  <span class="next-line">{t.card}</span>
+                </span>
+              </a>
+            </li>
+          ))
+      }
+    </ul>
+  </nav>
+</Base>
+
+<script>
+  // Copy-to-clipboard with an honest failure state — some browsers refuse
+  // clipboard access outside a secure context.
+  document.querySelectorAll('[data-copy]').forEach((btn) => {
+    btn.addEventListener('click', async () => {
+      const original = btn.textContent;
+      try {
+        await navigator.clipboard.writeText(btn.dataset.copy);
+        btn.textContent = 'Copied';
+      } catch {
+        btn.textContent = 'Press Ctrl+C';
+      }
+      setTimeout(() => {
+        btn.textContent = original;
+      }, 2000);
+    });
+  });
+</script>
+
+<style>
+  .layout {
+    display: grid;
+    grid-template-columns: var(--split);
+    gap: var(--split-gap);
+    align-items: start;
+  }
+  @media (max-width: 880px) {
+    .layout {
+      grid-template-columns: 1fr;
+      gap: var(--s-7);
+    }
+  }
+
+  /* The plain-language summary sits above anything technical. */
+  .plain {
+    border-left: 3px solid var(--indigo);
+    padding-left: var(--s-5);
+  }
+  .plain-h {
+    font-size: var(--t-sm);
+    font-weight: 400;
+    font-variation-settings: normal;
+    color: var(--text-mute);
+    margin-bottom: var(--s-3);
+  }
+  .plain-body {
+    font-family: var(--serif);
+    font-size: var(--t-md);
+    line-height: 1.65;
+    max-width: var(--measure-serif);
+  }
+
+  .block {
+    margin-top: var(--s-8);
+  }
+  .block-h {
+    font-variation-settings: 'wdth' 88;
+    font-weight: 600;
+    font-size: var(--t-lg);
+    letter-spacing: -0.02em;
+    padding-bottom: var(--s-3);
+    margin-bottom: var(--s-5);
+    border-bottom: 1px solid var(--rule);
+  }
+  .block-body {
+    font-family: var(--serif);
+    line-height: 1.72;
+    max-width: var(--measure-serif);
+    color: var(--text-soft);
+  }
+
+  /* ---- findings ---- */
+  /* Two up, so four findings read as a balanced block rather than
+     wrapping 3 + 1 and orphaning the last stat. */
+  .findings {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--s-6) var(--s-5);
+  }
+  @media (max-width: 520px) {
+    .findings {
+      grid-template-columns: 1fr;
+    }
+  }
+  .findings li {
+    display: grid;
+    gap: var(--s-1);
+    padding-top: var(--s-4);
+    border-top: 2px solid var(--marigold-dark);
+  }
+  .f-stat {
+    font-variation-settings: 'wdth' 82;
+    font-weight: 700;
+    font-size: var(--t-2xl);
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.03em;
+    margin-left: var(--optical-left);
+  }
+  .f-meta {
+    font-size: var(--t-sm);
+    color: var(--text-mute);
+  }
+  .f-label {
+    font-family: var(--serif);
+    font-size: var(--t-sm);
+    line-height: 1.55;
+    color: var(--text-soft);
+    margin-top: var(--s-2);
+  }
+  .f-note {
+    margin-top: var(--s-5);
+    font-size: var(--t-sm);
+    font-style: italic;
+    color: var(--text-mute);
+  }
+
+  .papers :global(.pub:first-child) {
+    border-top: 0;
+    padding-top: 0;
+  }
+
+  /* ---- sidebar ---- */
+  .side {
+    position: sticky;
+    top: calc(var(--header-h) + var(--s-5));
+    display: grid;
+    gap: var(--s-4);
+  }
+  @media (max-width: 880px) {
+    .side {
+      position: static;
+    }
+  }
+
+  .card {
+    background: var(--plaster-raised);
+    border: 1px solid var(--rule);
+    padding: var(--s-4);
+  }
+  .card-h {
+    display: block;
+    font-size: var(--t-sm);
+    font-weight: 400;
+    font-variation-settings: normal;
+    color: var(--text-mute);
+    margin-bottom: var(--s-3);
+  }
+  .card-cite {
+    font-size: var(--t-sm);
+    line-height: 1.6;
+    color: var(--text-soft);
+  }
+  .card-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--s-2);
+    margin-top: var(--s-4);
+  }
+  .btn {
+    font-size: var(--t-sm);
+    padding: var(--s-2) var(--s-3);
+    border: 1px solid var(--rule);
+    color: var(--text-soft);
+    background: var(--plaster);
+    transition: border-color var(--dur-fast) var(--ease), color var(--dur-fast) var(--ease);
+  }
+  .btn:hover {
+    border-color: var(--indigo);
+    color: var(--indigo);
+  }
+
+  .card-link {
+    display: block;
+    text-decoration: none;
+    transition: border-color var(--dur) var(--ease);
+  }
+  .card-link:hover {
+    border-color: var(--indigo);
+  }
+  .card-doi {
+    font-size: var(--t-sm);
+    color: var(--indigo);
+    word-break: break-all;
+  }
+
+  .plainlist {
+    display: grid;
+    gap: var(--s-2);
+    font-size: var(--t-sm);
+    color: var(--text-soft);
+  }
+  .plainlist li {
+    padding-bottom: var(--s-2);
+    border-bottom: 1px solid var(--rule);
+  }
+  .plainlist li:last-child {
+    border-bottom: 0;
+    padding-bottom: 0;
+  }
+
+  .side-note {
+    font-size: var(--t-sm);
+    line-height: 1.6;
+    color: var(--text-mute);
+    font-style: italic;
+  }
+
+  /* ---- other themes ---- */
+  .next-list {
+    border-top: 1px solid var(--rule);
+  }
+  .next-list li {
+    border-bottom: 1px solid var(--rule);
+  }
+  .next-item {
+    display: block;
+    text-decoration: none;
+    transition: background-color var(--dur) var(--ease), color var(--dur) var(--ease);
+  }
+  .next-inner {
+    display: grid;
+    grid-template-columns: var(--split);
+    gap: var(--split-gap);
+    align-items: baseline;
+    padding-block: var(--s-5);
+  }
+  @media (max-width: 880px) {
+    .next-inner {
+      grid-template-columns: 1fr;
+      gap: var(--s-2);
+    }
+  }
+  .next-title {
+    font-variation-settings: 'wdth' 88;
+    font-weight: 600;
+    font-size: var(--t-md);
+    letter-spacing: -0.015em;
+  }
+  .next-line {
+    font-family: var(--serif);
+    font-size: var(--t-sm);
+    line-height: 1.6;
+    color: var(--text-soft);
+  }
+  .next-item:hover,
+  .next-item:focus-visible {
+    background: var(--indigo);
+    color: var(--on-dark);
+  }
+  .next-item:hover .next-line,
+  .next-item:focus-visible .next-line {
+    color: var(--on-dark-soft);
+  }
+</style>

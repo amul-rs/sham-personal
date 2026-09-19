@@ -1,0 +1,145 @@
+---
+import { person, nav, footerPages, profiles } from '../data/site.js';
+const year = new Date().getFullYear();
+const academic = profiles.filter((p) =>
+  ['ORCID', 'ResearchGate', 'Academia.edu', 'Google Scholar', 'Scopus'].includes(p.label)
+);
+const elsewhere = profiles.filter((p) => ['LinkedIn', 'SlideShare'].includes(p.label));
+---
+
+<footer class="foot">
+  <div class="wrap">
+    <div class="cols">
+      <div class="col col-lead">
+        <p class="sign">Shamin Eabenson</p>
+        <address class="addr">
+          {person.department}<br />
+          {person.institution}<br />
+          {person.city}
+          {person.postcode}, {person.region}, {person.country}
+        </address>
+      </div>
+
+      <div class="col">
+        <h2 class="col-h">Pages</h2>
+        <ul class="list">
+          {nav.map((i) => (<li><a href={i.href}>{i.label}</a></li>))}
+          {footerPages.map((i) => (<li><a href={i.href}>{i.label}</a></li>))}
+        </ul>
+      </div>
+
+      <div class="col">
+        <h2 class="col-h">Academic profiles</h2>
+        <ul class="list">
+          {
+            academic.map((p) => (
+              <li>
+                {p.href ? (
+                  <a href={p.href} rel="me noopener">
+                    {p.label}
+                  </a>
+                ) : (
+                  <span class="pending">{p.label} — {p.detail}</span>
+                )}
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+
+      <div class="col">
+        <h2 class="col-h">Elsewhere</h2>
+        <ul class="list">
+          {elsewhere.map((p) => (<li><a href={p.href} rel="me noopener">{p.label}</a></li>))}
+        </ul>
+      </div>
+    </div>
+
+    <div class="base">
+      <p>© {year} {person.name}</p>
+      <p><a href="/accessibility/">Accessibility</a> &nbsp; <a href="/privacy/">Privacy</a></p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .foot {
+    background: var(--indigo-deep);
+    color: var(--on-dark-soft);
+    padding-block: var(--s-8) var(--s-6);
+    font-size: var(--t-sm);
+  }
+  .cols {
+    display: grid;
+    grid-template-columns: minmax(0, 1.5fr) repeat(3, minmax(0, 1fr));
+    gap: var(--s-7) var(--s-5);
+  }
+  @media (max-width: 880px) {
+    .cols {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .col-lead {
+      grid-column: 1 / -1;
+    }
+  }
+  @media (max-width: 460px) {
+    .cols {
+      grid-template-columns: 1fr;
+      gap: var(--s-6);
+    }
+  }
+
+  .sign {
+    font-variation-settings: 'wdth' 80;
+    font-weight: 700;
+    font-size: var(--t-lg);
+    letter-spacing: -0.02em;
+    color: var(--on-dark);
+  }
+  .addr {
+    font-style: normal;
+    line-height: 1.75;
+    margin-top: var(--s-4);
+    max-width: 34ch;
+  }
+
+  .col-h {
+    font-size: var(--t-sm);
+    font-weight: 400;
+    font-variation-settings: 'wdth' 100;
+    color: var(--on-dark-soft);
+    opacity: 0.65;
+    margin-bottom: var(--s-4);
+  }
+
+  .list {
+    display: grid;
+    gap: var(--s-3);
+  }
+  .foot a {
+    color: var(--on-dark);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: border-color var(--dur-fast) var(--ease);
+  }
+  .foot a:hover,
+  .foot a:focus-visible {
+    border-bottom-color: var(--on-dark);
+  }
+
+  /* Not yet supplied by the client — shown, but honestly. */
+  .pending {
+    opacity: 0.45;
+  }
+
+  .base {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--s-4) var(--s-6);
+    justify-content: space-between;
+    margin-top: var(--s-8);
+    padding-top: var(--s-5);
+    border-top: 1px solid rgba(236, 238, 244, 0.16);
+    font-size: var(--t-xs);
+  }
+</style>

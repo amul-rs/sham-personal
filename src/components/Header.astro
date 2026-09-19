@@ -1,0 +1,178 @@
+---
+import { nav, person } from '../data/site.js';
+const path = Astro.url.pathname;
+const isCurrent = (href) => (href === '/' ? path === '/' : path.startsWith(href));
+---
+
+<header class="topbar">
+  <div class="wrap bar">
+    <a class="mark" href="/">Shamin Eabenson</a>
+
+    <nav class="nav" aria-label="Primary">
+      {
+        nav.map((item) => (
+          <a
+            href={item.href}
+            class="nav-link"
+            aria-current={isCurrent(item.href) ? 'page' : undefined}
+          >
+            {item.label}
+          </a>
+        ))
+      }
+    </nav>
+
+    <button class="burger" id="burger" aria-expanded="false" aria-controls="mobile-nav">Menu</button>
+  </div>
+</header>
+
+<div class="sheet" id="mobile-nav" hidden>
+  <nav class="sheet-nav" aria-label="Primary, mobile">
+    {
+      nav.map((item) => (
+        <a href={item.href} aria-current={isCurrent(item.href) ? 'page' : undefined}>
+          {item.label}
+        </a>
+      ))
+    }
+  </nav>
+  <p class="sheet-foot">
+    {person.city}, {person.region}
+  </p>
+</div>
+
+<style>
+  /* The masthead is a field of indigo, continuous with the hero below it
+     on the home page and a firm band everywhere else. */
+  .topbar {
+    position: sticky;
+    top: 0;
+    z-index: 60;
+    background: var(--indigo-deep);
+    color: var(--on-dark);
+  }
+  .bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--s-5);
+    height: var(--header-h);
+  }
+
+  .mark {
+    font-variation-settings: 'wdth' 80;
+    font-weight: 700;
+    font-size: clamp(1.05rem, 0.95rem + 0.5vw, 1.3rem);
+    letter-spacing: -0.015em;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .nav {
+    display: flex;
+    gap: clamp(0.9rem, 0.2rem + 1.7vw, 2rem);
+  }
+  .nav-link {
+    position: relative;
+    font-size: var(--t-sm);
+    color: var(--on-dark-soft);
+    text-decoration: none;
+    padding-block: 6px;
+    transition: color var(--dur-fast) var(--ease);
+  }
+  .nav-link:hover,
+  .nav-link:focus-visible {
+    color: var(--on-dark);
+  }
+  .nav-link[aria-current='page'] {
+    color: var(--on-dark);
+  }
+  .nav-link[aria-current='page']::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 2px;
+    background: var(--on-dark);
+  }
+
+  .burger {
+    display: none;
+    font-size: var(--t-sm);
+    color: var(--on-dark);
+    padding: var(--s-2) 0;
+  }
+  @media (max-width: 840px) {
+    .nav {
+      display: none;
+    }
+    .burger {
+      display: block;
+    }
+  }
+
+  /* ---- mobile sheet ---- */
+  .sheet {
+    position: fixed;
+    inset: var(--header-h) 0 0;
+    z-index: 55;
+    background: var(--indigo-deep);
+    color: var(--on-dark);
+    padding: var(--s-7) var(--gutter) var(--s-6);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow-y: auto;
+  }
+  .sheet[hidden] {
+    display: none;
+  }
+  .sheet-nav {
+    display: flex;
+    flex-direction: column;
+  }
+  .sheet-nav a {
+    font-variation-settings: 'wdth' 85;
+    font-weight: 600;
+    font-size: clamp(1.8rem, 1.1rem + 4.6vw, 2.8rem);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    text-decoration: none;
+    padding-block: var(--s-4);
+    border-bottom: 1px solid rgba(236, 238, 244, 0.16);
+  }
+  .sheet-nav a[aria-current='page'] {
+    color: var(--marigold);
+  }
+  .sheet-foot {
+    margin-top: var(--s-6);
+    font-size: var(--t-sm);
+    color: var(--on-dark-soft);
+  }
+</style>
+
+<script>
+  const burger = document.getElementById('burger');
+  const sheet = document.getElementById('mobile-nav');
+
+  function setOpen(open) {
+    if (!burger || !sheet) return;
+    burger.setAttribute('aria-expanded', String(open));
+    sheet.hidden = !open;
+    document.body.style.overflow = open ? 'hidden' : '';
+    burger.textContent = open ? 'Close' : 'Menu';
+  }
+
+  burger?.addEventListener('click', () =>
+    setOpen(burger.getAttribute('aria-expanded') !== 'true')
+  );
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && burger?.getAttribute('aria-expanded') === 'true') {
+      setOpen(false);
+      burger.focus();
+    }
+  });
+  // Resizing past the breakpoint must not leave the page scroll-locked.
+  window.matchMedia('(min-width: 841px)').addEventListener('change', (e) => e.matches && setOpen(false));
+</script>

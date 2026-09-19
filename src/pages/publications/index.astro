@@ -1,0 +1,259 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import PubRow from '../../components/PubRow.astro';
+import { publications, fullCitation, bibtex } from '../../data/publications.js';
+import { themes } from '../../data/themes.js';
+
+// Grouped by year, newest first, no pagination — seven papers do not need it.
+const years = [...new Set(publications.map((p) => p.year))].sort((a, b) => b - a);
+const themesWithPapers = themes.filter((t) => publications.some((p) => p.theme === t.slug));
+const allBibtex = publications.map(bibtex).join('\n\n');
+const missingDoi = publications.filter((p) => !p.doi).length;
+---
+
+<Base
+  title="Publications"
+  description="Seven peer-reviewed papers by Dr Shamin Eabenson, all published in 2026, across community medicine and public health."
+>
+  <PageHeader
+    title="Publications"
+    standfirst="Seven peer-reviewed papers, all published in 2026."
+    count="Grouped by year, newest first. Each entry links to the DOI of record."
+  />
+
+  <section class="field-light pad">
+    <div class="wrap">
+      <!-- Enhancement only: with JS off every paper is already visible. -->
+      <div class="filters">
+        <div class="filter-row" role="group" aria-label="Filter publications by theme">
+          <button class="chip is-on" data-filter="all" aria-pressed="true">
+            All <span class="chip-n">{publications.length}</span>
+          </button>
+          {
+            themesWithPapers.map((t) => (
+              <button class="chip" data-filter={t.slug} aria-pressed="false">
+                {t.short}
+                <span class="chip-n">{publications.filter((p) => p.theme === t.slug).length}</span>
+              </button>
+            ))
+          }
+        </div>
+        <button class="chip chip-export" data-copy={allBibtex}>Copy all BibTeX</button>
+      </div>
+
+      <p class="empty" id="empty" hidden>No papers under that theme.</p>
+
+      {
+        years.map((year) => (
+          <section class="year-group" data-year={year}>
+            <h2 class="year">{year}</h2>
+            <div class="rows">
+              {publications
+                .filter((p) => p.year === year)
+                .map((p) => (
+                  <div class="row" data-theme={p.theme}>
+                    <PubRow pub={p}>
+                      <div class="actions">
+                        <button class="btn" data-copy={fullCitation(p)}>
+                          Copy citation
+                        </button>
+                        <button class="btn" data-copy={bibtex(p)}>
+                          BibTeX
+                        </button>
+                      </div>
+                    </PubRow>
+                  </div>
+                ))}
+            </div>
+          </section>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="field-light">
+    <div class="wrap note-grid">
+      <h2 class="note-h">A note on sources</h2>
+      <div class="note-body">
+        <p>
+          {missingDoi} of the {publications.length} entries have no DOI listed. Those identifiers were
+          not found in public sources and have not been guessed at — they will appear here once the
+          journals confirm them.
+        </p>
+        <p>
+          This page, the research theme pages and the curriculum vitae are generated from one
+          structured data file, so they cannot fall out of step with one another.
+        </p>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<script>
+  // ---- theme filter ----
+  const chips = document.querySelectorAll('[data-filter]');
+  const rows = document.querySelectorAll('.row');
+  const groups = document.querySelectorAll('.year-group');
+  const empty = document.getElementById('empty');
+
+  function apply(filter) {
+    rows.forEach((row) => {
+      row.hidden = filter !== 'all' && row.dataset.theme !== filter;
+    });
+    // A year heading with nothing under it is noise.
+    groups.forEach((g) => {
+      g.hidden = !g.querySelector('.row:not([hidden])');
+    });
+    if (empty) empty.hidden = !!document.querySelector('.row:not([hidden])');
+  }
+
+  chips.forEach((chip) => {
+    chip.addEventListener('click', () => {
+      chips.forEach((c) => {
+        const on = c === chip;
+        c.classList.toggle('is-on', on);
+        c.setAttribute('aria-pressed', String(on));
+      });
+      apply(chip.dataset.filter);
+    });
+  });
+
+  // ---- copy buttons ----
+  document.querySelectorAll('[data-copy]').forEach((btn) => {
+    btn.addEventListener('click', async () => {
+      const original = btn.textContent;
+      try {
+        await navigator.clipboard.writeText(btn.dataset.copy);
+        btn.textContent = 'Copied';
+      } catch {
+        btn.textContent = 'Press Ctrl+C';
+      }
+      setTimeout(() => {
+        btn.textContent = original;
+      }, 2000);
+    });
+  });
+</script>
+
+<style>
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--s-4);
+    padding-bottom: var(--s-6);
+  }
+  :global(html.no-js) .filters {
+    display: none;
+  }
+  .filter-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--s-2);
+  }
+
+  .chip {
+    display: inline-flex;
+    align-items: baseline;
+    gap: var(--s-2);
+    font-size: var(--t-sm);
+    padding: var(--s-2) var(--s-4);
+    border: 1px solid var(--rule);
+    color: var(--text-soft);
+    transition:
+      border-color var(--dur-fast) var(--ease),
+      color var(--dur-fast) var(--ease),
+      background-color var(--dur-fast) var(--ease);
+  }
+  .chip:hover {
+    border-color: var(--indigo);
+    color: var(--indigo);
+  }
+  .chip.is-on {
+    background: var(--indigo);
+    border-color: var(--indigo);
+    color: var(--on-dark);
+  }
+  .chip-n {
+    opacity: 0.65;
+  }
+  .chip-export {
+    margin-left: auto;
+  }
+
+  .empty {
+    padding-block: var(--s-7);
+    color: var(--text-mute);
+    font-style: italic;
+  }
+
+  .year-group[hidden] {
+    display: none;
+  }
+  .year {
+    font-size: var(--t-sm);
+    font-weight: 400;
+    font-variation-settings: normal;
+    letter-spacing: 0;
+    color: var(--text-mute);
+    padding-top: var(--s-5);
+  }
+  .row[hidden] {
+    display: none;
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--s-2);
+    margin-top: var(--s-4);
+  }
+  :global(html.no-js) .actions {
+    display: none;
+  }
+  .btn {
+    font-size: var(--t-sm);
+    padding: var(--s-2) var(--s-3);
+    border: 1px solid var(--rule);
+    color: var(--text-soft);
+    transition: border-color var(--dur-fast) var(--ease), color var(--dur-fast) var(--ease);
+  }
+  .btn:hover {
+    border-color: var(--indigo);
+    color: var(--indigo);
+  }
+
+  .note-grid {
+    display: grid;
+    grid-template-columns: var(--split);
+    gap: var(--split-gap);
+    align-items: start;
+    padding-top: var(--s-7);
+    padding-bottom: var(--s-9);
+    border-top: 1px solid var(--rule);
+  }
+  @media (max-width: 880px) {
+    .note-grid {
+      grid-template-columns: 1fr;
+      gap: var(--s-4);
+    }
+  }
+  .note-h {
+    font-variation-settings: 'wdth' 88;
+    font-weight: 600;
+    font-size: var(--t-lg);
+    letter-spacing: -0.02em;
+    color: var(--text-mute);
+  }
+  .note-body {
+    font-family: var(--serif);
+    line-height: 1.72;
+    color: var(--text-soft);
+    max-width: var(--measure-serif);
+  }
+  .note-body p + p {
+    margin-top: 1.1em;
+  }
+</style>

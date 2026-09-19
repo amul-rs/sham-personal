@@ -1,0 +1,217 @@
+@import './tokens.css';
+
+/* ============================================================
+   Reset
+   ============================================================ */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+html {
+  -webkit-text-size-adjust: 100%;
+}
+body,
+h1,
+h2,
+h3,
+h4,
+p,
+figure,
+blockquote,
+ul,
+ol,
+dl,
+dd {
+  margin: 0;
+}
+ul[class],
+ol[class] {
+  list-style: none;
+  padding: 0;
+}
+img,
+svg,
+video {
+  display: block;
+  max-width: 100%;
+}
+input,
+button,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+}
+button {
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+body {
+  background: var(--plaster);
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: var(--t-base);
+  font-weight: 400;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* Display type uses the width axis — this is the family's whole point. */
+h1,
+h2,
+h3 {
+  font-family: var(--sans);
+  font-variation-settings: 'wdth' 85;
+  font-weight: 600;
+  line-height: 1.02;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+/* Reading prose is the serif, with the extra leading a serif wants. */
+.prose {
+  font-family: var(--serif);
+  font-size: var(--t-base);
+  line-height: 1.72;
+  max-width: var(--measure-serif);
+  color: var(--text-soft);
+}
+.prose > * + * {
+  margin-top: 1.15em;
+}
+.prose strong {
+  color: var(--text);
+  font-weight: 600;
+}
+p {
+  text-wrap: pretty;
+}
+
+/* ============================================================
+   Layout
+   ============================================================ */
+.wrap {
+  width: 100%;
+  max-width: var(--page);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+.bleed {
+  width: 100%;
+}
+
+/* Sections are separated by a change of colour field, not by rules. */
+.field-light {
+  background: var(--plaster);
+  color: var(--text);
+}
+.field-deep {
+  background: var(--indigo-deep);
+  color: var(--on-dark);
+}
+.field-indigo {
+  background: var(--indigo);
+  color: var(--on-dark);
+}
+.pad {
+  padding-block: var(--s-9);
+}
+.pad-half {
+  padding-block: var(--s-8);
+}
+
+/* ============================================================
+   Links
+   ============================================================ */
+a {
+  color: inherit;
+}
+/* Underline is currentColor, not marigold: marigold is reserved for marks
+   that are counting something. */
+.link {
+  text-decoration: none;
+  border-bottom: 1px solid currentColor;
+  padding-bottom: 1px;
+  transition: background-color var(--dur) var(--ease);
+}
+.link:hover,
+.link:focus-visible {
+  background-color: var(--marigold);
+  color: var(--indigo-deep);
+}
+
+/* A link that fills with indigo rather than growing an underline. */
+.link-fill {
+  display: inline-block;
+  text-decoration: none;
+  padding: var(--s-3) var(--s-5);
+  border: 1px solid currentColor;
+  transition:
+    background-color var(--dur) var(--ease),
+    color var(--dur) var(--ease);
+}
+.link-fill:hover,
+.link-fill:focus-visible {
+  background: var(--indigo);
+  border-color: var(--indigo);
+  color: var(--on-dark);
+}
+.field-deep .link-fill:hover,
+.field-indigo .link-fill:hover {
+  background: var(--on-dark);
+  border-color: var(--on-dark);
+  color: var(--indigo-deep);
+}
+
+/* ============================================================
+   Accessibility floor
+   ============================================================ */
+/* currentColor rather than a fixed accent: the ring then inherits whatever
+   passes contrast on that ground. Marigold reaches only 1.9:1 on plaster,
+   which fails the 3:1 WCAG 2.2 needs from a focus indicator. */
+:focus-visible {
+  outline: 3px solid currentColor;
+  outline-offset: 2px;
+}
+.skip {
+  position: absolute;
+  left: var(--gutter);
+  top: -100px;
+  z-index: 200;
+  background: var(--indigo-deep);
+  color: var(--on-dark);
+  padding: var(--s-3) var(--s-4);
+  text-decoration: none;
+}
+.skip:focus {
+  top: var(--s-3);
+}
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+::selection {
+  background: var(--marigold);
+  color: var(--indigo-deep);
+}

@@ -1,0 +1,199 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import Tally from '../../components/Tally.astro';
+import { themes } from '../../data/themes.js';
+import { byTheme, publications } from '../../data/publications.js';
+---
+
+<Base
+  title="Research"
+  description="Five lines of enquiry in community medicine: medical education, access to medicines, road safety, infection control and medical ethics."
+>
+  <PageHeader
+    title="Research"
+    standfirst="Five lines of enquiry, one underlying question: does the system around a patient work as it is meant to?"
+    count={`${publications.length} papers across ${themes.length} themes, all published in 2026.`}
+  />
+
+  <section class="field-light pad">
+    <div class="wrap">
+      <p class="statement">
+        That covers how doctors are trained, what medicines people can afford, who gets hurt on the
+        roads, whether infection control is actually practised, and what clinicians understand about
+        their own duty of care.
+      </p>
+    </div>
+
+    {
+      themes.map((theme) => {
+        const papers = byTheme(theme.slug);
+        return (
+          <article class="theme">
+            <div class="wrap theme-grid">
+              <div>
+                <h2 class="theme-title">{theme.title}</h2>
+                <p class="theme-text">{theme.body}</p>
+                <p class="theme-more">
+                  <a class="link-fill" href={`/research/${theme.slug}/`}>
+                    The full study
+                  </a>
+                </p>
+              </div>
+
+              <div class="theme-aside">
+                {theme.figure === 'dots' && (
+                  <div class="fig">
+                    <Tally ground="light" />
+                    <p class="fig-cap">
+                      Each stroke is one of the 195 students surveyed. The marked ones said AI
+                      threatens the human part of medicine.
+                    </p>
+                  </div>
+                )}
+                <ul class="paper-list">
+                  {papers.map((p) => (
+                    <li>
+                      <a class="paper" href={`/research/${theme.slug}/`}>
+                        <span class="paper-title">{p.title}</span>
+                        <span class="paper-cite">
+                          {p.journalShort}, {p.year}
+                        </span>
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </article>
+        );
+      })
+    }
+  </section>
+
+  <section class="field-indigo pad">
+    <div class="wrap split">
+      <h2 class="cta-head">Co-authors are credited on every paper.</h2>
+      <p class="cta-body">
+        A named collaborators section will go up once each person has agreed to appear here. Until
+        then, full author lists are on the
+        <a class="link" href="/publications/">publications page</a>.
+      </p>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .statement {
+    font-family: var(--serif);
+    font-size: var(--t-md);
+    line-height: 1.7;
+    color: var(--text-soft);
+    max-width: 56ch;
+    margin-bottom: var(--s-8);
+  }
+
+  .theme {
+    padding-block: var(--s-8);
+    border-top: 1px solid var(--rule);
+  }
+  .theme-grid {
+    display: grid;
+    grid-template-columns: var(--split);
+    gap: var(--split-gap);
+    align-items: start;
+  }
+  @media (max-width: 880px) {
+    .theme-grid {
+      grid-template-columns: 1fr;
+      gap: var(--s-6);
+    }
+  }
+
+  .theme-title {
+    font-variation-settings: 'wdth' 85;
+    font-weight: 600;
+    font-size: var(--t-xl);
+    line-height: 1.08;
+    letter-spacing: -0.025em;
+    margin-left: var(--optical-left);
+    max-width: 20ch;
+  }
+  .theme-text {
+    margin-top: var(--s-5);
+    font-family: var(--serif);
+    line-height: 1.7;
+    color: var(--text-soft);
+    max-width: var(--measure-serif);
+  }
+  .theme-more {
+    margin-top: var(--s-6);
+  }
+
+  .fig {
+    margin-bottom: var(--s-6);
+  }
+  .fig-cap {
+    margin-top: var(--s-4);
+    font-size: var(--t-sm);
+    color: var(--text-soft);
+    max-width: 40ch;
+  }
+
+  .paper-list {
+    display: grid;
+  }
+  .paper {
+    display: grid;
+    gap: var(--s-2);
+    padding-block: var(--s-4);
+    border-top: 1px solid var(--rule);
+    text-decoration: none;
+    transition: padding-left var(--dur) var(--ease);
+  }
+  .paper:hover,
+  .paper:focus-visible {
+    padding-left: var(--s-3);
+  }
+  .paper-title {
+    font-family: var(--serif);
+    font-size: var(--t-sm);
+    line-height: 1.45;
+  }
+  .paper:hover .paper-title {
+    color: var(--indigo);
+  }
+  .paper-cite {
+    font-size: var(--t-sm);
+    color: var(--text-mute);
+  }
+
+  .split {
+    display: grid;
+    grid-template-columns: var(--split);
+    gap: var(--split-gap);
+    align-items: start;
+  }
+  @media (max-width: 880px) {
+    .split {
+      grid-template-columns: 1fr;
+      gap: var(--s-5);
+    }
+  }
+  .cta-head {
+    font-variation-settings: 'wdth' 85;
+    font-weight: 600;
+    font-size: var(--t-xl);
+    line-height: 1.1;
+    letter-spacing: -0.025em;
+    margin-left: var(--optical-left);
+    color: var(--on-dark);
+    max-width: 18ch;
+  }
+  .cta-body {
+    font-family: var(--serif);
+    line-height: 1.7;
+    color: var(--on-dark-soft);
+    max-width: 46ch;
+  }
+</style>

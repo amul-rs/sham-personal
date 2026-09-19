@@ -1,0 +1,302 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHeader from '../components/PageHeader.astro';
+import { person, profiles } from '../data/site.js';
+
+const live = Boolean(person.formEndpoint);
+const reachable = profiles.filter((p) => ['LinkedIn', 'ResearchGate'].includes(p.label) && p.href);
+
+const purposes = [
+  'Research collaboration',
+  'Speaking invitation',
+  'Student or teaching question',
+  'Press and media',
+];
+---
+
+<Base
+  title="Contact"
+  description="Contact Dr Shamin Eabenson about research collaboration, speaking invitations, questions from students, or press enquiries."
+>
+  <PageHeader
+    title="Get in touch"
+    standfirst="For research collaboration, speaking invitations, questions from students, or press enquiries."
+  />
+
+  <section class="field-light pad">
+    <div class="wrap form-grid">
+      <div>
+        {
+          !live && (
+            <div class="notice">
+              <p>
+                <strong>This form is not connected yet.</strong> The site is static and has no mail
+                server of its own, so an external form service has to be configured before anything
+                sent here can be delivered. Until then, please use one of the profiles listed
+                alongside.
+              </p>
+            </div>
+          )
+        }
+
+        <form
+          class="form"
+          method="post"
+          action={person.formEndpoint ?? undefined}
+          aria-describedby={live ? undefined : 'form-disabled'}
+        >
+          <fieldset class="fs">
+            <legend class="legend">What is this about?</legend>
+            <div class="purposes">
+              {
+                purposes.map((p, i) => (
+                  <label class="purpose">
+                    <input type="radio" name="purpose" value={p} required={live} checked={i === 0} />
+                    <span>{p}</span>
+                  </label>
+                ))
+              }
+            </div>
+          </fieldset>
+
+          <div class="field">
+            <label for="name">Your name</label>
+            <input id="name" name="name" type="text" autocomplete="name" required={live} />
+          </div>
+
+          <div class="field">
+            <label for="email">Email address</label>
+            <input id="email" name="email" type="email" autocomplete="email" required={live} />
+          </div>
+
+          <div class="field">
+            <label for="org">Organisation <span class="opt">optional</span></label>
+            <input id="org" name="organisation" type="text" autocomplete="organization" />
+          </div>
+
+          <div class="field">
+            <label for="message">Message</label>
+            <textarea id="message" name="message" rows="7" required={live}></textarea>
+          </div>
+
+          <label class="consent">
+            <input type="checkbox" name="consent" value="yes" required={live} />
+            <span>
+              I agree to my details being used to respond to this enquiry. See the
+              <a class="link" href="/privacy/">privacy notice</a>.
+            </span>
+          </label>
+
+          <p class="medical">
+            Please do not send questions about your own health through this form, and do not use it
+            for anything urgent. If you have a medical emergency, go to your nearest hospital.
+          </p>
+
+          <p>
+            <button class="submit" type="submit" disabled={!live}>Send message</button>
+            {!live && <span id="form-disabled" class="disabled-why">Sending is disabled until the form service is configured.</span>}
+          </p>
+        </form>
+      </div>
+
+      <aside class="aside">
+        <h2 class="aside-h">Elsewhere</h2>
+        <ul class="links">
+          {
+            reachable.map((p) => (
+              <li>
+                <a class="link" href={p.href} rel="me noopener">
+                  {p.label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+
+        <h2 class="aside-h aside-h-2">Department address</h2>
+        <address class="addr">
+          {person.department}<br />
+          {person.institution}<br />
+          {person.city}
+          {person.postcode}<br />
+          {person.region}, {person.country}
+        </address>
+      </aside>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .form-grid {
+    display: grid;
+    grid-template-columns: var(--split);
+    gap: var(--split-gap);
+    align-items: start;
+  }
+  @media (max-width: 880px) {
+    .form-grid {
+      grid-template-columns: 1fr;
+      gap: var(--s-7);
+    }
+  }
+
+  .notice {
+    border-left: 3px solid var(--marigold-dark);
+    background: var(--plaster-raised);
+    padding: var(--s-4) var(--s-5);
+    margin-bottom: var(--s-7);
+    font-size: var(--t-sm);
+    line-height: 1.6;
+    color: var(--text-soft);
+    max-width: 60ch;
+  }
+  .notice strong {
+    color: var(--text);
+  }
+
+  .form {
+    display: grid;
+    gap: var(--s-6);
+    max-width: 48rem;
+  }
+  .fs {
+    border: 0;
+    padding: 0;
+    margin: 0;
+  }
+  .legend {
+    padding: 0;
+    margin-bottom: var(--s-3);
+    color: var(--text-mute);
+    font-size: var(--t-sm);
+  }
+  .purposes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--s-2);
+  }
+  .purpose {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--s-2);
+    padding: var(--s-3) var(--s-4);
+    border: 1px solid var(--rule);
+    font-size: var(--t-sm);
+    cursor: pointer;
+    transition: border-color var(--dur-fast) var(--ease);
+  }
+  .purpose:hover {
+    border-color: var(--indigo);
+  }
+  /* The whole chip reads as selected, not just the radio dot. */
+  .purpose:has(input:checked) {
+    background: var(--indigo);
+    border-color: var(--indigo);
+    color: var(--on-dark);
+  }
+  .purpose:has(input:focus-visible) {
+    outline: 3px solid currentColor;
+    outline-offset: 2px;
+  }
+
+  .field {
+    display: grid;
+    gap: var(--s-2);
+  }
+  .field label {
+    font-size: var(--t-sm);
+    color: var(--text-mute);
+  }
+  .opt {
+    color: var(--text-mute);
+    font-style: italic;
+  }
+  input[type='text'],
+  input[type='email'],
+  textarea {
+    width: 100%;
+    padding: var(--s-3) var(--s-4);
+    border: 1px solid var(--rule);
+    background: var(--plaster-raised);
+    color: var(--text);
+    font-size: var(--t-base);
+    transition: border-color var(--dur-fast) var(--ease);
+  }
+  input:focus,
+  textarea:focus {
+    border-color: var(--indigo);
+  }
+  textarea {
+    resize: vertical;
+    font-family: var(--serif);
+    line-height: 1.6;
+  }
+
+  .consent {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: var(--s-3);
+    align-items: start;
+    font-size: var(--t-sm);
+    color: var(--text-soft);
+    max-width: 56ch;
+  }
+  .consent input {
+    margin-top: 0.3em;
+  }
+
+  .medical {
+    font-size: var(--t-sm);
+    color: var(--text-soft);
+    max-width: 56ch;
+    padding-top: var(--s-4);
+    border-top: 1px solid var(--rule);
+  }
+
+  .submit {
+    padding: var(--s-3) var(--s-6);
+    border: 1px solid var(--indigo);
+    background: var(--indigo);
+    color: var(--on-dark);
+    font-size: var(--t-base);
+    transition: background-color var(--dur) var(--ease);
+  }
+  .submit:hover:not(:disabled) {
+    background: var(--indigo-deep);
+  }
+  .submit:disabled {
+    background: transparent;
+    color: var(--text-mute);
+    border-color: var(--rule);
+    cursor: not-allowed;
+  }
+  .disabled-why {
+    display: block;
+    margin-top: var(--s-3);
+    font-size: var(--t-sm);
+    color: var(--text-mute);
+  }
+
+  .aside-h {
+    font-size: var(--t-sm);
+    color: var(--text-mute);
+    padding-bottom: var(--s-3);
+    border-bottom: 1px solid var(--rule);
+    margin-bottom: var(--s-4);
+    font-weight: 400;
+  }
+  .aside-h-2 {
+    margin-top: var(--s-7);
+  }
+  .links {
+    display: grid;
+    gap: var(--s-3);
+    font-size: var(--t-sm);
+  }
+  .addr {
+    font-style: normal;
+    font-size: var(--t-sm);
+    line-height: 1.75;
+    color: var(--text-soft);
+  }
+</style>

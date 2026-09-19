@@ -1,0 +1,215 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHeader from '../components/PageHeader.astro';
+import { person } from '../data/site.js';
+import { publications } from '../data/publications.js';
+import { themes } from '../data/themes.js';
+
+// Derived, never hardcoded, so the prose cannot drift from the data.
+const journalCount = new Set(publications.map((p) => p.journal)).size;
+
+// Education, positions held, registration, memberships and awards are
+// deliberately absent from this page. Nothing public states them, and a
+// doctor's qualifications are not something to infer. Those sections appear
+// here only once the answers to Q5–Q10 arrive.
+---
+
+<Base
+  title="About"
+  description="Dr Shamin Eabenson is a physician in the Department of Community Medicine at BLDE (DU), Shri B. M. Patil Medical College, Vijayapura, Karnataka."
+>
+  <PageHeader
+    title="About"
+    standfirst="A physician working in community medicine in North Karnataka, with research spanning medical education, road safety, access to medicines, infection control and medical ethics."
+  />
+
+  <section class="field-light pad">
+    <div class="wrap bio-grid">
+      <div class="prose bio">
+        <p>
+          Dr Shamin Eabenson is a medical doctor working in the {person.department} at {
+            person.institution
+          } in {person.city}, {person.region}.
+        </p>
+        <p>
+          Community medicine asks a different question from most of clinical practice. Instead of
+          what is wrong with this patient, it asks what is happening to this population, and why.
+          That shift runs through all of his published work. When he studied road traffic accidents
+          in {person.city}, the question was not how to treat the injured but who was being injured,
+          and what pattern the answer revealed. When he surveyed medical students about artificial
+          intelligence, the question was whether the curriculum is preparing them for the practice
+          they will actually enter.
+        </p>
+        <p>
+          In 2026 he published {publications.length} papers across {journalCount} journals, covering
+          medical education, generic medicines under the Janaushadhi scheme, road safety, infection
+          control in dental practice, biomedical waste management, and the perception of medical
+          negligence among undergraduates. The common thread is the training and conduct of doctors,
+          examined with the same methods he would apply to any other public health problem.
+        </p>
+        <p>
+          Alongside research he teaches and presents in departmental journal clubs, and publishes his
+          teaching material openly so that students outside his institution can use it.
+        </p>
+      </div>
+
+      <dl class="facts">
+        <div>
+          <dt>Department</dt>
+          <dd>Community Medicine</dd>
+        </div>
+        <div>
+          <dt>Institution</dt>
+          <dd>{person.institution}</dd>
+        </div>
+        <div>
+          <dt>Based in</dt>
+          <dd>{person.city}, {person.region}, {person.country}</dd>
+        </div>
+        <div>
+          <dt>Published</dt>
+          <dd>
+            {publications.length} peer-reviewed papers across {journalCount} journals, 2026
+          </dd>
+        </div>
+      </dl>
+    </div>
+  </section>
+
+  <section class="field-light">
+    <div class="wrap">
+      <h2 class="section-head">Where the work goes</h2>
+    </div>
+    <ul class="onward">
+      {
+        themes.map((t) => (
+          <li>
+            <a class="row" href={`/research/${t.slug}/`}>
+              <span class="wrap row-inner">
+                <span class="row-title">{t.title}</span>
+                <span class="row-line">{t.card}</span>
+              </span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <section class="field-indigo pad">
+    <div class="wrap split">
+      <h2 class="cta-head">Questions about any of the studies are welcome.</h2>
+      <p><a class="link-fill" href="/contact/">Send an enquiry</a></p>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .bio-grid {
+    display: grid;
+    grid-template-columns: var(--split);
+    gap: var(--split-gap);
+    align-items: start;
+  }
+  @media (max-width: 880px) {
+    .bio-grid {
+      grid-template-columns: 1fr;
+      gap: var(--s-7);
+    }
+  }
+  .bio {
+    font-size: var(--t-md);
+  }
+
+  .facts {
+    font-size: var(--t-sm);
+  }
+  .facts > div {
+    padding-block: var(--s-4);
+    border-top: 1px solid var(--rule);
+  }
+  .facts dt {
+    color: var(--text-mute);
+    margin-bottom: var(--s-1);
+  }
+  .facts dd {
+    margin: 0;
+  }
+
+  .section-head {
+    font-size: var(--t-lg);
+    font-variation-settings: 'wdth' 88;
+    font-weight: 600;
+    color: var(--text-mute);
+    margin-bottom: var(--s-6);
+  }
+
+  .onward {
+    border-top: 1px solid var(--rule);
+  }
+  .onward li {
+    border-bottom: 1px solid var(--rule);
+  }
+  .row {
+    display: block;
+    text-decoration: none;
+    transition: background-color var(--dur) var(--ease), color var(--dur) var(--ease);
+  }
+  .row-inner {
+    display: grid;
+    grid-template-columns: var(--split);
+    gap: var(--split-gap);
+    align-items: baseline;
+    padding-block: clamp(1rem, 0.7rem + 1.2vw, 1.75rem);
+  }
+  @media (max-width: 880px) {
+    .row-inner {
+      grid-template-columns: 1fr;
+      gap: var(--s-3);
+    }
+  }
+  .row-title {
+    font-variation-settings: 'wdth' 88;
+    font-weight: 600;
+    font-size: var(--t-md);
+    letter-spacing: -0.015em;
+  }
+  .row-line {
+    font-family: var(--serif);
+    font-size: var(--t-sm);
+    line-height: 1.6;
+    color: var(--text-soft);
+  }
+  .row:hover,
+  .row:focus-visible {
+    background: var(--indigo);
+    color: var(--on-dark);
+  }
+  .row:hover .row-line,
+  .row:focus-visible .row-line {
+    color: var(--on-dark-soft);
+  }
+
+  .split {
+    display: grid;
+    grid-template-columns: var(--split);
+    gap: var(--split-gap);
+    align-items: start;
+  }
+  @media (max-width: 880px) {
+    .split {
+      grid-template-columns: 1fr;
+      gap: var(--s-5);
+    }
+  }
+  .cta-head {
+    font-variation-settings: 'wdth' 85;
+    font-weight: 600;
+    font-size: var(--t-xl);
+    line-height: 1.1;
+    letter-spacing: -0.025em;
+    margin-left: var(--optical-left);
+    color: var(--on-dark);
+    max-width: 18ch;
+  }
+</style>

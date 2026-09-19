@@ -1,0 +1,84 @@
+/* ============================================================
+   Design tokens — Dr Shamin Eabenson
+
+   Grounded in the subject: population-scale medicine in
+   Vijayapura, North Karnataka. Indigo (a Deccan dye crop) is the
+   dominant structural colour and is used in large fields, never
+   as a thin accent. Marigold appears on data marks only — if it
+   is not counting something, it is not marigold.
+   ============================================================ */
+:root {
+  /* --- colour ------------------------------------------------ */
+  --indigo-deep: #161c3d; /* hero and contact grounds */
+  --indigo: #232f6b; /* dominant structural field */
+  --indigo-lift: #34418a; /* hover state on indigo grounds */
+  --plaster: #edefea; /* page ground — cool, lime-washed */
+  --plaster-warm: #e3e6df; /* sunken panels */
+  --plaster-raised: #f5f6f2; /* panels lifted off the page ground */
+  --marigold: #e5a02b; /* data marks on dark grounds */
+  --marigold-dark: #a9700f; /* the same signal on plaster, at 3.6:1 */
+
+  --text: #1c2145; /* chromatic, not a tinted black */
+  --text-soft: #5a6276;
+  --text-mute: #656c7e; /* 4.5:1 on plaster — was #858C9C at 2.9:1 */
+  --on-dark: #eceef4;
+  --on-dark-soft: #a2a9c4;
+  --rule: #cdd0c7;
+
+  /* --- type -------------------------------------------------- */
+  /* One sans with a live width axis, one reading serif. */
+  --sans: 'Anek Latin', system-ui, -apple-system, sans-serif;
+  --serif: 'Literata', Georgia, serif;
+
+  --t-xs: 0.8125rem;
+  --t-sm: 0.9375rem;
+  --t-base: clamp(1.0625rem, 1rem + 0.25vw, 1.1875rem);
+  --t-md: clamp(1.2rem, 1.1rem + 0.45vw, 1.45rem);
+  --t-lg: clamp(1.45rem, 1.25rem + 0.9vw, 2.1rem);
+  --t-xl: clamp(1.9rem, 1.5rem + 1.9vw, 3.1rem);
+  --t-2xl: clamp(2.6rem, 1.9rem + 3.4vw, 4.6rem);
+  --t-display: clamp(3.6rem, 1.6rem + 9.4vw, 11rem);
+
+  /* Serif body wants a longer measure and more leading than sans. */
+  --measure-serif: 68ch;
+  --measure-sans: 60ch;
+
+  /* --- space ------------------------------------------------- */
+  --s-1: 0.25rem;
+  --s-2: 0.5rem;
+  --s-3: 0.75rem;
+  --s-4: 1rem;
+  --s-5: 1.5rem;
+  --s-6: 2rem;
+  --s-7: 3rem;
+  --s-8: clamp(3rem, 2rem + 4vw, 5.5rem);
+  --s-9: clamp(4.5rem, 2.5rem + 8vw, 9rem);
+
+  --gutter: clamp(1.25rem, 0.5rem + 3vw, 3rem);
+  --page: 1280px;
+  --header-h: 68px;
+
+  /* One split shared by every two-column section, so secondary content
+     (descriptions, citations, the facts list) sits on a single vertical
+     axis all the way down the page instead of each section inventing one. */
+  --split: minmax(0, 7fr) minmax(0, 5fr);
+  --split-gap: clamp(2rem, 1rem + 4vw, 4rem);
+
+  /* Left side bearing of the display face at large sizes, measured: the
+     glyph ink starts ~0.025em right of the box. Pulled back so big type
+     optically aligns with the body text and wordmark above it. */
+  --optical-left: -0.025em;
+
+  /* --- motion ------------------------------------------------ */
+  /* One orchestrated page-load moment. Nothing animates on scroll. */
+  --ease: cubic-bezier(0.2, 0.7, 0.3, 1);
+  --dur-fast: 140ms;
+  --dur: 260ms;
+}
+
+@media (max-width: 640px) {
+  :root {
+    --header-h: 58px;
+  }
+}
+

@@ -1,0 +1,93 @@
+---
+/**
+ * Interior masthead. Sits on the same indigo field as the site header so the
+ * two read as one band, then the page drops to plaster below it.
+ *
+ * `crumb` renders as a link back to the parent section when `crumbHref` is
+ * given, and as a plain label otherwise. `count` and `note` both render as a
+ * quiet line under the standfirst.
+ */
+const { title, standfirst, crumb, crumbHref, count, note } = Astro.props;
+const footLine = count ?? note;
+---
+
+<header class="masthead field-deep">
+  <div class="wrap">
+    {
+      crumb &&
+        (crumbHref ? (
+          <a class="crumb" href={crumbHref}>
+            <svg width="14" height="8" viewBox="0 0 14 8" fill="none" aria-hidden="true">
+              <path d="M14 4H1M4.5 1 1 4l3.5 3" stroke="currentColor" stroke-width="1.2" />
+            </svg>
+            {crumb}
+          </a>
+        ) : (
+          <p class="crumb crumb-plain">{crumb}</p>
+        ))
+    }
+    <h1 class="title">{title}</h1>
+    {standfirst && <p class="standfirst">{standfirst}</p>}
+    {footLine && <p class="foot">{footLine}</p>}
+  </div>
+</header>
+
+<style>
+  .masthead {
+    padding-block: clamp(2rem, 1rem + 4vw, 4.5rem) clamp(2.5rem, 1.5rem + 4vw, 5rem);
+  }
+
+  /* The only arrow on the site, and it points back — it marks a real
+     hierarchical relationship rather than decorating a call to action. */
+  .crumb {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--s-2);
+    font-size: var(--t-sm);
+    color: var(--on-dark-soft);
+    text-decoration: none;
+    margin-bottom: var(--s-4);
+    border-bottom: 1px solid transparent;
+    transition: color var(--dur-fast) var(--ease), border-color var(--dur-fast) var(--ease);
+  }
+  .crumb svg {
+    transition: transform var(--dur) var(--ease);
+  }
+  .crumb:hover,
+  .crumb:focus-visible {
+    color: var(--on-dark);
+    border-bottom-color: currentColor;
+  }
+  .crumb:hover svg {
+    transform: translateX(-3px);
+  }
+  .crumb-plain {
+    border-bottom: 0;
+  }
+
+  .title {
+    font-variation-settings: 'wdth' 80;
+    font-weight: 700;
+    font-size: var(--t-2xl);
+    line-height: 0.94;
+    letter-spacing: -0.03em;
+    margin-left: var(--optical-left);
+    color: var(--on-dark);
+    max-width: 18ch;
+  }
+  .standfirst {
+    font-family: var(--serif);
+    font-size: var(--t-md);
+    line-height: 1.6;
+    color: var(--on-dark-soft);
+    max-width: 48ch;
+    margin-top: var(--s-5);
+  }
+  .foot {
+    font-size: var(--t-sm);
+    color: var(--on-dark-soft);
+    opacity: 0.8;
+    max-width: 52ch;
+    margin-top: var(--s-5);
+  }
+</style>

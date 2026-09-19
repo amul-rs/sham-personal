@@ -1,0 +1,16 @@
+node_modules/
+dist/
+.astro/
+.DS_Store
+*.log
+
+# Vendored design and accessibility skills: ~10 MB of third-party code from
+# five separate repositories, most without a bundled licence file. Kept out of
+# this repo deliberately — see README for how to re-fetch them.
+.claude/skills/
+
+# One lockfile only. Everything here is built and verified with npm; a second
+# lockfile silently produces a different dependency tree depending on which
+# tool you happen to run.
+pnpm-lock.yaml
+pnpm-workspace.yaml

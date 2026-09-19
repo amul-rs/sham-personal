@@ -1,0 +1,67 @@
+---
+import Base from '../layouts/Base.astro';
+import { nav } from '../data/site.js';
+---
+
+<Base
+  title="Page not found"
+  description="That page does not exist on this site."
+>
+  <section class="nf field-deep">
+    <div class="wrap">
+      <h1 class="head">This page doesn't exist</h1>
+      <p class="body">
+        The address may be mistyped, or the page may have moved. Start from one of these instead.
+      </p>
+      <ul class="routes">
+        {nav.map((i) => (
+          <li><a class="route" href={i.href}>{i.label}</a></li>
+        ))}
+      </ul>
+    </div>
+  </section>
+</Base>
+
+<style>
+  /* Plain and useful. A 404 on a doctor's site is not the place for a joke. */
+  .nf {
+    padding-block: clamp(3rem, 2rem + 6vw, 7rem) clamp(4rem, 2rem + 8vw, 9rem);
+  }
+  .head {
+    font-variation-settings: 'wdth' 80;
+    font-weight: 700;
+    font-size: var(--t-2xl);
+    line-height: 0.95;
+    letter-spacing: -0.03em;
+    margin-left: var(--optical-left);
+    color: var(--on-dark);
+    max-width: 14ch;
+  }
+  .body {
+    font-family: var(--serif);
+    font-size: var(--t-md);
+    color: var(--on-dark-soft);
+    max-width: 46ch;
+    margin-top: var(--s-5);
+  }
+  .routes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--s-3);
+    margin-top: var(--s-7);
+  }
+  .route {
+    display: inline-block;
+    padding: var(--s-3) var(--s-5);
+    border: 1px solid var(--on-dark-soft);
+    text-decoration: none;
+    font-size: var(--t-sm);
+    transition: background-color var(--dur) var(--ease), color var(--dur) var(--ease);
+  }
+  .route:hover,
+  .route:focus-visible {
+    background: var(--on-dark);
+    border-color: var(--on-dark);
+    color: var(--indigo-deep);
+  }
+</style>

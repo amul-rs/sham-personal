@@ -1,0 +1,126 @@
+---
+import { citationLine } from '../data/publications.js';
+const { pub, compact = false } = Astro.props;
+---
+
+<article class:list={['pub', { compact }]}>
+  <p class="yr">{pub.year}</p>
+  <div class="detail">
+    <h3 class="title">
+      {pub.title}{pub.subtitle && <span class="sub">: {pub.subtitle}</span>}
+    </h3>
+    <p class="authors">
+      {
+        pub.authors.map((a, i) => (
+          <>
+            {i > 0 && ', '}
+            <span class:list={{ self: a.startsWith('Eabenson') }}>{a}</span>
+          </>
+        ))
+      }
+    </p>
+    <p class="cite">{citationLine(pub)}</p>
+    {!compact && pub.note && <p class="note">{pub.note}</p>}
+    {
+      pub.doi ? (
+        <a class="doi" href={`https://doi.org/${pub.doi}`} rel="noopener">
+          Read the paper
+        </a>
+      ) : (
+        <p class="nodoi">DOI not yet available</p>
+      )
+    }
+    <slot />
+  </div>
+</article>
+
+<style>
+  .pub {
+    display: grid;
+    grid-template-columns: 62px minmax(0, 1fr);
+    gap: var(--s-5);
+    padding-block: var(--s-6);
+    border-top: 1px solid var(--rule);
+  }
+  .pub.compact {
+    padding-block: var(--s-5);
+  }
+  @media (max-width: 600px) {
+    .pub {
+      grid-template-columns: 1fr;
+      gap: var(--s-2);
+    }
+  }
+
+  .yr {
+    font-size: var(--t-sm);
+    color: var(--text-mute);
+    padding-top: 0.3em;
+  }
+  @media (max-width: 600px) {
+    .yr {
+      padding-top: 0;
+    }
+  }
+
+  .title {
+    font-family: var(--serif);
+    font-weight: 600;
+    font-variation-settings: normal;
+    font-size: var(--t-md);
+    line-height: 1.35;
+    letter-spacing: 0;
+    max-width: 46ch;
+  }
+  .sub {
+    color: var(--text-soft);
+    font-style: italic;
+    font-weight: 400;
+  }
+
+  .authors {
+    font-size: var(--t-sm);
+    color: var(--text-soft);
+    margin-top: var(--s-3);
+  }
+  /* His own name is emphasised so authorship position reads at a glance. */
+  .authors .self {
+    color: var(--text);
+    font-weight: 600;
+  }
+
+  .cite {
+    font-size: var(--t-sm);
+    color: var(--text-mute);
+    margin-top: var(--s-1);
+  }
+  .note {
+    margin-top: var(--s-4);
+    font-family: var(--serif);
+    line-height: 1.7;
+    color: var(--text-soft);
+    max-width: var(--measure-serif);
+    font-size: var(--t-sm);
+  }
+
+  .doi {
+    display: inline-block;
+    margin-top: var(--s-4);
+    font-size: var(--t-sm);
+    color: var(--indigo);
+    text-decoration: none;
+    border-bottom: 1px solid currentColor;
+    transition: background-color var(--dur) var(--ease), color var(--dur) var(--ease);
+  }
+  .doi:hover,
+  .doi:focus-visible {
+    background: var(--indigo);
+    color: var(--on-dark);
+  }
+  .nodoi {
+    margin-top: var(--s-4);
+    font-size: var(--t-sm);
+    color: var(--text-mute);
+    font-style: italic;
+  }
+</style>
