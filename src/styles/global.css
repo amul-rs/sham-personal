@@ -119,6 +119,10 @@ p {
   background: var(--tint-sand);
   color: var(--text);
 }
+.ground-clay {
+  background: var(--tint-clay);
+  color: var(--text);
+}
 .field-deep {
   background: var(--field-deep);
   color: var(--on-dark);
@@ -126,19 +130,6 @@ p {
 .field-strong {
   background: var(--field);
   color: var(--on-dark);
-}
-.field-alt-deep {
-  background: var(--field-alt-deep);
-  color: var(--on-dark);
-}
-.field-alt {
-  background: var(--field-alt);
-  color: var(--on-dark);
-}
-/* Secondary text takes its colour from whichever hue it sits on. */
-.field-alt-deep .soft,
-.field-alt .soft {
-  color: var(--on-alt-soft);
 }
 .field-deep .soft,
 .field-strong .soft {
@@ -198,11 +189,12 @@ p {
   /* Opacity is capped by contrast, not by taste. At 0.55 the centre of the
      green bloom lightened the ground enough to drop marigold text to 4.15:1,
      under the 4.5 minimum — and marigold carries his post-nominals and the
-     "111 of the 195" figure. At 0.36 the worst point holds 4.8:1.
-     Raising these values means re-checking that number. */
+     "111 of the 195" figure. At 0.36 / 0.22 the worst point holds 4.85:1.
+     Raising these values means re-checking that number by hand — automated
+     contrast tools read background-color and cannot see a gradient. */
   background:
     radial-gradient(38% 44% at 22% 28%, rgba(44, 107, 73, 0.36), transparent 70%),
-    radial-gradient(34% 40% at 78% 72%, rgba(107, 64, 85, 0.3), transparent 70%);
+    radial-gradient(34% 40% at 78% 72%, rgba(169, 112, 15, 0.22), transparent 70%);
   will-change: transform;
 }
 @media (prefers-reduced-motion: no-preference) {
@@ -263,9 +255,7 @@ a {
   color: var(--on-dark);
 }
 .field-deep .link-fill:hover,
-.field-strong .link-fill:hover,
-.field-alt-deep .link-fill:hover,
-.field-alt .link-fill:hover {
+.field-strong .link-fill:hover {
   background: var(--on-dark);
   border-color: var(--on-dark);
   color: var(--field-deep);

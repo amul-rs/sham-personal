@@ -179,8 +179,10 @@ enquiry form; a real booking system needs a decision (§6).
    identity each have one home. Prose never hardcodes a number that data can
    derive — this rule has already been broken twice and both times shipped a
    wrong figure ("Seven papers" when there were fourteen).
-6. **Colour is not blue.** The client already has two sites in blue and rejected
-   it here. The site is a deep green, `--field-deep #12301F`. Colour tokens are
+6. **Colour is not blue, and the palette is light.** The client already has two
+   sites in blue and rejected it here. A dark violet second hue was then tried
+   and also rejected — he wants it lighter. Green is now the only dark field;
+   everything else is a pale ground (plaster, mint, sand, clay). Colour tokens are
    named for their role (`--field-deep`, `--field`, `--field-lift`), never their
    hue, so another change is one file. Marigold stays for data marks only.
 7. **Re-measure contrast after any colour change.** All fourteen pairs were

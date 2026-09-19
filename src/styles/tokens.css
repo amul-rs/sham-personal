@@ -23,18 +23,12 @@
   --field: #1e4a32; /* structural field, row hovers, buttons */
   --field-lift: #2c6b49; /* unmarked tally strokes, hover lift */
 
-  /* Second hue — plum. Used for the contact band and every second
-     alternating block, so the page has two grounds to move between instead
-     of one repeated one. Never mixed with green inside a single element. */
-  --field-alt-deep: #2e1b27;
-  --field-alt: #4a2b3a;
-  --field-alt-lift: #6b4055;
-
   /* Pale grounds. Light sections alternate between these instead of every
      one being identical plaster. */
   --plaster: #edefea; /* default page ground — cool, lime-washed */
   --tint-mint: #dfeae1; /* pale green ground */
   --tint-sand: #f2eadb; /* pale warm ground */
+  --tint-clay: #efe4dd; /* pale clay ground — carries the contact band */
   --plaster-warm: #e3e6df; /* sunken panels */
   --plaster-raised: #f5f6f2; /* panels lifted off the page ground */
 
@@ -47,7 +41,6 @@
                             clears 4.5 on all four: mint, sand, plaster, raised */
   --on-dark: #ebf0ec;
   --on-dark-soft: #a6bfae; /* secondary text on the green grounds */
-  --on-alt-soft: #c9afbc; /* secondary text on the plum grounds */
   --rule: #cdd0c7;
   --rule-soft: #dcdfd6;
 

@@ -31,9 +31,11 @@ Status: **deployed to Vercel, DNS pending client confirmation**
 
 ## 2. Content and design
 
-- [x] Two-tone palette with pastel grounds — green and plum fields, mint and
-      sand light grounds, soft radii and tinted shadows, and a very slow ambient
-      drift behind the dark bands — *19 Sep 2026*
+- [x] Pale palette — green is the only dark field; light sections alternate
+      plaster, mint, sand and clay. Soft radii, tinted shadows, and a very slow
+      ambient drift behind the dark bands — *19 Sep 2026*
+- [x] Dark violet second hue removed at the client's request; the contact band
+      is now a pale clay ground — *19 Sep 2026*
 - [x] Palette moved off blue — the client has two other sites in blue. Now a deep
       green, `--field-deep #12301F`. Colour tokens renamed to role-based names
       (`--field-deep`, not `--field-blue`), so a future change is one file — *19 Sep 2026*
