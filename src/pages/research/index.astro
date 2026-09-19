@@ -8,11 +8,11 @@ import { byTheme, publications } from '../../data/publications.js';
 
 <Base
   title="Research"
-  description="Five lines of enquiry in community medicine: medical education, access to medicines, road safety, infection control and medical ethics."
+  description={`${themes.length} lines of enquiry in community medicine: medical education, injury and emergency response, access to medicines, health systems and more.`}
 >
   <PageHeader
     title="Research"
-    standfirst="Five lines of enquiry, one underlying question: does the system around a patient work as it is meant to?"
+    standfirst={`${themes.length} lines of enquiry, one underlying question: does the system around a patient work as it is meant to?`}
     count={`${publications.length} papers across ${themes.length} themes, all published in 2026.`}
   />
 
@@ -20,8 +20,10 @@ import { byTheme, publications } from '../../data/publications.js';
     <div class="wrap">
       <p class="statement">
         That covers how doctors are trained, what medicines people can afford, who gets hurt on the
-        roads, whether infection control is actually practised, and what clinicians understand about
-        their own duty of care.
+        roads and what happens in the hour after, whether infection control survives daily practice,
+        what a heat wave does to people who are young and healthy, what delivering a national
+        programme looks like to the health workers who carry it, and what clinicians understand
+        about their own duty of care.
       </p>
     </div>
 

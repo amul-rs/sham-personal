@@ -22,7 +22,19 @@ const isCurrent = (href) => (href === '/' ? path === '/' : path.startsWith(href)
       }
     </nav>
 
-    <button class="burger" id="burger" aria-expanded="false" aria-controls="mobile-nav">Menu</button>
+    <div class="actions">
+      <a
+        class="cv"
+        href="/about/cv/"
+        aria-current={path.startsWith('/about/cv') ? 'page' : undefined}
+      >
+        <span class="cv-long">Curriculum vitae</span>
+        <span class="cv-short" aria-hidden="true">CV</span>
+      </a>
+      <button class="burger" id="burger" aria-expanded="false" aria-controls="mobile-nav">
+        Menu
+      </button>
+    </div>
   </div>
 </header>
 
@@ -93,6 +105,53 @@ const isCurrent = (href) => (href === '/' ? path === '/' : path.startsWith(href)
     bottom: 0;
     height: 2px;
     background: var(--on-dark);
+  }
+
+  /* The CV is the one action that stays put. It sits outside the collapsible
+     nav so it survives the mobile breakpoint, and is bordered rather than
+     plain so it reads as an action and not a seventh nav link. */
+  .actions {
+    display: flex;
+    align-items: center;
+    gap: var(--s-4);
+  }
+  .cv {
+    display: inline-block;
+    font-size: var(--t-sm);
+    line-height: 1;
+    color: var(--on-dark);
+    text-decoration: none;
+    padding: 0.55em 0.9em;
+    border: 1px solid var(--on-dark-soft);
+    white-space: nowrap;
+    transition:
+      background-color var(--dur) var(--ease),
+      color var(--dur) var(--ease),
+      border-color var(--dur) var(--ease);
+  }
+  .cv:hover,
+  .cv:focus-visible {
+    background: var(--on-dark);
+    border-color: var(--on-dark);
+    color: var(--indigo-deep);
+  }
+  .cv[aria-current='page'] {
+    background: var(--on-dark);
+    border-color: var(--on-dark);
+    color: var(--indigo-deep);
+  }
+  .cv-short {
+    display: none;
+  }
+  /* Below the nav breakpoint the label shortens so the wordmark, the CV and
+     Menu all still fit on a 320px screen. */
+  @media (max-width: 560px) {
+    .cv-long {
+      display: none;
+    }
+    .cv-short {
+      display: inline;
+    }
   }
 
   .burger {

@@ -5,20 +5,24 @@ import PubRow from '../../components/PubRow.astro';
 import { publications, fullCitation, bibtex } from '../../data/publications.js';
 import { themes } from '../../data/themes.js';
 
-// Grouped by year, newest first, no pagination — seven papers do not need it.
+// Grouped by year, newest first, no pagination — this many papers do not need it.
+// Every count below is derived. Never write a number here that data can state.
 const years = [...new Set(publications.map((p) => p.year))].sort((a, b) => b - a);
 const themesWithPapers = themes.filter((t) => publications.some((p) => p.theme === t.slug));
 const allBibtex = publications.map(bibtex).join('\n\n');
 const missingDoi = publications.filter((p) => !p.doi).length;
+const unresolvedDoi = publications.filter((p) => p.doiUnresolved).length;
+const yearSpan =
+  years.length === 1 ? `all published in ${years[0]}` : `published ${years[years.length - 1]}–${years[0]}`;
 ---
 
 <Base
   title="Publications"
-  description="Seven peer-reviewed papers by Dr Shamin Eabenson, all published in 2026, across community medicine and public health."
+  description={`${publications.length} peer-reviewed papers by Dr Shamin Eabenson across community medicine, medical education and public health.`}
 >
   <PageHeader
     title="Publications"
-    standfirst="Seven peer-reviewed papers, all published in 2026."
+    standfirst={`${publications.length} peer-reviewed papers, ${yearSpan}.`}
     count="Grouped by year, newest first. Each entry links to the DOI of record."
   />
 
@@ -77,10 +81,19 @@ const missingDoi = publications.filter((p) => !p.doi).length;
       <h2 class="note-h">A note on sources</h2>
       <div class="note-body">
         <p>
-          {missingDoi} of the {publications.length} entries have no DOI listed. Those identifiers were
-          not found in public sources and have not been guessed at — they will appear here once the
-          journals confirm them.
+          {missingDoi} of the {publications.length} entries have no DOI listed. Those identifiers
+          have not been guessed at, and will appear here once the journals supply them.
         </p>
+        {
+          unresolvedDoi > 0 && (
+            <p>
+              A further {unresolvedDoi === 1 ? 'entry has a DOI that does' : `${unresolvedDoi} entries have DOIs that do`}{' '}
+              not resolve yet — the publisher appears not to have registered
+              {unresolvedDoi === 1 ? ' it' : ' them'} with doi.org. The identifier is shown as text
+              rather than linked to a page that is not there.
+            </p>
+          )
+        }
         <p>
           This page, the research theme pages and the curriculum vitae are generated from one
           structured data file, so they cannot fall out of step with one another.
