@@ -21,6 +21,8 @@ if (description && description.length > 160) {
   );
 }
 const canonical = new URL(Astro.url.pathname, Astro.site);
+// Social platforms will not fetch a relative image, so this must be absolute.
+const ogImage = new URL('/og.png', Astro.site);
 
 // No postal address is emitted: none has been supplied for Eabenson Healthcare,
 // and the university department address stopped describing him when the MD
@@ -53,7 +55,21 @@ const schema = {
     <meta property="og:description" content={description} />
     <meta property="og:type" content="profile" />
     <meta property="og:url" content={canonical} />
-    <meta name="theme-color" content="#161C3D" />
+    <meta property="og:site_name" content={person.name} />
+    <meta property="og:locale" content="en_IN" />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta
+      property="og:image:alt"
+      content="Dr Shamin Eabenson, MBBS MD Community Medicine, above a row of tally marks"
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content={ogImage} />
+
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <meta name="theme-color" content="#12301F" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />

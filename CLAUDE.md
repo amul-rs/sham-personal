@@ -5,7 +5,11 @@ where it matters, plus the decisions taken from it. When client answers and code
 disagree, this file wins and the code gets corrected.
 
 Answers received from Dr Eabenson, recorded 19 September 2026.
-Everything in §1–§4 is client-supplied. §5 is our reading of it. §6 is outstanding.
+Everything in §1–§4 is client-supplied. §5 is our reading of it.
+
+The live launch checklist is `REQUIREMENTS.md` — keep it ticked and dated.
+This file records *what the client said and what we decided*; that file records
+*what is left to do*.
 
 ---
 
@@ -172,42 +176,41 @@ enquiry form; a real booking system needs a decision (§6).
 4. **Clinical copy follows NMC advertising rules** — no testimonials, no before-and-after
    imagery, no superlatives, no guaranteed outcomes, registration number displayed.
 5. **One data file per kind of fact.** Publications, credentials, themes and site
-   identity each have one home. Prose never hardcodes a number that data can derive.
+   identity each have one home. Prose never hardcodes a number that data can
+   derive — this rule has already been broken twice and both times shipped a
+   wrong figure ("Seven papers" when there were fourteen).
+6. **Colour is not blue.** The client already has two sites in blue and rejected
+   it here. The site is a deep green, `--field-deep #12301F`. Colour tokens are
+   named for their role (`--field-deep`, `--field`, `--field-lift`), never their
+   hue, so another change is one file. Marigold stays for data marks only.
+7. **Re-measure contrast after any colour change.** All fourteen pairs were
+   checked against WCAG 2.2 when the palette moved to green; the lowest is
+   4.6:1 for small meta text and 3.6:1 for graphical marks.
 
 ---
 
 ## 6. Still outstanding
 
-**Blocking a page**
-- Speaking engagements, dates, places, and topics he will accept (Q19–Q21) → `/speaking` not built
-- Ministry decision A / B / C / D (Q22), books (Q23), which YouTube channels (Q24)
-- Writing section yes/no (Q27) → `/writing` not built
+Kept in **`REQUIREMENTS.md`**, not here. One list, one place — two copies of the
+same checklist in two files is how they end up disagreeing.
 
-**Blocking a section**
-- Which professional body the KRL/… life membership belongs to (see §2)
-- Clinical days, timings, languages
-- Booking system choice — Calendly, Practo, a Medisage link, or plain enquiry
-- Scopus author ID
-- Years for the Commonwealth Scholarship and Shankers International Award; issuer for Shankers
-- Permission to link SlideShare decks, and individual deck URLs (Q21)
-- The professional photograph
+The one item worth repeating, because it is a credential and not a task: the
+`KRL/…` life membership is held back from the site until he confirms whether the
+body is the Indian Medical Association. See §2.
 
-**Blocking launch**
-- Which social accounts to link (Q25–Q26) — currently only the academic profiles he
-  supplied links for are used
-- A form service endpoint (`person.formEndpoint`) — the site is static and cannot send
-  mail on its own
-- Confirmation that the company email is the right public address
-- Tone and visual preferences (Q28–Q31) went unanswered; current direction stands
-- Privacy notice sign-off
-
----
+The ministry decision (A / B / C / D) referenced in §1 and §2 also lives there.
 
 ## 7. Working notes
 
 - Stack: Astro, static output. `npm run dev`, `npm run build`. npm only — a stray
   `pnpm-lock.yaml` is gitignored.
 - Repo: https://github.com/amul-rs/sham-personal
+- Hosting: **Vercel**, deployed 19 Sep 2026. DNS for `www.shamineabenson.com`
+  (bought at GoDaddy) is deliberately **not** pointed yet — waiting on client
+  confirmation. That is the last step before the site is publicly reachable.
+- Brand assets live in `public/`: `favicon.svg`, `apple-touch-icon.png`, and
+  `og.png` (1200×630). All three are generated from the tally motif, so they
+  need regenerating if the palette changes again.
 - Design rules and QC method are in `README.md`. Do not reintroduce: ALL-CAPS eyebrow
   labels, middle-dot meta strings, monospace data labels, `→` on link text, or
   scroll-triggered fade-ups. One motion moment, on page load, only.

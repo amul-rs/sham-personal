@@ -31,7 +31,7 @@ const label = `${TOTAL} tally strokes, one for each medical student surveyed. ${
 
 /**
  * `ground` picks the marked-stroke colour. The bright marigold clears 3:1 on
- * indigo but only reaches 1.9:1 on plaster, so a light ground needs the
+ * the deep field but only reaches 1.9:1 on plaster, so a light ground needs the
  * deeper amber instead — same signal, legible against its own background.
  */
 const { ground = 'dark' } = Astro.props;
@@ -59,7 +59,7 @@ const { ground = 'dark' } = Astro.props;
     display: block;
     width: 2px;
     height: clamp(26px, 4.2vw, 58px);
-    background: var(--indigo-lift);
+    background: var(--field-lift);
   }
   .stroke.marked {
     background: var(--marigold);

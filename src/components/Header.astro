@@ -52,13 +52,13 @@ const isCurrent = (href) => (href === '/' ? path === '/' : path.startsWith(href)
 </div>
 
 <style>
-  /* The masthead is a field of indigo, continuous with the hero below it
+  /* The masthead is a deep field of colour, continuous with the hero below it
      on the home page and a firm band everywhere else. */
   .topbar {
     position: sticky;
     top: 0;
     z-index: 60;
-    background: var(--indigo-deep);
+    background: var(--field-deep);
     color: var(--on-dark);
   }
   .bar {
@@ -133,12 +133,12 @@ const isCurrent = (href) => (href === '/' ? path === '/' : path.startsWith(href)
   .cv:focus-visible {
     background: var(--on-dark);
     border-color: var(--on-dark);
-    color: var(--indigo-deep);
+    color: var(--field-deep);
   }
   .cv[aria-current='page'] {
     background: var(--on-dark);
     border-color: var(--on-dark);
-    color: var(--indigo-deep);
+    color: var(--field-deep);
   }
   .cv-short {
     display: none;
@@ -174,7 +174,7 @@ const isCurrent = (href) => (href === '/' ? path === '/' : path.startsWith(href)
     position: fixed;
     inset: var(--header-h) 0 0;
     z-index: 55;
-    background: var(--indigo-deep);
+    background: var(--field-deep);
     color: var(--on-dark);
     padding: var(--s-7) var(--gutter) var(--s-6);
     display: flex;

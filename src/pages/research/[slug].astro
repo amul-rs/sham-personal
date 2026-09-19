@@ -210,7 +210,7 @@ const coauthors = [...new Set(papers.flatMap((p) => p.authors))].filter(
 
   /* The plain-language summary sits above anything technical. */
   .plain {
-    border-left: 3px solid var(--indigo);
+    border-left: 3px solid var(--field);
     padding-left: var(--s-5);
   }
   .plain-h {
@@ -343,8 +343,8 @@ const coauthors = [...new Set(papers.flatMap((p) => p.authors))].filter(
     transition: border-color var(--dur-fast) var(--ease), color var(--dur-fast) var(--ease);
   }
   .btn:hover {
-    border-color: var(--indigo);
-    color: var(--indigo);
+    border-color: var(--field);
+    color: var(--field);
   }
 
   .card-link {
@@ -353,11 +353,11 @@ const coauthors = [...new Set(papers.flatMap((p) => p.authors))].filter(
     transition: border-color var(--dur) var(--ease);
   }
   .card-link:hover {
-    border-color: var(--indigo);
+    border-color: var(--field);
   }
   .card-doi {
     font-size: var(--t-sm);
-    color: var(--indigo);
+    color: var(--field);
     word-break: break-all;
   }
 
@@ -422,7 +422,7 @@ const coauthors = [...new Set(papers.flatMap((p) => p.authors))].filter(
   }
   .next-item:hover,
   .next-item:focus-visible {
-    background: var(--indigo);
+    background: var(--field);
     color: var(--on-dark);
   }
   .next-item:hover .next-line,

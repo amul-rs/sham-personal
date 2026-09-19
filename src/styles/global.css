@@ -110,11 +110,11 @@ p {
   color: var(--text);
 }
 .field-deep {
-  background: var(--indigo-deep);
+  background: var(--field-deep);
   color: var(--on-dark);
 }
-.field-indigo {
-  background: var(--indigo);
+.field-strong {
+  background: var(--field);
   color: var(--on-dark);
 }
 .pad {
@@ -141,10 +141,10 @@ a {
 .link:hover,
 .link:focus-visible {
   background-color: var(--marigold);
-  color: var(--indigo-deep);
+  color: var(--field-deep);
 }
 
-/* A link that fills with indigo rather than growing an underline. */
+/* A link that fills with the field colour rather than growing an underline. */
 .link-fill {
   display: inline-block;
   text-decoration: none;
@@ -156,15 +156,15 @@ a {
 }
 .link-fill:hover,
 .link-fill:focus-visible {
-  background: var(--indigo);
-  border-color: var(--indigo);
+  background: var(--field);
+  border-color: var(--field);
   color: var(--on-dark);
 }
 .field-deep .link-fill:hover,
-.field-indigo .link-fill:hover {
+.field-strong .link-fill:hover {
   background: var(--on-dark);
   border-color: var(--on-dark);
-  color: var(--indigo-deep);
+  color: var(--field-deep);
 }
 
 /* ============================================================
@@ -182,7 +182,7 @@ a {
   left: var(--gutter);
   top: -100px;
   z-index: 200;
-  background: var(--indigo-deep);
+  background: var(--field-deep);
   color: var(--on-dark);
   padding: var(--s-3) var(--s-4);
   text-decoration: none;
@@ -213,5 +213,5 @@ a {
 
 ::selection {
   background: var(--marigold);
-  color: var(--indigo-deep);
+  color: var(--field-deep);
 }

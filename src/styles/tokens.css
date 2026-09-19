@@ -1,28 +1,39 @@
 /* ============================================================
    Design tokens — Dr Shamin Eabenson
 
-   Grounded in the subject: population-scale medicine in
-   Vijayapura, North Karnataka. Indigo (a Deccan dye crop) is the
-   dominant structural colour and is used in large fields, never
-   as a thin accent. Marigold appears on data marks only — if it
-   is not counting something, it is not marigold.
+   Grounded in the subject: population-scale medicine in North
+   Karnataka. The dominant colour is used in LARGE FIELDS — whole
+   sections change ground — never as a thin accent stripe.
+   Marigold appears on data marks only: if it is not counting
+   something, it is not marigold.
+
+   Colour tokens are named for their ROLE, not their hue
+   (--field-deep, not --green-deep). Changing the site's colour is
+   then this file alone. It has already changed once: the client
+   has two other sites in blue, so this one is green.
+
+   Every pair below was measured, not eyeballed. Lowest ratios:
+   body 13.7:1, secondary prose 5.7:1, small meta 4.6:1,
+   graphical marks 3.6:1. Re-measure after any colour change.
    ============================================================ */
 :root {
   /* --- colour ------------------------------------------------ */
-  --indigo-deep: #161c3d; /* hero and contact grounds */
-  --indigo: #232f6b; /* dominant structural field */
-  --indigo-lift: #34418a; /* hover state on indigo grounds */
+  --field-deep: #12301f; /* hero, masthead, contact band, footer */
+  --field: #1e4a32; /* structural field, row hovers, buttons */
+  --field-lift: #2c6b49; /* unmarked tally strokes, hover lift */
+
   --plaster: #edefea; /* page ground — cool, lime-washed */
   --plaster-warm: #e3e6df; /* sunken panels */
   --plaster-raised: #f5f6f2; /* panels lifted off the page ground */
+
   --marigold: #e5a02b; /* data marks on dark grounds */
   --marigold-dark: #a9700f; /* the same signal on plaster, at 3.6:1 */
 
-  --text: #1c2145; /* chromatic, not a tinted black */
-  --text-soft: #5a6276;
-  --text-mute: #656c7e; /* 4.5:1 on plaster — was #858C9C at 2.9:1 */
-  --on-dark: #eceef4;
-  --on-dark-soft: #a2a9c4;
+  --text: #16261c; /* chromatic, not a tinted black */
+  --text-soft: #4e6157;
+  --text-mute: #5c6f65; /* 4.6:1 on plaster — the floor for real content */
+  --on-dark: #ebf0ec;
+  --on-dark-soft: #a6bfae;
   --rule: #cdd0c7;
 
   /* --- type -------------------------------------------------- */
@@ -81,4 +92,3 @@
     --header-h: 58px;
   }
 }
-
