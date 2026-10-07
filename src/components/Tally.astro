@@ -65,14 +65,22 @@ const COLS = 39;
     align-items: end;
   }
 
+  /* Both stroke colours change with the ground. The marked ones always did;
+     the unmarked ones now have to as well, because the aurora bloom on the
+     dark grounds is the same hue as the stroke and washed the old value out
+     to 2.1:1 — under the 3:1 a graphical object needs, and these strokes
+     carry the denominator of the figure. */
   .stroke {
     display: block;
     width: 2px;
     height: clamp(26px, 4.2vw, 58px);
-    background: var(--field-lift);
+    background: var(--stroke-dark);
   }
   .stroke.marked {
     background: var(--marigold);
+  }
+  .tally.on-light .stroke {
+    background: var(--field-lift);
   }
   .tally.on-light .stroke.marked {
     background: var(--marigold-dark);

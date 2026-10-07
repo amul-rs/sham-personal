@@ -189,12 +189,14 @@ p {
   /* Opacity is capped by contrast, not by taste. At 0.55 the centre of the
      green bloom lightened the ground enough to drop marigold text to 4.15:1,
      under the 4.5 minimum — and marigold carries his post-nominals and the
-     "111 of the 195" figure. At 0.36 / 0.22 the worst point holds 4.85:1.
-     Raising these values means re-checking that number by hand — automated
-     contrast tools read background-color and cannot see a gradient. */
+     "111 of the 195" figure. The greens brightened, so these came down to
+     0.16: at the bloom's brightest point marigold holds 4.77:1 and the
+     unmarked tally strokes 4.16:1. Raising them means re-checking both by
+     hand — automated contrast tools read background-color and cannot see a
+     gradient. */
   background:
-    radial-gradient(38% 44% at 22% 28%, rgba(44, 107, 73, 0.36), transparent 70%),
-    radial-gradient(34% 40% at 78% 72%, rgba(169, 112, 15, 0.22), transparent 70%);
+    radial-gradient(38% 44% at 22% 28%, rgba(17, 148, 85, 0.16), transparent 70%),
+    radial-gradient(34% 40% at 78% 72%, rgba(169, 112, 15, 0.16), transparent 70%);
   will-change: transform;
 }
 @media (prefers-reduced-motion: no-preference) {

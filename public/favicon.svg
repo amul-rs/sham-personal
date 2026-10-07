@@ -1,8 +1,9 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="Tally mark">
   <!-- The hero's tally, reduced to four strokes. Two marked, matching the
-       roughly-half proportion of the study the site opens with. -->
-  <rect width="32" height="32" fill="#12301F"/>
-  <g fill="#2C6B49">
+       roughly-half proportion of the study the site opens with.
+       Colours track tokens.css — regenerate if the palette changes. -->
+  <rect width="32" height="32" fill="#053A23"/>
+  <g fill="#41B67C">
     <rect x="6"  y="8" width="3" height="16" rx="0.5"/>
     <rect x="17" y="8" width="3" height="16" rx="0.5"/>
   </g>

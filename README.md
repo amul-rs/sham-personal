@@ -58,6 +58,11 @@ second document to drift out of step.
 - **The tally wave animates height because height carries no data here.** Every
   stroke is the same height; the encoding is colour and count. Animating the
   size of a mark whose size meant something would misstate the figure.
+- **Tally strokes take their colour from the ground, both marked and unmarked.**
+  The unmarked ones must, because the aurora bloom is the same hue as the stroke:
+  on a dark ground the bloom brightening beneath them dropped them to 2.1:1,
+  under the 3:1 a graphical object needs. `--stroke-dark` on dark grounds,
+  `--field-lift` on pale ones.
 - **Measured cost, 4x CPU throttle at 390px:** 61fps idle, 56 with the wave,
   59 with the aurora, 54 with both. `transform` only, so no layout; no
   `will-change` on the 195 strokes, which would cost more in memory than it
@@ -85,8 +90,9 @@ second document to drift out of step.
   ground it sits on. At 0.55 opacity it dropped marigold text to 4.15:1, under
   the minimum. It is 0.36 / 0.30 now, holding 4.8:1 at the brightest point.
   Automated contrast checks read `backgroundColor` and cannot see a gradient —
-  if you raise those values, re-check by hand. The blooms are green and amber;
-  there is no violet anywhere in the build.
+  if you raise those values, re-check by hand. At the royal green the blooms came
+  down to 0.16/0.16, holding marigold at 4.77:1 and the tally strokes at 4.16:1.
+  The blooms are green and amber; there is no violet anywhere in the build.
 - **A DOI is only linked if it resolves.** `doiUnresolved: true` renders the
   identifier as text instead of linking to a 404. All DOIs were checked against
   doi.org; re-check when adding papers.

@@ -5,7 +5,7 @@ something new comes back from the client, move it out of §3 and into whichever
 section it unblocks. This file and `CLAUDE.md` are the project's memory — if a
 decision is not written down in one of them, it did not happen.
 
-Last updated: **19 September 2026**
+Last updated: **4 October 2026**
 Status: **deployed to Vercel, DNS pending client confirmation**
 
 ---
@@ -31,6 +31,9 @@ Status: **deployed to Vercel, DNS pending client confirmation**
 
 ## 2. Content and design
 
+- [x] **Royal green** — client approved the green but asked for it richer
+      ("royal / brilliant / Rolex green", WhatsApp 4 Oct). Now `#053A23` /
+      `#00663D`. Brand assets regenerated to match — *4 Oct 2026*
 - [x] Pale palette — green is the only dark field; light sections alternate
       plaster, mint, sand and clay. Soft radii, tinted shadows, and a very slow
       ambient drift behind the dark bands — *19 Sep 2026*
@@ -50,6 +53,27 @@ Status: **deployed to Vercel, DNS pending client confirmation**
 - [ ] `/clinical` read by someone familiar with NMC advertising rules before launch.
 - [ ] `/privacy` read and signed off by Dr Eabenson, ideally checked against the
       DPDP Act.
+
+## 2b. New, from the client's 4 Oct WhatsApp review
+
+He approved the colour, the link sharing, the publication linking and the
+integration. Three requests came with it:
+
+- [ ] **A dedicated profiles page, with screenshots.** *"The website links etc
+      should be prominent — like Google Scholar, ResearchGate, LinkedIn etc.
+      with screen shots of those pages in a separate page, so that the look
+      improves."* The links currently live in the footer and on the CV only.
+      Two things to settle before building it: screenshots of third-party
+      profile pages go stale the moment he publishes again, so they need either
+      a refresh routine or a note of the date captured; and someone needs to
+      take them — they are his logged-in profile pages, not ours to fetch.
+      Ask whether live-looking screenshots are wanted, or just a strong card
+      per profile with its logo and current metrics typed in.
+- [ ] **"Fonts can be changed in some instances."** Too vague to act on without
+      guessing. Ask him which pages or which text — a heading somewhere he
+      disliked, or the serif body generally?
+- [ ] **"Final looks should be superb."** Not actionable as written. Worth
+      turning into specifics the next time he is on a call.
 
 ## 3. Waiting on the client
 

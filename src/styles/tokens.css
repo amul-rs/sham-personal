@@ -12,16 +12,27 @@
    then this file alone. It has already changed once: the client
    has two other sites in blue, so this one is green.
 
-   Every pair below was measured, not eyeballed. Lowest ratios:
-   body 13.7:1, secondary prose 5.7:1, small meta 4.6:1,
-   graphical marks 3.6:1. Re-measure after any colour change.
+   All 34 pairs were measured, not eyeballed, including text and marks over
+   the aurora bloom at its brightest. Lowest ratios: body 11.1:1, secondary
+   4.7:1, small meta 4.6:1, graphical marks 3.2:1.
+   Re-measure every pair after any colour change — brightening the field
+   broke three of them last time.
    ============================================================ */
 :root {
   /* --- colour ------------------------------------------------ */
-  /* Primary hue — green. Carries the masthead, hero and footer. */
-  --field-deep: #12301f; /* hero, masthead, footer */
-  --field: #1e4a32; /* structural field, row hovers, buttons */
-  --field-lift: #2c6b49; /* unmarked tally strokes, hover lift */
+  /* Primary hue — green. Carries the masthead, hero and footer.
+     Saturated rather than muted, at the client's request: he asked for a
+     royal / Rolex green, not a forest one. #00663D sits a shade brighter
+     than Rolex's own #006039, which is where it still clears 4.5:1. */
+  --field-deep: #053a23; /* hero, masthead, footer */
+  --field: #00663d; /* structural field, row hovers, buttons */
+
+  /* Tally strokes need a different value on each ground, and the dark one
+     has to survive the aurora bloom passing beneath it. A single value
+     cannot: the bloom is the same hue as the stroke, so brightening the
+     ground always erodes it. Measured at the bloom's brightest point. */
+  --field-lift: #119455; /* unmarked stroke on PALE grounds — 3.2:1 on mint */
+  --stroke-dark: #41b67c; /* unmarked stroke on DARK grounds — 4.2:1 under bloom */
 
   /* Pale grounds. Light sections alternate between these instead of every
      one being identical plaster. */
@@ -40,7 +51,9 @@
   --text-mute: #586b61; /* 4.6:1 on the DARKEST pale ground (mint), so it
                             clears 4.5 on all four: mint, sand, plaster, raised */
   --on-dark: #ebf0ec;
-  --on-dark-soft: #a6bfae; /* secondary text on the green grounds */
+  --on-dark-soft: #c2d9c9; /* secondary on the green grounds — lightened when
+                              the field brightened; the old #A6BFAE fell to
+                              3.6:1 on the new --field */
   --rule: #cdd0c7;
   --rule-soft: #dcdfd6;
 
@@ -97,8 +110,8 @@
 
   /* Shadows are tinted with the page's own green rather than neutral black,
      which is what stops them reading as the default grey drop shadow. */
-  --shadow: 0 1px 2px rgba(18, 48, 31, 0.04), 0 10px 28px -14px rgba(18, 48, 31, 0.16);
-  --shadow-lift: 0 2px 4px rgba(18, 48, 31, 0.05), 0 18px 40px -16px rgba(18, 48, 31, 0.22);
+  --shadow: 0 1px 2px rgba(5, 58, 35, 0.05), 0 10px 28px -14px rgba(5, 58, 35, 0.18);
+  --shadow-lift: 0 2px 4px rgba(5, 58, 35, 0.06), 0 18px 40px -16px rgba(5, 58, 35, 0.24);
 
   /* --- motion ------------------------------------------------ */
   /* One orchestrated page-load moment. Nothing animates on scroll. */

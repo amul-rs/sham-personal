@@ -179,15 +179,23 @@ enquiry form; a real booking system needs a decision (§6).
    identity each have one home. Prose never hardcodes a number that data can
    derive — this rule has already been broken twice and both times shipped a
    wrong figure ("Seven papers" when there were fourteen).
-6. **Colour is not blue, and the palette is light.** The client already has two
-   sites in blue and rejected it here. A dark violet second hue was then tried
-   and also rejected — he wants it lighter. Green is now the only dark field;
-   everything else is a pale ground (plaster, mint, sand, clay). Colour tokens are
-   named for their role (`--field-deep`, `--field`, `--field-lift`), never their
-   hue, so another change is one file. Marigold stays for data marks only.
-7. **Re-measure contrast after any colour change.** All fourteen pairs were
-   checked against WCAG 2.2 when the palette moved to green; the lowest is
-   4.6:1 for small meta text and 3.6:1 for graphical marks.
+6. **Colour is a royal green, and the palette is light.** Three rounds got here:
+   blue rejected (he has two other sites in blue), then a dark violet second hue
+   rejected (wanted lighter), then the muted forest green approved but asked to
+   be richer — *"Can be royal green / Brilliant green etc. / Rolex green etc"*,
+   WhatsApp, 4 Oct 2026. Now `--field-deep #053A23` / `--field #00663D`, a shade
+   brighter than Rolex's own #006039, which is where it still clears 4.5:1.
+   Green is the only dark field; everything else is a pale ground (plaster, mint,
+   sand, clay). Tokens are named for their role, never their hue, so another
+   change is one file. Marigold stays for data marks only.
+7. **Re-measure contrast after any colour change — every pair, not the ones you
+   think changed.** Brightening the green to royal broke three pairs that had
+   been fine, and exposed a fourth that had been failing unnoticed: the unmarked
+   tally strokes sat at 2.25:1 on the hero, under the 3:1 a graphical object
+   needs, and those strokes are the denominator of the 195. All 34 pairs now
+   pass, including text and marks measured over the aurora bloom at its
+   brightest — which automated tools cannot see, because they read
+   `background-color` and a gradient is not one.
 
 ---
 
