@@ -66,6 +66,7 @@ export const nav = [
   { label: 'Research', href: '/research/' },
   { label: 'Publications', href: '/publications/' },
   { label: 'Teaching', href: '/teaching/' },
+  { label: 'Profiles', href: '/profiles/' },
   { label: 'Consultation', href: '/clinical/' },
   { label: 'Contact', href: '/contact/' },
 ];
@@ -75,54 +76,93 @@ export const footerPages = [
   { label: 'Privacy', href: '/privacy/' },
 ];
 
-// Every link below was supplied by the client. `pending: true` renders muted and
-// unclickable rather than being silently dropped.
+/**
+ * Every link below was supplied by the client. `pending: true` renders muted and
+ * unclickable rather than being silently dropped.
+ *
+ * `blurb` says what is actually AT that profile, so a visitor can choose where
+ * to go rather than being handed ten identical links.
+ *
+ * `shot` is an optional screenshot for /profiles, as a path under /public.
+ * It is null everywhere because these cannot be captured automatically — tested
+ * 7 Oct 2026: ResearchGate returns 403, LinkedIn 999, Google Scholar and
+ * Semantic Scholar show bot checks, SlideShare a CAPTCHA. Only ORCID renders.
+ * If Dr Eabenson supplies screenshots, drop them in /public/profiles/ and set
+ * the path here — the card picks them up with no code change. Add `shotDate`
+ * so the page can say when it was captured; a profile screenshot is out of date
+ * the moment he publishes again.
+ */
 export const profiles = [
   {
     label: 'ORCID',
     detail: '0009-0002-6516-7234',
+    blurb:
+      'The permanent identifier that ties every paper to him, independent of any publisher or platform.',
+    shot: null,
+    shotDate: null,
     href: 'https://orcid.org/0009-0002-6516-7234',
     group: 'academic',
   },
   {
     label: 'Google Scholar',
     detail: 'Citations and metrics',
+    blurb: 'Citation counts, h-index, and every paper the index has picked up.',
+    shot: null,
+    shotDate: null,
     href: 'https://scholar.google.com/citations?user=iGElE6UAAAAJ&hl=en',
     group: 'academic',
   },
   {
     label: 'Web of Science',
     detail: 'ResearcherID QDN-7117-2026',
+    blurb: 'Clarivate’s curated index — a narrower, more selective record than Scholar.',
+    shot: null,
+    shotDate: null,
     href: 'https://www.webofscience.com/wos/author/record/QDN-7117-2026',
     group: 'academic',
   },
   {
     label: 'ResearchGate',
     detail: 'Publications and preprints',
+    blurb: 'Full texts where the licence allows, plus co-authors and reader statistics.',
+    shot: null,
+    shotDate: null,
     href: 'https://www.researchgate.net/profile/Shamin-Eabenson',
     group: 'academic',
   },
   {
     label: 'Semantic Scholar',
     detail: 'Indexed papers',
+    blurb: 'Machine-indexed, showing which papers cite which and in what context.',
+    shot: null,
+    shotDate: null,
     href: 'https://www.semanticscholar.org/author/Shamin-Eabenson/2421380683',
     group: 'academic',
   },
   {
     label: 'Academia.edu',
     detail: 'Papers and drafts',
+    blurb: 'Papers and working drafts, including material not yet in a journal.',
+    shot: null,
+    shotDate: null,
     href: 'https://bldeu.academia.edu/DrSHAMINEABENSON',
     group: 'academic',
   },
   {
     label: 'Researchers Profile',
     detail: 'Profile 41486',
+    blurb: 'A secondary researcher directory listing.',
+    shot: null,
+    shotDate: null,
     href: 'https://researchersprofile.com/users/41486/shamin-eabenson',
     group: 'academic',
   },
   {
     label: 'Scopus',
     detail: 'Author ID awaited',
+    blurb: 'Elsevier’s index. The author ID has not been supplied yet.',
+    shot: null,
+    shotDate: null,
     href: null,
     pending: true,
     group: 'academic',
@@ -130,18 +170,27 @@ export const profiles = [
   {
     label: 'LinkedIn',
     detail: 'Professional profile',
+    blurb: 'Professional background, current post, and where he posts about the work.',
+    shot: null,
+    shotDate: null,
     href: 'https://www.linkedin.com/in/dr-shamin-eabenson-1a55811b3/',
     group: 'elsewhere',
   },
   {
     label: 'SlideShare',
     detail: 'Teaching material',
+    blurb: 'Journal club and seminar decks, published openly for students to use.',
+    shot: null,
+    shotDate: null,
     href: 'https://www.slideshare.net/DrSHAMINEABENSON1',
     group: 'elsewhere',
   },
   {
     label: 'Medisage',
     detail: 'Clinical profile',
+    blurb: 'Clinical listing, for patients rather than researchers.',
+    shot: null,
+    shotDate: null,
     href: 'https://mymedisage.com/profile/dr-shamin-eabenson-general-practitioner-gp',
     group: 'elsewhere',
   },

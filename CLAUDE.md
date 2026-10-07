@@ -226,3 +226,9 @@ The ministry decision (A / B / C / D) referenced in §1 and §2 also lives there
   scroll-triggered fade-ups. One motion moment, on page load, only.
 - `--split` in `tokens.css` is the shared column ratio. Every two-column section uses
   it so secondary content shares one vertical axis.
+- **Profile screenshots cannot be automated.** Tested 7 Oct 2026: ResearchGate
+  403, LinkedIn 999, Google Scholar and Semantic Scholar bot checks, SlideShare
+  CAPTCHA. Only ORCID renders. `/profiles` therefore stands on real identifiers
+  rather than pictures, and takes supplied screenshots through `shot` /
+  `shotDate` on each profile in `src/data/site.js`. Do not spend time trying to
+  scrape these again.

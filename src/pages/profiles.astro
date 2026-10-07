@@ -1,0 +1,304 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHeader from '../components/PageHeader.astro';
+import { academicProfiles, elsewhereProfiles } from '../data/site.js';
+import { publications } from '../data/publications.js';
+
+/**
+ * Where to find him elsewhere, made prominent at the client's request.
+ *
+ * Each card carries a real identifier rather than a screenshot. Screenshots of
+ * these pages cannot be captured automatically — tested 7 Oct 2026: ResearchGate
+ * 403, LinkedIn 999, Google Scholar and Semantic Scholar bot checks, SlideShare
+ * CAPTCHA. Only ORCID renders. Set `shot` on a profile in site.js and the card
+ * renders it above the text with no change here.
+ */
+const host = (url) => url.replace(/^https?:\/\/(www\.)?/, '').split('/')[0];
+const live = academicProfiles.filter((p) => p.href);
+const pending = academicProfiles.filter((p) => !p.href);
+---
+
+<Base
+  title="Profiles"
+  description="Where to find Dr Shamin Eabenson's work indexed: ORCID, Google Scholar, Web of Science, ResearchGate, Semantic Scholar and more."
+>
+  <PageHeader
+    title="Find the work"
+    standfirst="The same fourteen papers, indexed in different places. Each of these shows something the others do not."
+    count={`${live.length + elsewhereProfiles.length} profiles, all verified against links supplied by Dr Eabenson.`}
+  />
+
+  <!-- The identifier that matters most, given its own weight. -->
+  {
+    live
+      .filter((p) => p.label === 'ORCID')
+      .map((p) => (
+        <section class="ground-mint pad-half">
+          <div class="wrap orcid-grid">
+            <div>
+              <h2 class="orcid-h">The one identifier that never changes</h2>
+              <p class="orcid-body">
+                Names are ambiguous and institutions change. An ORCID is neither — it ties every one
+                of the {publications.length} papers to this person and nobody else, independent of
+                any publisher, index or employer.
+              </p>
+            </div>
+            <a class="orcid-card card" href={p.href} rel="me noopener">
+              <span class="orcid-label">ORCID iD</span>
+              <span class="orcid-id">{p.detail}</span>
+              <span class="orcid-host">{host(p.href)}</span>
+            </a>
+          </div>
+        </section>
+      ))
+  }
+
+  <section class="field-light pad">
+    <div class="wrap">
+      <h2 class="section-head">Indexed and cited</h2>
+      <ul class="grid">
+        {
+          live
+            .filter((p) => p.label !== 'ORCID')
+            .map((p) => (
+              <li>
+                <a class="card tile" href={p.href} rel="me noopener">
+                  {p.shot && (
+                    <span class="shot">
+                      <img src={p.shot} alt={`The ${p.label} profile page of Dr Shamin Eabenson`} loading="lazy" />
+                      {p.shotDate && <span class="shot-date">Captured {p.shotDate}</span>}
+                    </span>
+                  )}
+                  <span class="tile-host">{host(p.href)}</span>
+                  <span class="tile-name">{p.label}</span>
+                  <span class="tile-blurb">{p.blurb}</span>
+                  <span class="tile-foot">{p.detail}</span>
+                </a>
+              </li>
+            ))
+        }
+      </ul>
+
+      {
+        pending.length > 0 && (
+          <p class="pending">
+            {pending.map((p) => p.label).join(' and ')}{' '}
+            {pending.length === 1 ? 'is' : 'are'} not listed: the author{' '}
+            {pending.length === 1 ? 'ID has' : 'IDs have'} not been supplied yet.
+          </p>
+        )
+      }
+    </div>
+  </section>
+
+  <section class="ground-sand pad">
+    <div class="wrap">
+      <h2 class="section-head">Professional and teaching</h2>
+      <ul class="grid">
+        {
+          elsewhereProfiles.map((p) => (
+            <li>
+              <a class="card tile" href={p.href} rel="me noopener">
+                {p.shot && (
+                  <span class="shot">
+                    <img src={p.shot} alt={`The ${p.label} profile page of Dr Shamin Eabenson`} loading="lazy" />
+                    {p.shotDate && <span class="shot-date">Captured {p.shotDate}</span>}
+                  </span>
+                )}
+                <span class="tile-host">{host(p.href)}</span>
+                <span class="tile-name">{p.label}</span>
+                <span class="tile-blurb">{p.blurb}</span>
+                <span class="tile-foot">{p.detail}</span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="field-deep aurora pad">
+    <div class="wrap split">
+      <h2 class="cta-head">All fourteen papers are listed here too.</h2>
+      <div>
+        <p><a class="link-fill" href="/publications/">Publications</a></p>
+        <p class="cta-body">
+          With citations, BibTeX, and a link to the DOI of record for every paper that has one.
+        </p>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  /* ---- ORCID, given its own band ---- */
+  .orcid-grid {
+    display: grid;
+    grid-template-columns: var(--split);
+    gap: var(--split-gap);
+    align-items: center;
+  }
+  @media (max-width: 880px) {
+    .orcid-grid {
+      grid-template-columns: 1fr;
+      gap: var(--s-5);
+    }
+  }
+  .orcid-h {
+    font-variation-settings: 'wdth' 85;
+    font-weight: 600;
+    font-size: var(--t-xl);
+    line-height: 1.1;
+    letter-spacing: -0.025em;
+    margin-left: var(--optical-left);
+    max-width: 18ch;
+  }
+  .orcid-body {
+    margin-top: var(--s-4);
+    font-family: var(--serif);
+    line-height: 1.7;
+    color: var(--text-soft);
+    max-width: var(--measure-serif);
+  }
+  .orcid-card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--s-2);
+    padding: var(--s-6);
+  }
+  .orcid-label {
+    font-size: var(--t-sm);
+    color: var(--text-mute);
+  }
+  .orcid-id {
+    font-variation-settings: 'wdth' 88;
+    font-weight: 700;
+    font-size: var(--t-lg);
+    letter-spacing: -0.01em;
+    color: var(--field);
+    font-variant-numeric: tabular-nums;
+  }
+  .orcid-host {
+    margin-top: var(--s-3);
+    padding-top: var(--s-3);
+    border-top: 1px solid var(--rule-soft);
+    font-size: var(--t-sm);
+    color: var(--text-mute);
+  }
+
+  /* ---- the grids ---- */
+  .section-head {
+    font-size: var(--t-lg);
+    font-variation-settings: 'wdth' 88;
+    font-weight: 600;
+    color: var(--text-mute);
+    margin-bottom: var(--s-6);
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 290px), 1fr));
+    gap: var(--s-4);
+  }
+  .tile {
+    display: flex;
+    flex-direction: column;
+    gap: var(--s-2);
+    height: 100%;
+    padding: var(--s-5);
+    overflow: hidden;
+  }
+  /* Only renders when a screenshot has actually been supplied. */
+  .shot {
+    display: block;
+    margin: calc(var(--s-5) * -1) calc(var(--s-5) * -1) var(--s-4);
+    border-bottom: 1px solid var(--rule-soft);
+    position: relative;
+  }
+  .shot img {
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+    object-position: top center;
+  }
+  .shot-date {
+    position: absolute;
+    right: var(--s-2);
+    bottom: var(--s-2);
+    background: var(--plaster-raised);
+    padding: 2px var(--s-2);
+    border-radius: var(--r-sm);
+    font-size: var(--t-xs);
+    color: var(--text-mute);
+  }
+  .tile-host {
+    font-size: var(--t-sm);
+    color: var(--text-mute);
+    overflow-wrap: anywhere;
+  }
+  .tile-name {
+    font-variation-settings: 'wdth' 86;
+    font-weight: 700;
+    font-size: var(--t-lg);
+    line-height: 1.05;
+    letter-spacing: -0.025em;
+    margin-left: var(--optical-left);
+    color: var(--text);
+  }
+  .tile:hover .tile-name,
+  .tile:focus-visible .tile-name {
+    color: var(--field);
+  }
+  .tile-blurb {
+    font-family: var(--serif);
+    font-size: var(--t-sm);
+    line-height: 1.6;
+    color: var(--text-soft);
+    margin-top: var(--s-1);
+  }
+  .tile-foot {
+    margin-top: auto;
+    padding-top: var(--s-4);
+    border-top: 1px solid var(--rule-soft);
+    font-size: var(--t-sm);
+    color: var(--text-mute);
+  }
+
+  .pending {
+    margin-top: var(--s-6);
+    font-size: var(--t-sm);
+    font-style: italic;
+    color: var(--text-mute);
+  }
+
+  /* ---- closing band ---- */
+  .split {
+    display: grid;
+    grid-template-columns: var(--split);
+    gap: var(--split-gap);
+    align-items: start;
+  }
+  @media (max-width: 880px) {
+    .split {
+      grid-template-columns: 1fr;
+      gap: var(--s-5);
+    }
+  }
+  .cta-head {
+    font-variation-settings: 'wdth' 85;
+    font-weight: 600;
+    font-size: var(--t-xl);
+    line-height: 1.1;
+    letter-spacing: -0.025em;
+    margin-left: var(--optical-left);
+    color: var(--on-dark);
+    max-width: 18ch;
+  }
+  .cta-body {
+    margin-top: var(--s-5);
+    font-family: var(--serif);
+    font-size: var(--t-sm);
+    line-height: 1.7;
+    color: var(--on-dark-soft);
+    max-width: 46ch;
+  }
+</style>

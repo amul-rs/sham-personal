@@ -5,7 +5,7 @@ something new comes back from the client, move it out of §3 and into whichever
 section it unblocks. This file and `CLAUDE.md` are the project's memory — if a
 decision is not written down in one of them, it did not happen.
 
-Last updated: **4 October 2026**
+Last updated: **7 October 2026**
 Status: **deployed to Vercel, DNS pending client confirmation**
 
 ---
@@ -59,16 +59,23 @@ Status: **deployed to Vercel, DNS pending client confirmation**
 He approved the colour, the link sharing, the publication linking and the
 integration. Three requests came with it:
 
-- [ ] **A dedicated profiles page, with screenshots.** *"The website links etc
-      should be prominent — like Google Scholar, ResearchGate, LinkedIn etc.
-      with screen shots of those pages in a separate page, so that the look
-      improves."* The links currently live in the footer and on the CV only.
-      Two things to settle before building it: screenshots of third-party
-      profile pages go stale the moment he publishes again, so they need either
-      a refresh routine or a note of the date captured; and someone needs to
-      take them — they are his logged-in profile pages, not ours to fetch.
-      Ask whether live-looking screenshots are wanted, or just a strong card
-      per profile with its logo and current metrics typed in.
+- [x] **A dedicated profiles page.** `/profiles`, added to the main navigation
+      so it is as prominent as he asked. ORCID gets its own band — it is the one
+      identifier that never changes — then a card per platform showing the
+      domain, what is actually held there, and his identifier. — *7 Oct 2026*
+- [ ] **Screenshots for the profile cards — needs him, not us.** Automated
+      capture was tested on 7 Oct and does not work: ResearchGate returns
+      **403**, LinkedIn **999**, Google Scholar and Semantic Scholar show bot
+      checks, SlideShare a CAPTCHA. Only ORCID renders. The three he named are
+      the three most firmly blocked.
+      The cards are built to take them anyway: drop images into
+      `/public/profiles/` and set `shot` and `shotDate` on that profile in
+      `src/data/site.js` — the card renders the image above the text with no
+      code change. `shotDate` prints on the image, because a profile screenshot
+      is out of date the moment he publishes again.
+      **Ask him:** does he want to send screenshots, knowing they need
+      re-taking each time his profiles change? The cards already look complete
+      without them.
 - [ ] **"Fonts can be changed in some instances."** Too vague to act on without
       guessing. Ask him which pages or which text — a heading somewhere he
       disliked, or the serif body generally?
