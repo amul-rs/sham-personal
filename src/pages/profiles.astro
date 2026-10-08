@@ -14,8 +14,7 @@ import { publications } from '../data/publications.js';
  * renders it above the text with no change here.
  */
 const host = (url) => url.replace(/^https?:\/\/(www\.)?/, '').split('/')[0];
-const live = academicProfiles.filter((p) => p.href);
-const pending = academicProfiles.filter((p) => !p.href);
+const live = academicProfiles;
 ---
 
 <Base
@@ -25,7 +24,7 @@ const pending = academicProfiles.filter((p) => !p.href);
   <PageHeader
     title="Find the work"
     standfirst="The same fourteen papers, indexed in different places. Each of these shows something the others do not."
-    count={`${live.length + elsewhereProfiles.length} profiles, all verified against links supplied by Dr Eabenson.`}
+    count="Every entry links straight to the profile — no sign-in, no paywall."
   />
 
   <!-- The identifier that matters most, given its own weight. -->
@@ -79,15 +78,6 @@ const pending = academicProfiles.filter((p) => !p.href);
         }
       </ul>
 
-      {
-        pending.length > 0 && (
-          <p class="pending">
-            {pending.map((p) => p.label).join(' and ')}{' '}
-            {pending.length === 1 ? 'is' : 'are'} not listed: the author{' '}
-            {pending.length === 1 ? 'ID has' : 'IDs have'} not been supplied yet.
-          </p>
-        )
-      }
     </div>
   </section>
 
@@ -260,13 +250,6 @@ const pending = academicProfiles.filter((p) => !p.href);
     padding-top: var(--s-4);
     border-top: 1px solid var(--rule-soft);
     font-size: var(--t-sm);
-    color: var(--text-mute);
-  }
-
-  .pending {
-    margin-top: var(--s-6);
-    font-size: var(--t-sm);
-    font-style: italic;
     color: var(--text-mute);
   }
 

@@ -5,8 +5,11 @@ something new comes back from the client, move it out of §3 and into whichever
 section it unblocks. This file and `CLAUDE.md` are the project's memory — if a
 decision is not written down in one of them, it did not happen.
 
-Last updated: **7 October 2026**
-Status: **deployed to Vercel, DNS pending client confirmation**
+Last updated: **8 October 2026**
+Status: **content and design are launch-ready. Only DNS and five client answers remain.**
+
+A short version to send Dr Eabenson is `client-requirements.csv` — 18 items,
+five of them marked "Before launch".
 
 ---
 
@@ -30,6 +33,15 @@ Status: **deployed to Vercel, DNS pending client confirmation**
       If none is added, remove the "no analytics" wording from `/privacy`.
 
 ## 2. Content and design
+
+- [x] **Every work-in-progress note removed from the site** — no "DOI not yet
+      available", no "Scopus author ID awaited", no "form is not connected",
+      no "note on sources". A profile with no link is simply not shown, and a
+      paper with no working DOI simply has no link. Those lines told a visitor
+      about our paperwork. — *8 Oct 2026*
+- [x] **Portrait placeholder** that reads as a designed graphic rather than an
+      empty box, so the page is presentable before the photograph arrives. Set
+      `person.images.portrait` and it swaps in. — *8 Oct 2026*
 
 - [x] **Royal green** — client approved the green but asked for it richer
       ("royal / brilliant / Rolex green", WhatsApp 4 Oct). Now `#053A23` /
@@ -85,10 +97,12 @@ integration. Three requests came with it:
 ## 3. Waiting on the client
 
 ### Blocks launch
-- [ ] **Contact form endpoint.** Static sites cannot send mail. Needs Formspree,
-      Netlify Forms or Web3Forms. Set `person.formEndpoint` in `src/data/site.js`
-      and the form enables itself. Until then it is visibly disabled and points
-      to email.
+- [x] **Contact form works.** It composes the message in the visitor's own mail
+      client, so a static site needs no mail server, no third-party service and
+      no monthly cost. Validation, the purpose selector and the consent checkbox
+      all still apply. If a form service is wanted later, set
+      `person.formEndpoint` and it POSTs there instead with no other change.
+      — *8 Oct 2026*
 - [ ] **Confirm the public email.** The site publishes
       `drshamineabenson@eabensonhealthcare.com`. He gave four addresses and never
       said which is public. Alternatives: `drshamin123@gmail.com`,

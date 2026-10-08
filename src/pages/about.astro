@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import PageHeader from '../components/PageHeader.astro';
+import Portrait from '../components/Portrait.astro';
 import { person } from '../data/site.js';
 import { publications } from '../data/publications.js';
 import { themes } from '../data/themes.js';
@@ -59,7 +60,10 @@ const md = education.find((e) => e.degree.startsWith('MD'));
         </p>
       </div>
 
-      <dl class="facts">
+      <div class="aside-col">
+        <Portrait />
+
+        <dl class="facts">
         <div>
           <dt>Qualifications</dt>
           <dd>{person.postNominals}</dd>
@@ -76,7 +80,8 @@ const md = education.find((e) => e.degree.startsWith('MD'));
           <dt>Published</dt>
           <dd>{publications.length} papers across {journalCount} journals</dd>
         </div>
-      </dl>
+        </dl>
+      </div>
     </div>
   </section>
 
@@ -218,6 +223,10 @@ const md = education.find((e) => e.degree.startsWith('MD'));
     font-size: var(--t-md);
   }
 
+  .aside-col {
+    display: grid;
+    gap: var(--s-6);
+  }
   .facts {
     font-size: var(--t-sm);
   }

@@ -1,13 +1,8 @@
 ---
 import Base from '../layouts/Base.astro';
 import PageHeader from '../components/PageHeader.astro';
-import { person } from '../data/site.js';
 
-// Every statement here describes what this site actually does today. Nothing
-// about retention periods, processors or the controller's contact details is
-// invented — where an answer is missing the page routes the reader to the
-// contact page rather than stating a policy nobody has agreed to.
-const formLive = Boolean(person.formEndpoint);
+// Every statement here describes what this site actually does today.
 ---
 
 <Base
@@ -29,23 +24,14 @@ const formLive = Boolean(person.formEndpoint);
       </p>
 
       <h2>The enquiry form</h2>
-      {
-        formLive ? (
-          <p>
-            The form collects your name, email address, the subject you select, your message, and
-            your organisation if you choose to give it. These are used to reply to you and for
-            nothing else. They are not sold, published, or used for any mailing list.
-          </p>
-        ) : (
-          <p>
-            The enquiry form is not connected to any service yet, so it currently collects and
-            transmits nothing at all. When it is connected it will collect your name, email address,
-            the subject you select, your message, and your organisation if you choose to give it —
-            used to reply to you and for nothing else, never sold, published, or added to a mailing
-            list.
-          </p>
-        )
-      }
+      <p>
+        The enquiry form collects your name, email address, the subject you select, your message,
+        and your organisation if you choose to give it. It opens these in your own email program so
+        you can see exactly what is being sent before you send it — nothing is transmitted to this
+        website, and nothing is stored here. Your message goes to Dr Eabenson's inbox and is used to
+        reply to you, for nothing else. It is never sold, published, or added to a mailing list.
+      </p>
+
       <p>
         The consent checkbox on the form is there because sending an enquiry means handing over
         personal data, and that should be a deliberate act rather than a side effect.

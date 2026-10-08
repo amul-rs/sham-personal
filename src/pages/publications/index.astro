@@ -10,8 +10,6 @@ import { themes } from '../../data/themes.js';
 const years = [...new Set(publications.map((p) => p.year))].sort((a, b) => b - a);
 const themesWithPapers = themes.filter((t) => publications.some((p) => p.theme === t.slug));
 const allBibtex = publications.map(bibtex).join('\n\n');
-const missingDoi = publications.filter((p) => !p.doi).length;
-const unresolvedDoi = publications.filter((p) => p.doiUnresolved).length;
 const yearSpan =
   years.length === 1 ? `all published in ${years[0]}` : `published ${years[years.length - 1]}–${years[0]}`;
 ---
@@ -76,31 +74,6 @@ const yearSpan =
     </div>
   </section>
 
-  <section class="field-light">
-    <div class="wrap note-grid">
-      <h2 class="note-h">A note on sources</h2>
-      <div class="note-body">
-        <p>
-          {missingDoi} of the {publications.length} entries have no DOI listed. Those identifiers
-          have not been guessed at, and will appear here once the journals supply them.
-        </p>
-        {
-          unresolvedDoi > 0 && (
-            <p>
-              A further {unresolvedDoi === 1 ? 'entry has a DOI that does' : `${unresolvedDoi} entries have DOIs that do`}{' '}
-              not resolve yet — the publisher appears not to have registered
-              {unresolvedDoi === 1 ? ' it' : ' them'} with doi.org. The identifier is shown as text
-              rather than linked to a page that is not there.
-            </p>
-          )
-        }
-        <p>
-          This page, the research theme pages and the curriculum vitae are generated from one
-          structured data file, so they cannot fall out of step with one another.
-        </p>
-      </div>
-    </div>
-  </section>
 </Base>
 
 <script>
@@ -240,35 +213,8 @@ const yearSpan =
     color: var(--field);
   }
 
-  .note-grid {
-    display: grid;
-    grid-template-columns: var(--split);
-    gap: var(--split-gap);
-    align-items: start;
-    padding-top: var(--s-7);
-    padding-bottom: var(--s-9);
-    border-top: 1px solid var(--rule);
-  }
-  @media (max-width: 880px) {
-    .note-grid {
-      grid-template-columns: 1fr;
-      gap: var(--s-4);
-    }
-  }
-  .note-h {
-    font-variation-settings: 'wdth' 88;
-    font-weight: 600;
-    font-size: var(--t-lg);
-    letter-spacing: -0.02em;
-    color: var(--text-mute);
-  }
-  .note-body {
-    font-family: var(--serif);
-    line-height: 1.72;
-    color: var(--text-soft);
-    max-width: var(--measure-serif);
-  }
-  .note-body p + p {
-    margin-top: 1.1em;
-  }
+  
+  
+  
+  
 </style>

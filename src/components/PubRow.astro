@@ -22,14 +22,12 @@ const { pub, compact = false } = Astro.props;
     <p class="cite">{citationLine(pub)}</p>
     {!compact && pub.note && <p class="note">{pub.note}</p>}
     {
-      pub.doi && !pub.doiUnresolved ? (
+      /* No link where the DOI is missing or does not resolve. The absence is
+         the information; a line explaining it is housekeeping, not content. */
+      pub.doi && !pub.doiUnresolved && (
         <a class="doi" href={`https://doi.org/${pub.doi}`} rel="noopener">
           Read the paper
         </a>
-      ) : pub.doi ? (
-        <p class="nodoi">DOI {pub.doi} — not yet resolving</p>
-      ) : (
-        <p class="nodoi">DOI not yet available</p>
       )
     }
     <slot />
@@ -119,10 +117,5 @@ const { pub, compact = false } = Astro.props;
     background: var(--field);
     color: var(--on-dark);
   }
-  .nodoi {
-    margin-top: var(--s-4);
-    font-size: var(--t-sm);
-    color: var(--text-mute);
-    font-style: italic;
-  }
+
 </style>

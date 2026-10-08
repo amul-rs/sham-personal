@@ -54,6 +54,16 @@ export const person = {
     bookingUrl: null,
   },
 
+  /**
+   * Client-supplied imagery. Null means the designed placeholder renders in its
+   * place — a deliberate graphic, not an empty box, so the page is presentable
+   * before the photographs arrive. Drop files in /public and set the path.
+   */
+  images: {
+    portrait: null, // a professional headshot, plain background, 1200px+ on the short edge
+    portraitAlt: 'Dr Shamin Eabenson',
+  },
+
   lede:
     'Medicine practised at the scale of a population — how health systems, education and everyday risk shape the lives of people in North Karnataka.',
 };
@@ -196,5 +206,12 @@ export const profiles = [
   },
 ];
 
-export const academicProfiles = profiles.filter((p) => p.group === 'academic');
-export const elsewhereProfiles = profiles.filter((p) => p.group === 'elsewhere');
+/**
+ * Only profiles with a live link are exported for rendering. Entries still
+ * awaiting an identifier stay in `profiles` above so we know they are
+ * outstanding, but nothing on the site announces a gap in our paperwork to a
+ * visitor. Add the href and the card appears.
+ */
+export const academicProfiles = profiles.filter((p) => p.group === 'academic' && p.href);
+export const elsewhereProfiles = profiles.filter((p) => p.group === 'elsewhere' && p.href);
+export const awaitingProfiles = profiles.filter((p) => !p.href);

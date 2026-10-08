@@ -1,0 +1,97 @@
+---
+import { person } from '../data/site.js';
+
+/**
+ * The portrait, or a designed stand-in for it.
+ *
+ * The photograph has been promised but not supplied. Rather than a grey box
+ * with "image here" — which makes a live site look unfinished — the fallback is
+ * a composition in the site's own language: the tally motif, dense, in the
+ * brand greens with the marked strokes in marigold. It reads as a deliberate
+ * graphic, so the page is presentable today and improves when the photograph
+ * arrives.
+ *
+ * To swap it in: put the file in /public and set `person.images.portrait` in
+ * src/data/site.js. Nothing else changes.
+ */
+const { portrait, portraitAlt } = person.images;
+
+// Fixed-seed so the figure is identical on every build, like the hero tally.
+function mulberry32(seed) {
+  return function () {
+    seed |= 0;
+    seed = (seed + 0x6d2b79f5) | 0;
+    let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+// Thin strokes on a wide grid, like the hero tally — fat blocks read as a
+// placeholder graphic, fine strokes read as a considered one. The marked
+// proportion is deliberately not the study's 111/195: this is decoration and
+// should not look like it is stating a figure.
+const COLS = 34;
+const ROWS = 13;
+const TOTAL = COLS * ROWS;
+const MARKED = Math.round(TOTAL * 0.24);
+const rand = mulberry32(57231);
+const marks = Array.from({ length: TOTAL }, (_, i) => i < MARKED);
+for (let i = marks.length - 1; i > 0; i--) {
+  const j = Math.floor(rand() * (i + 1));
+  [marks[i], marks[j]] = [marks[j], marks[i]];
+}
+---
+
+{
+  portrait ? (
+    <figure class="portrait">
+      <img src={portrait} alt={portraitAlt} width="800" height="1000" loading="lazy" />
+    </figure>
+  ) : (
+    <figure class="portrait stand-in" aria-hidden="true">
+      <div class="field" style={`--cols:${COLS}`}>
+        {marks.map((m) => <i class:list={['mark', { on: m }]} />)}
+      </div>
+    </figure>
+  )
+}
+
+<style>
+  .portrait {
+    margin: 0;
+    border-radius: var(--r);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+  }
+  .portrait img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+  }
+
+  .stand-in {
+    background: var(--field-deep);
+    aspect-ratio: 4 / 5;
+    padding: clamp(1.1rem, 0.6rem + 2vw, 2rem);
+  }
+  .field {
+    display: grid;
+    grid-template-columns: repeat(var(--cols), 3px);
+    justify-content: space-between;
+    align-content: space-between;
+    height: 100%;
+    width: 100%;
+  }
+  .mark {
+    display: block;
+    width: 3px;
+    height: clamp(16px, 2vw, 30px);
+    background: var(--stroke-dark);
+    opacity: 0.5;
+  }
+  .mark.on {
+    background: var(--marigold);
+    opacity: 1;
+  }
+</style>

@@ -35,8 +35,10 @@ The trust address is *not* published here; it belongs to the ministry, and the m
 question (§6) is unanswered. See `person.email` in `src/data/site.js` to change this.
 
 ### Photograph
-Promised as an attachment. **Not yet received.** No portrait is used anywhere; the
-site does not depend on one.
+Promised as an attachment. **Not yet received.** `/about` shows a designed
+stand-in built from the tally motif — deliberately not a grey placeholder box,
+so the live site is presentable. Set `person.images.portrait` in
+`src/data/site.js` and it swaps in with no other change.
 
 ---
 
@@ -164,12 +166,20 @@ registration number, as Indian advertising rules require. It does **not** state 
 timings or languages, because he did not give them. Booking currently routes to the
 enquiry form; a real booking system needs a decision (§6).
 
+**The enquiry form works.** It composes the message in the visitor's own mail
+client rather than posting to a server — a static site has none. No service, no
+cost, nothing to configure. `person.formEndpoint` still overrides it if a form
+service is ever added.
+
 ---
 
 ## 5. Editorial rules for this site
 
-1. **Never invent.** If the client has not supplied it, the element does not render.
-   Unknowns are `null` in `src/data/` and components hide or honestly mark them.
+1. **Never invent, and never narrate the gap.** If the client has not supplied
+   it, the element does not render — silently. Early drafts printed lines like
+   "DOI not yet available" and "Scopus — author ID awaited"; those tell a
+   visitor about our paperwork and make a finished site look half-built. Absence
+   is enough. Keep the gap recorded in `REQUIREMENTS.md`, not on the page.
 2. **Never publish a credential we suspect is wrong.** See the IMA note in §2.
 3. **The ministry stays off the medical site** until he chooses A/B/C/D. He is publicly
    associated with both; the site simply does not speak for the ministry yet.
