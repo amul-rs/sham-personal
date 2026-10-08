@@ -198,7 +198,23 @@ service is ever added.
    Green is the only dark field; everything else is a pale ground (plaster, mint,
    sand, clay). Tokens are named for their role, never their hue, so another
    change is one file. Marigold stays for data marks only.
-7. **Re-measure contrast after any colour change — every pair, not the ones you
+7. **Four lessons from the 8 Oct QA audit, each of which shipped a real bug.**
+   - Use `isSelf()` for his own name. `startsWith('Eabenson')` matched nothing
+     against "Shamin Eabenson" and listed him among his own co-authors on all
+     eight theme pages.
+   - The `currentColor` focus ring is invisible on a *filled* control, whose
+     text colour matches its fill. Three controls measured 1.00:1.
+   - A `px` media query cannot see text-only zoom. Breakpoints that gate
+     navigation are in `em`, and the JS `matchMedia` must match the CSS.
+   - A page's meta description is not a person's description. Putting it in the
+     `Person` schema told crawlers he *is* "How this website handles personal
+     data" on `/privacy`.
+   Also: contrast over the `.aurora` gradients, focus rings, text-only zoom and
+   JS-disabled behaviour are all invisible to the automated audit. Check them by
+   hand, and pad the capture when pixel-diffing a focus ring — the outline is
+   drawn outside the element box.
+
+8. **Re-measure contrast after any colour change — every pair, not the ones you
    think changed.** Brightening the green to royal broke three pairs that had
    been fine, and exposed a fourth that had been failing unnoticed: the unmarked
    tally strokes sat at 2.25:1 on the hero, under the 3:1 a graphical object

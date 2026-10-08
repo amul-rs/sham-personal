@@ -1,9 +1,10 @@
 # Dr Shamin Eabenson — personal site
 
 Static site, built with Astro. No CMS, no client-side framework, no runtime data
-fetching. Output is plain HTML with three small inline scripts — the mobile nav,
-the publications filter, and copy-to-clipboard for citations. Every page is
-fully readable with JavaScript disabled.
+fetching. Output is plain HTML with six small inline scripts — the `no-js` class
+stripper, the mobile nav, the publications filter, copy-to-clipboard for
+citations (twice), the contact mailto composer and the CV print button. Every
+page is fully readable and usable with JavaScript disabled.
 
 ```
 npm install
@@ -30,10 +31,12 @@ src/
   styles/
     tokens.css     colour, fluid type scale, spacing, the shared column split
     global.css     reset, layout primitives, link and focus behaviour
-  components/    Header, Footer, PageHeader, Tally, PubRow
+  components/    Header, Footer, PageHeader, Tally, PubRow, Portrait
   layouts/Base.astro   head, SEO, schema.org Person, skip link
-  pages/         index, about, teaching, contact, privacy, accessibility, 404,
-                 research/, research/[slug], publications/
+  pages/         index, about, about/cv, research/, research/[slug],
+                 publications/, teaching, profiles, clinical, contact,
+                 privacy, accessibility, 404                      (20 routes)
+vercel.json      trailingSlash, so /about and /about/ are not two URLs
 ```
 
 `publications.js` feeds the home page, the theme pages, the Publications page
@@ -44,10 +47,12 @@ second document to drift out of step.
 
 ## Conventions worth knowing
 
-- **Nothing unconfirmed is invented.** Fields the client has not answered are
-  `null` in the data files (`person.email`, two `doi` values, Google Scholar and
-  Scopus). Components hide or visibly mark those rather than rendering a
-  placeholder. Grep for `null` in `src/data/` to find what is outstanding.
+- **Nothing unconfirmed is invented, and nothing narrates the gap.** Fields the
+  client has not answered are `null` (four `doi` values, the Scopus profile,
+  `person.images.portrait`, the clinical times). Components hide them silently —
+  no "awaited", no "not yet available". Grep for `null` in `src/data/` to find
+  what is outstanding. This rule has been broken once, by inferring an award's
+  issuing body; see CLAUDE.md §5.1.
 - **The tally is seeded.** `Tally.astro` shuffles 111 of 195 marks with a
   fixed-seed PRNG at build time, so the figure is byte-identical on every build
   and needs no JavaScript to render.
@@ -90,27 +95,36 @@ second document to drift out of step.
   ground it sits on. At 0.55 opacity it dropped marigold text to 4.15:1, under
   the minimum. It is 0.36 / 0.30 now, holding 4.8:1 at the brightest point.
   Automated contrast checks read `backgroundColor` and cannot see a gradient —
-  if you raise those values, re-check by hand. At the royal green the blooms came
-  down to 0.16/0.16, holding marigold at 4.77:1 and the tally strokes at 4.16:1.
+  if you raise those values, re-check by hand. At the royal green the blooms are
+  0.16/0.16; pixel-sampling the brightest rendered point gives marigold 4.70:1
+  and the tally strokes 4.11:1, so there is about 0.2 of headroom and no more.
   The blooms are green and amber; there is no violet anywhere in the build.
 - **A DOI is only linked if it resolves.** `doiUnresolved: true` renders the
   identifier as text instead of linking to a 404. All DOIs were checked against
   doi.org; re-check when adding papers.
 - **Held-back facts.** `hold: true` on a membership keeps it out of the rendered
   page. Used where we believe the supplied detail is wrong — see CLAUDE.md §2.
+- **Use `isSelf()` for his own name, never `startsWith`.** Authors are stored
+  "Shamin Eabenson" and "S. Eabenson"; a surname prefix match silently matches
+  nothing. That bug listed him among his own co-authors on all eight theme pages.
+- **The focus ring is `currentColor`, which breaks on filled controls.** A filled
+  button's text colour matches its fill, so the ring lands on the page behind it
+  at 1:1. `.submit`, `.chip.is-on` and `.cv[aria-current]` each set their own
+  `outline-color`. Any new filled control needs the same.
+- **Breakpoints that gate navigation are in `em`, not `px`.** A px media query
+  cannot see text-only zoom, so the seven-item desktop nav stayed up at 200%
+  text and pushed the CV button off-screen. The JS `matchMedia` must match.
+- **Never put a page's meta description into the `Person` schema.** It described
+  Dr Eabenson as "How this website handles personal data" on `/privacy`.
 
 ## Still blocked on client answers
 
-| Area | Question | Effect |
-|---|---|---|
-| Email address | Q2 | Footer and contact band link to `/contact/` instead |
-| Degrees, posts, registration | Q5–Q10 | `/about`, `/about/cv` cannot be written |
-| Two missing DOIs | Q11 | Rows render "DOI not yet available" |
-| Scholar / Scopus IDs | Q13, Q14 | Shown greyed in the footer |
-| Co-author consent | Q15 | Collaborator list not yet rendered |
-| Clinical practice | Q16–Q19 | `/clinical` not built; may be dropped entirely |
-| Speaking history | Q20–Q25 | `/speaking` not built |
-| Writing section | Q28 | `/writing` not built, and not linked |
+See `REQUIREMENTS.md` — one list, kept current. Short version: the public email
+is confirmed and live, `/about`, `/about/cv` and `/clinical` are all built, and
+co-author consent is granted. What remains is the photograph, the IMA
+confirmation, the Scopus ID, four papers with no DOI, consultation times, and
+the speaking/ministry/writing decisions.
+
 
 ## Quality checks
 
@@ -119,7 +133,12 @@ second document to drift out of step.
 The audit script used during development checks contrast from the rendered DOM,
 heading order, accessible names, duplicate ids, WCAG 2.2 tap targets (with its
 inline and spacing exceptions), and overflow at 320/390/768/1440. Last run:
-14 pages, 0 issues. Re-run it after layout changes.
+20 pages, 0 issues. Re-run it after layout changes.
+
+It does NOT catch: contrast over the `.aurora` gradients (sample the rendered
+pixels), focus rings on filled controls (pixel-diff the control, with a padded
+capture — the outline is drawn outside the element box), text-only zoom, or
+behaviour with JavaScript disabled. Each of those hid a real bug.
 
 ## Design and accessibility skills
 

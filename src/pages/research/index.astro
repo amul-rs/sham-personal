@@ -13,7 +13,7 @@ import { byTheme, publications } from '../../data/publications.js';
   <PageHeader
     title="Research"
     standfirst={`${themes.length} lines of enquiry, one underlying question: does the system around a patient work as it is meant to?`}
-    count={`${publications.length} papers across ${themes.length} themes, all published in 2026.`}
+    count={`${publications.length} papers across ${themes.length} themes.`}
   />
 
   <section class="field-light pad">
@@ -44,7 +44,7 @@ import { byTheme, publications } from '../../data/publications.js';
               </div>
 
               <div class="theme-aside">
-                {theme.figure === 'dots' && (
+                {theme.figure === 'tally' && (
                   <div class="fig">
                     <Tally ground="light" />
                     <p class="fig-cap">
@@ -77,8 +77,7 @@ import { byTheme, publications } from '../../data/publications.js';
     <div class="wrap split">
       <h2 class="cta-head">Co-authors are credited on every paper.</h2>
       <p class="cta-body">
-        A named collaborators section will go up once each person has agreed to appear here. Until
-        then, full author lists are on the
+        Full author lists, in order, are on the
         <a class="link" href="/publications/">publications page</a>.
       </p>
     </div>

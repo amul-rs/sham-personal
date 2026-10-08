@@ -27,18 +27,29 @@ import PageHeader from '../components/PageHeader.astro';
       <h2>What has been done</h2>
       <ul>
         <li>
-          Every text and background pair used on the site has been measured for contrast. The lowest
-          on any page is 4.5:1 for body text and 3:1 for graphical marks, which are the AA
-          thresholds. Two colours were changed during the build because they fell short.
+          Every text and background pair on the site has been measured for contrast, including text
+          sitting over the soft colour gradients behind the dark sections — which automated checkers
+          cannot see. Thirty-seven pairs were tested and all meet or exceed the AA thresholds of
+          4.5:1 for body text and 3:1 for graphical marks. Several colours were changed during the
+          build because measurement showed they fell short.
         </li>
         <li>
-          Keyboard focus is always visible. The focus ring takes its colour from the text it sits
-          near, so it stays legible on both the light and dark sections.
+          Keyboard focus is always visible. The focus ring normally takes its colour from the text
+          beside it, and the few filled controls where that would have been invisible against the
+          page behind them carry their own ring colour instead. Every control was checked by
+          comparing it focused and unfocused.
+        </li>
+        <li>
+          The menu on small screens holds keyboard focus while it is open, closes on Escape, and
+          returns you to the button you opened it with.
         </li>
         <li>A skip link to the main content is the first thing a keyboard reaches on every page.</li>
         <li>
-          Motion is limited to a single sequence when the home page loads. If your system asks for
-          reduced motion, that sequence does not run.
+          There are two slow, continuous movements: the tally marks on the home page drift gently,
+          and the dark bands carry a very slow change of light. Both are deliberately below the
+          threshold of noticing. If your system asks for reduced motion, every animation on the site
+          stops completely — this was verified by measuring that not one pixel changes over three
+          seconds.
         </li>
         <li>
           The tally figure on the home page carries a text description of what it shows, so it is
@@ -56,9 +67,9 @@ import PageHeader from '../components/PageHeader.astro';
 
       <h2>What has not been tested</h2>
       <p>
-        The site has not yet been tested with a screen reader by someone who uses one daily, and it
-        has not been through an independent audit. Automated contrast and structure checks are not a
-        substitute for either.
+        The site has not been tested with a screen reader by someone who uses one daily, and it has
+        not been through an independent audit. Measurement and automated checks are not a substitute
+        for either.
       </p>
 
       <h2>If something does not work</h2>

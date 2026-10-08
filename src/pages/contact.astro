@@ -35,11 +35,18 @@ const purposes = [
   <section class="field-light pad">
     <div class="wrap form-grid">
       <div>
+        <!--
+          With JS, the inline script composes a tidy mailto and preventDefaults.
+          Without it, the form still POSTs to mailto: — which hands the browser
+          to the mail client rather than GETting the visitor's name, email and
+          message into the URL bar, their history and the server log.
+        -->
         <form
           class="form"
           id="enquiry"
-          method={endpoint ? 'post' : undefined}
-          action={endpoint ?? undefined}
+          method="post"
+          enctype={endpoint ? undefined : 'text/plain'}
+          action={endpoint ?? `mailto:${person.email}`}
           data-mailto={endpoint ? undefined : person.email}
         >
           <fieldset class="fs">
@@ -93,6 +100,9 @@ const purposes = [
 
           <p class="send">
             <button class="submit" type="submit">Send message</button>
+            <span class="send-note">
+              This opens a draft in your own email program, so you can read it before it goes.
+            </span>
           </p>
         </form>
       </div>
@@ -285,6 +295,19 @@ const purposes = [
   }
   .submit:hover {
     background: var(--field-deep);
+  }
+  /* currentColor here is --on-dark, which lands at 1.00:1 against the plaster
+     page ground behind the button. The ring has to be the dark field instead. */
+  .submit:focus-visible {
+    outline-color: var(--field-deep);
+  }
+
+  .send-note {
+    display: block;
+    margin-top: var(--s-3);
+    font-size: var(--t-sm);
+    color: var(--text-soft);
+    max-width: 46ch;
   }
 
   .aside-h {

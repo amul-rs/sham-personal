@@ -38,7 +38,7 @@ const isCurrent = (href) => (href === '/' ? path === '/' : path.startsWith(href)
   </div>
 </header>
 
-<div class="sheet" id="mobile-nav" hidden>
+<div class="sheet" id="mobile-nav" role="dialog" aria-modal="true" aria-label="Site menu" hidden>
   <nav class="sheet-nav" aria-label="Primary, mobile">
     {
       nav.map((item) => (
@@ -140,6 +140,11 @@ const isCurrent = (href) => (href === '/' ? path === '/' : path.startsWith(href)
     border-color: var(--on-dark);
     color: var(--field-deep);
   }
+  /* On /about/cv the button is already filled, so currentColor is the same
+     --field-deep as the masthead behind it: a 1.00:1 ring, i.e. none at all. */
+  .cv[aria-current='page']:focus-visible {
+    outline-color: var(--on-dark);
+  }
   .cv-short {
     display: none;
   }
@@ -160,7 +165,10 @@ const isCurrent = (href) => (href === '/' ? path === '/' : path.startsWith(href)
     color: var(--on-dark);
     padding: var(--s-2) 0;
   }
-  @media (max-width: 840px) {
+  /* 52.5em, not 840px: under text-only zoom (or a large default font) the
+     viewport is unchanged, so a px query never fires and the seven-item nav
+     stays up and overflows. An em query tracks the text instead. */
+  @media (max-width: 52.5em) {
     .nav {
       display: none;
     }
@@ -219,17 +227,41 @@ const isCurrent = (href) => (href === '/' ? path === '/' : path.startsWith(href)
     sheet.hidden = !open;
     document.body.style.overflow = open ? 'hidden' : '';
     burger.textContent = open ? 'Close' : 'Menu';
+    // The sheet covers the viewport. Without this, Tab walks straight off the
+    // end of the menu and onto controls the user cannot see behind it.
+    document.querySelectorAll('header.topbar ~ *, main, footer').forEach((el) => {
+      if (el !== sheet) el.inert = open;
+    });
   }
 
   burger?.addEventListener('click', () =>
     setOpen(burger.getAttribute('aria-expanded') !== 'true')
   );
+
   document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && burger?.getAttribute('aria-expanded') === 'true') {
+    if (burger?.getAttribute('aria-expanded') !== 'true') return;
+    if (e.key === 'Escape') {
       setOpen(false);
       burger.focus();
+      return;
+    }
+    if (e.key !== 'Tab') return;
+    // Wrap focus between the burger and the last link in the sheet.
+    const stops = [burger, ...sheet.querySelectorAll('a[href]')];
+    const first = stops[0];
+    const last = stops[stops.length - 1];
+    if (e.shiftKey && document.activeElement === first) {
+      e.preventDefault();
+      last.focus();
+    } else if (!e.shiftKey && document.activeElement === last) {
+      e.preventDefault();
+      first.focus();
     }
   });
-  // Resizing past the breakpoint must not leave the page scroll-locked.
-  window.matchMedia('(min-width: 841px)').addEventListener('change', (e) => e.matches && setOpen(false));
+
+  // Resizing past the breakpoint must not leave the page scroll-locked or
+  // inert. Matches the CSS breakpoint, which is in em so it tracks text zoom.
+  window
+    .matchMedia('not all and (max-width: 52.5em)')
+    .addEventListener('change', (e) => e.matches && setOpen(false));
 </script>

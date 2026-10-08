@@ -84,7 +84,7 @@ const updated = new Date().toLocaleDateString('en-GB', {
           {
             medicalVentures.map((v) => (
               <li>
-                <span class="r-year">{v.role ? 'Current' : ''}</span>
+                <span class="r-year">{v.current ? 'Current' : ''}</span>
                 <span class="r-body">
                   <b>{v.name}</b>
                   {v.role && <span>{v.role}</span>}
@@ -197,7 +197,7 @@ const updated = new Date().toLocaleDateString('en-GB', {
           {
             decks.map((d) => (
               <li>
-                <span class="r-year">{d.date ?? d.kind}</span>
+                <span class="r-year">{d.date}</span>
                 <span class="r-body">
                   <b>{d.title}</b>
                   <span>{d.kind}</span>
@@ -386,10 +386,29 @@ const updated = new Date().toLocaleDateString('en-GB', {
     color: var(--text-mute);
   }
 
-  /* Printing this page is the PDF. There is no separate file to drift. */
+  /* Printing this page is the PDF. There is no separate file to drift.
+     Browsers drop background graphics by default, so the dark masthead must be
+     forced to a light ground or its white title prints white-on-white — and the
+     site header and footer have no business on a CV at all. */
   @media print {
-    .no-print {
+    .no-print,
+    :global(header.topbar),
+    :global(footer.foot),
+    :global(.sheet) {
       display: none !important;
+    }
+    :global(.masthead) {
+      background: #fff !important;
+      padding-block: 0 1.5rem !important;
+    }
+    :global(.masthead *) {
+      color: #000 !important;
+    }
+    :global(.aurora::before) {
+      display: none !important;
+    }
+    :global(section) {
+      background: #fff !important;
     }
     .sec {
       break-inside: avoid;

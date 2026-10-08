@@ -163,8 +163,19 @@ const yearSpan =
     border-color: var(--field);
     color: var(--on-dark);
   }
+  /* The selected chip is filled, so currentColor resolves to --on-dark and the
+     global ring lands at 1.00:1 on the plaster page ground. */
+  .chip.is-on:focus-visible {
+    outline-color: var(--field-deep);
+  }
+  /* These are the per-theme paper counts — real data, not decoration. opacity
+     dropped them to 2.78:1 on plaster and 3.53:1 on the filled chip. A solid
+     token keeps them legible on both. */
   .chip-n {
-    opacity: 0.65;
+    color: var(--text-mute);
+  }
+  .chip.is-on .chip-n {
+    color: var(--on-dark);
   }
   .chip-export {
     margin-left: auto;

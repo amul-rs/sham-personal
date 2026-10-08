@@ -23,7 +23,7 @@ const live = academicProfiles;
 >
   <PageHeader
     title="Find the work"
-    standfirst="The same fourteen papers, indexed in different places. Each of these shows something the others do not."
+    standfirst={`The same ${publications.length} papers, indexed in different places. Each of these shows something the others do not.`}
     count="Every entry links straight to the profile — no sign-in, no paywall."
   />
 
@@ -109,7 +109,7 @@ const live = academicProfiles;
 
   <section class="field-deep aurora pad">
     <div class="wrap split">
-      <h2 class="cta-head">All fourteen papers are listed here too.</h2>
+      <h2 class="cta-head">All {publications.length} papers are listed here too.</h2>
       <div>
         <p><a class="link-fill" href="/publications/">Publications</a></p>
         <p class="cta-body">

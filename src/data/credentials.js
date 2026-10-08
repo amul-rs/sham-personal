@@ -39,7 +39,7 @@ export const positions = [
  * he answers the ministry question. Only entries with `medical: true` render here.
  */
 export const ventures = [
-  { name: 'Eabenson Healthcare Private Limited', role: 'Founder, Director', medical: true },
+  { name: 'Eabenson Healthcare Private Limited', role: 'Founder, Director', medical: true, current: true },
   { name: 'Eabenson Research Centre', role: null, medical: true },
   { name: 'Eabenson Foundation', role: null, medical: true },
   { name: 'Eabenson Ministries and Church Trust', role: 'Chairman, Founder, Managing Trustee', medical: false },
@@ -79,7 +79,8 @@ export const memberships = [
   },
   {
     body: 'European Society of Cardiology',
-    detail: 'Member',
+    // No membership grade was supplied; the ID and dates are all we have.
+    detail: null,
     number: 'ESC ID 1284616',
     dates: 'Since August 2022',
   },
@@ -130,7 +131,9 @@ export const awards = [
   },
   {
     title: 'Commonwealth Scholarship, United Kingdom',
-    issuer: 'Commonwealth Scholarship Commission',
+    // The client named no issuing body. "Commonwealth Scholarship Commission"
+    // was an inference and has no place on a public CV — see CLAUDE.md §5.1.
+    issuer: null,
     date: null,
   },
   {

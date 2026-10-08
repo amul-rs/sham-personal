@@ -9,6 +9,10 @@ const {
   description,
   /** Suppresses the name suffix on the home page. */
   bareTitle = false,
+  /** Open Graph type. 'profile' belongs on /about only. */
+  ogType = 'website',
+  /** Utility pages should not be indexed. */
+  noindex = false,
 } = Astro.props;
 
 const fullTitle = bareTitle ? title : `${title} — ${person.name}`;
@@ -24,20 +28,35 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
 // Social platforms will not fetch a relative image, so this must be absolute.
 const ogImage = new URL('/og.png', Astro.site);
 
-// No postal address is emitted: none has been supplied for Eabenson Healthcare,
-// and the university department address stopped describing him when the MD
-// completed. An address we cannot stand behind is worse than none.
+/**
+ * One Person entity, identical on every page.
+ *
+ * No postal address is emitted: none has been supplied for Eabenson Healthcare,
+ * and the university department address stopped describing him when the MD
+ * completed. An address we cannot stand behind is worse than none.
+ *
+ * `description` is deliberately NOT the page's meta description. It used to be,
+ * which meant /privacy told crawlers that Dr Eabenson *is* "How this website
+ * handles personal data", and /404 that he is "That page does not exist on this
+ * site". A page description describes a page; a Person description describes a
+ * person. The `@id` ties the 20 copies together as one entity.
+ */
+const orcid = profiles.find((p) => p.label === 'ORCID');
 const schema = {
   '@context': 'https://schema.org',
   '@type': 'Person',
+  '@id': new URL('#person', Astro.site).href,
   name: person.name,
   honorificSuffix: person.postNominals,
   jobTitle: person.title,
-  description,
+  description: person.lede,
   url: Astro.site?.href,
   email: person.email ? `mailto:${person.email}` : undefined,
   worksFor: { '@type': 'Organization', name: person.org },
   alumniOf: { '@type': 'CollegeOrUniversity', name: person.almaMater },
+  identifier: orcid
+    ? { '@type': 'PropertyValue', propertyID: 'ORCID', value: orcid.href }
+    : undefined,
   sameAs: profiles.filter((p) => p.href).map((p) => p.href),
 };
 ---
@@ -49,11 +68,11 @@ const schema = {
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
-    <link rel="canonical" href={canonical} />
+    {noindex ? <meta name="robots" content="noindex" /> : <link rel="canonical" href={canonical} />}
 
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
-    <meta property="og:type" content="profile" />
+    <meta property="og:type" content={ogType} />
     <meta property="og:url" content={canonical} />
     <meta property="og:site_name" content={person.name} />
     <meta property="og:locale" content="en_IN" />
@@ -76,7 +95,7 @@ const schema = {
     <!-- Anek Latin carries a live width axis, used for display; Literata reads. -->
     <link
       rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Anek+Latin:wdth,wght@75..125,300..700&family=Literata:ital,opsz,wght@0,7..72,400..600;1,7..72,400&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Anek+Latin:wdth,wght@75..100,300..700&family=Literata:ital,opsz,wght@0,7..72,400..600;1,7..72,400&display=swap"
     />
 
     <link rel="sitemap" href="/sitemap-index.xml" />

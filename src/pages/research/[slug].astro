@@ -4,7 +4,7 @@ import PageHeader from '../../components/PageHeader.astro';
 import PubRow from '../../components/PubRow.astro';
 import { themes } from '../../data/themes.js';
 import { detailFor } from '../../data/themeDetail.js';
-import { byTheme, fullCitation, bibtex } from '../../data/publications.js';
+import { byTheme, fullCitation, bibtex, isSelf } from '../../data/publications.js';
 
 export function getStaticPaths() {
   return themes.map((theme) => ({ params: { slug: theme.slug }, props: { theme } }));
@@ -15,9 +15,10 @@ const detail = detailFor(theme.slug);
 const papers = byTheme(theme.slug);
 const primary = detail?.primary ? papers.find((p) => p.id === detail.primary) : papers[0];
 const others = papers.filter((p) => p.id !== primary?.id);
-const coauthors = [...new Set(papers.flatMap((p) => p.authors))].filter(
-  (a) => !a.startsWith('Eabenson')
-);
+// isSelf(), not startsWith('Eabenson') — authors are stored "Shamin Eabenson"
+// and "S. Eabenson", neither of which starts with the surname, so the old
+// filter matched nothing and listed him among his own co-authors.
+const coauthors = [...new Set(papers.flatMap((p) => p.authors))].filter((a) => !isSelf(a));
 ---
 
 <Base title={detail?.displayTitle ?? theme.title} description={`${theme.title} — ${theme.card}`}>
@@ -114,7 +115,7 @@ const coauthors = [...new Set(papers.flatMap((p) => p.authors))].filter(
         }
 
         {
-          primary?.doi && (
+          primary?.doi && !primary.doiUnresolved && (
             <a class="card card-link" href={`https://doi.org/${primary.doi}`} rel="noopener">
               <span class="card-h">Read the paper</span>
               <span class="card-doi">doi.org/{primary.doi}</span>

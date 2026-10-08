@@ -5,7 +5,7 @@ something new comes back from the client, move it out of §3 and into whichever
 section it unblocks. This file and `CLAUDE.md` are the project's memory — if a
 decision is not written down in one of them, it did not happen.
 
-Last updated: **8 October 2026**
+Last updated: **8 October 2026** (full four-agent QA audit)
 Status: **content and design are launch-ready. Only DNS and five client answers remain.**
 
 A short version to send Dr Eabenson is `client-requirements.csv` — 18 items,
@@ -33,6 +33,18 @@ five of them marked "Before launch".
       If none is added, remove the "no analytics" wording from `/privacy`.
 
 ## 2. Content and design
+
+- [x] **Four-agent QA audit, all findings triaged** — content accuracy against
+      CLAUDE.md and Crossref, accessibility and responsive, launch readiness,
+      code quality. 5 critical and 13 major fixed; verified after. — *8 Oct 2026*
+- [ ] **Self-host the fonts.** Google Fonts is ~95% of every page's weight
+      (232 KB of 244 KB on the home page) and the only third party the privacy
+      notice has to disclose. Subsetting to latin and serving three woff2 files
+      from `/public/fonts/` should take pages to roughly 60–90 KB. Not a launch
+      blocker; the site's own payload is 6–13 KB per route.
+- [ ] **Add `ScholarlyArticle` structured data** for the 14 papers on
+      `/publications`. All the data is already in `publications.js`. The Person
+      node now carries the ORCID as an `identifier`.
 
 - [x] **Every work-in-progress note removed from the site** — no "DOI not yet
       available", no "Scopus author ID awaited", no "form is not connected",
